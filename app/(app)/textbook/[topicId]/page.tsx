@@ -12,6 +12,8 @@ import type { TextbookContent } from "@/types/curriculum";
 
 const MARKDOWN_BY_TOPIC: Record<string, string> = {
   "1.1.1": "topic-1-1-1-what-is-money.md",
+  "1.1.2": "topic-1-1-2-needs-vs-wants.md",
+  "1.1.3": "topic-1-1-3-impulse-spending.md",
 };
 
 const ALL_TOPICS = getAllLessonTopics();

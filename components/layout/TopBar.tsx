@@ -13,11 +13,11 @@ export function TopBar() {
       <div className="flex h-14 items-center justify-between px-4 gap-4">
         <div className="flex items-center gap-4">
           <StreakBadge />
-          <HeartDisplay />
           <RankBadge />
           <XPBar />
         </div>
         <div className="flex items-center gap-2">
+          <HeartDisplay />
           <UserButton
             afterSignOutUrl="/"
             appearance={{

@@ -7,12 +7,26 @@ import { PropertiesRadarChart } from "./diagrams/PropertiesRadarChart";
 import { EvolutionTimeline } from "./diagrams/EvolutionTimeline";
 import { BarterVsMoneyChart } from "./diagrams/BarterVsMoneyChart";
 import { MoneyDonutChart } from "./diagrams/MoneyDonutChart";
+import { NeedsWantsSplitChart } from "./diagrams/NeedsWantsSplitChart";
+import { WantEscalationChart } from "./diagrams/WantEscalationChart";
+import { CostOfConfusionChart } from "./diagrams/CostOfConfusionChart";
+import { ImpulseCycleChart } from "./diagrams/ImpulseCycleChart";
+import { WhereImpulseChart } from "./diagrams/WhereImpulseChart";
+import { AnnualCostChart } from "./diagrams/AnnualCostChart";
+import { WaitingEffectChart } from "./diagrams/WaitingEffectChart";
 
 const CHART_SRC = [
   "chart_properties_radar.png",
   "chart_evolution.png",
   "chart_barter_vs_money.png",
   "chart_money_donut.png",
+  "chart_1_1_2_A_needs_wants_split.png",
+  "chart_1_1_2_B_want_escalation.png",
+  "chart_1_1_2_C_cost_of_confusion.png",
+  "chart_1_1_3_A_where_impulse.png",
+  "chart_1_1_3_B_impulse_cycle.png",
+  "chart_1_1_3_C_annual_cost.png",
+  "chart_1_1_3_D_waiting_effect.png",
 ] as const;
 
 function ChartBlock({ src }: { src: string }) {
@@ -20,6 +34,13 @@ function ChartBlock({ src }: { src: string }) {
   if (src === "chart_evolution.png") return <EvolutionTimeline />;
   if (src === "chart_barter_vs_money.png") return <BarterVsMoneyChart />;
   if (src === "chart_money_donut.png") return <MoneyDonutChart />;
+  if (src === "chart_1_1_2_A_needs_wants_split.png") return <NeedsWantsSplitChart />;
+  if (src === "chart_1_1_2_B_want_escalation.png") return <WantEscalationChart />;
+  if (src === "chart_1_1_2_C_cost_of_confusion.png") return <CostOfConfusionChart />;
+  if (src === "chart_1_1_3_A_where_impulse.png") return <WhereImpulseChart />;
+  if (src === "chart_1_1_3_B_impulse_cycle.png") return <ImpulseCycleChart />;
+  if (src === "chart_1_1_3_C_annual_cost.png") return <AnnualCostChart />;
+  if (src === "chart_1_1_3_D_waiting_effect.png") return <WaitingEffectChart />;
   return (
     <div className="my-8 rounded-xl border border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
       [Chart: {src}]

@@ -41,7 +41,7 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
             <Button
               key={i}
               variant="outline"
-              className="w-full justify-start h-auto py-4 text-left"
+              className="w-full justify-start h-auto min-h-11 py-4 px-4 text-left whitespace-normal break-words"
               disabled={answered}
               onClick={() => submitChoice(i)}
               style={
@@ -126,7 +126,7 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
             <Button
               key={i}
               variant="outline"
-              className="w-full justify-start h-auto py-4 text-left"
+              className="w-full justify-start h-auto min-h-11 py-4 px-4 text-left whitespace-normal break-words"
               disabled={answered}
               onClick={() => submitChoice(i)}
             >

@@ -32,5 +32,9 @@ export default async function TopicPage({
     redirect(`/learn/${topicId}/quiz`);
   }
 
+  if (topic?.topic_type === "lesson") {
+    redirect(`/learn/${topicId}/lesson`);
+  }
+
   redirect(`/textbook/${topicId}`);
 }

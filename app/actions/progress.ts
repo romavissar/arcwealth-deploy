@@ -4,12 +4,24 @@ import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { getLevelFromXP } from "@/lib/xp";
 import { getRankForCurriculumLevel } from "@/lib/ranks";
+import { applyRegeneration } from "@/lib/hearts";
 
-export async function completeLesson(topicId: string, xpEarned: number): Promise<{ error?: string }> {
+export async function completeLesson(topicId: string, xpEarned: number, isRedo = false): Promise<{ error?: string }> {
   const { userId } = await auth();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
+
+  await supabase.from("user_progress").update({
+    status: "completed",
+    xp_earned: xpEarned,
+    completed_at: new Date().toISOString(),
+    attempts: 1,
+  }).eq("user_id", userId).eq("topic_id", topicId);
+
+  if (isRedo) {
+    return {};
+  }
 
   const today = new Date().toISOString().slice(0, 10);
   const { data: profile } = await supabase.from("user_profiles").select("xp, streak_days, last_activity_date").eq("id", userId).single();
@@ -28,13 +40,6 @@ export async function completeLesson(topicId: string, xpEarned: number): Promise
 
   const newXp = (profile?.xp ?? 0) + xpEarned;
   const level = getLevelFromXP(newXp);
-
-  await supabase.from("user_progress").update({
-    status: "completed",
-    xp_earned: xpEarned,
-    completed_at: new Date().toISOString(),
-    attempts: 1,
-  }).eq("user_id", userId).eq("topic_id", topicId);
 
   await supabase.from("user_profiles").update({
     xp: newXp,
@@ -72,7 +77,7 @@ export async function completeLesson(topicId: string, xpEarned: number): Promise
   return {};
 }
 
-export async function completeQuiz(topicId: string, score: number, xpEarned: number): Promise<{ error?: string; rankUp?: boolean; newRankSlug?: string }> {
+export async function completeQuiz(topicId: string, score: number, xpEarned: number, isRedo = false): Promise<{ error?: string; rankUp?: boolean; newRankSlug?: string }> {
   const { userId } = await auth();
   if (!userId) return { error: "Unauthorized" };
 
@@ -81,6 +86,15 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
   const isBoss = topic?.topic_type === "boss_challenge";
   const threshold = isBoss ? 80 : 70;
   if (score < threshold) return { error: "Score too low to pass" };
+
+  await supabase.from("user_progress").update({
+    status: "completed",
+    score,
+    xp_earned: xpEarned,
+    completed_at: new Date().toISOString(),
+  }).eq("user_id", userId).eq("topic_id", topicId);
+
+  if (isRedo) return {};
 
   const today = new Date().toISOString().slice(0, 10);
   const { data: profile } = await supabase.from("user_profiles").select("xp, streak_days, last_activity_date, rank").eq("id", userId).single();
@@ -96,13 +110,6 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
 
   const newXp = (profile?.xp ?? 0) + xpEarned;
   const level = getLevelFromXP(newXp);
-
-  await supabase.from("user_progress").update({
-    status: "completed",
-    score,
-    xp_earned: xpEarned,
-    completed_at: new Date().toISOString(),
-  }).eq("user_id", userId).eq("topic_id", topicId);
 
   await supabase.from("user_profiles").update({
     xp: newXp,
@@ -139,4 +146,36 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
   }
 
   return { rankUp: !!newRankSlug, newRankSlug };
+}
+
+/** Decrements hearts by 1 (floor 0). Applies regeneration (1 heart per 5 min) before decrementing. */
+export async function decrementHeart(): Promise<{ error?: string; hearts?: number }> {
+  const { userId } = await auth();
+  if (!userId) return { error: "Unauthorized" };
+
+  const supabase = createServiceClient();
+  const { data: profile, error: fetchError } = await supabase
+    .from("user_profiles")
+    .select("hearts, last_hearts_at, max_hearts")
+    .eq("id", userId)
+    .single();
+
+  if (fetchError || !profile) return { error: fetchError?.message ?? "Profile not found" };
+
+  const maxHearts = profile.max_hearts ?? 5;
+  const { hearts: afterRegen } = applyRegeneration(
+    profile.hearts ?? 5,
+    profile.last_hearts_at,
+    maxHearts
+  );
+  const newHearts = Math.max(0, afterRegen - 1);
+  const now = new Date().toISOString();
+
+  const { error: updateError } = await supabase
+    .from("user_profiles")
+    .update({ hearts: newHearts, last_hearts_at: now, updated_at: now })
+    .eq("id", userId);
+
+  if (updateError) return { error: updateError.message };
+  return { hearts: newHearts };
 }

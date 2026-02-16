@@ -69,3 +69,8 @@ export interface LessonContent {
   type: "duolingo_lesson";
   exercises: LessonExercise[];
 }
+
+/** A lesson step is either content (text from textbook) or an exercise. Used for textbook-based lessons. */
+export type LessonStep =
+  | { type: "content"; title: string; body: string }
+  | { type: "exercise"; exercise: LessonExercise };

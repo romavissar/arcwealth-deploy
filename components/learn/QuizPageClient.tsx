@@ -14,9 +14,10 @@ interface QuizPageClientProps {
   exercises: LessonExercise[];
   xpReward: number;
   isBoss: boolean;
+  redoMode?: boolean;
 }
 
-export function QuizPageClient({ topicId, exercises, xpReward, isBoss }: QuizPageClientProps) {
+export function QuizPageClient({ topicId, exercises, xpReward, isBoss, redoMode = false }: QuizPageClientProps) {
   const [step, setStep] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [showScore, setShowScore] = useState(false);
@@ -38,7 +39,7 @@ export function QuizPageClient({ topicId, exercises, xpReward, isBoss }: QuizPag
       const finalCorrect = correctCount + (lastAnswerCorrect ? 1 : 0);
       const score = total > 0 ? Math.round((finalCorrect / total) * 100) : 0;
       setShowScore(true);
-      completeQuiz(topicId, score, score >= (isBoss ? 80 : 70) ? xpReward : 0).then((res) => {
+      completeQuiz(topicId, score, redoMode ? 0 : (score >= (isBoss ? 80 : 70) ? xpReward : 0), redoMode).then((res) => {
         if (res.rankUp && res.newRankSlug) {
           setNewRankSlug(res.newRankSlug);
           setShowRankUp(true);
@@ -75,7 +76,7 @@ export function QuizPageClient({ topicId, exercises, xpReward, isBoss }: QuizPag
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Quiz complete</h2>
           <p className="text-3xl font-bold text-primary mb-4">{score}%</p>
           <p className="text-gray-600 mb-6">
-            {passed ? `You passed! +${xpReward} XP` : "Keep practicing to pass."}
+            {redoMode ? "Redo complete — no XP" : passed ? `You passed! +${xpReward} XP` : "Keep practicing to pass."}
           </p>
           <Link href="/learn" className="inline-block rounded-lg bg-primary px-6 py-2 text-white font-medium">
             Back to Learn

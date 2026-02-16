@@ -6,10 +6,14 @@ import type { LessonExercise } from "@/types/curriculum";
 
 export default async function QuizPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ topicId: string }>;
+  searchParams: Promise<{ redo?: string }>;
 }) {
   const { topicId } = await params;
+  const { redo } = await searchParams;
+  const redoMode = redo === "1" || redo === "true";
   const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
@@ -34,6 +38,7 @@ export default async function QuizPage({
       exercises={exercises}
       xpReward={xpReward}
       isBoss={topic?.topic_type === "boss_challenge"}
+      redoMode={redoMode}
     />
   );
 }
