@@ -28,21 +28,21 @@ export function LessonNode({ topic, status }: LessonNodeProps) {
 
   const cardClass = cn(
     "rounded-xl border-2 p-4 transition-all",
-    status === "completed" && "border-green-300 bg-green-50",
-    status === "available" && "border-primary/40 bg-primary/5",
-    status === "in_progress" && "border-amber-400 bg-amber-50 animate-pulse",
-    status === "locked" && "border-gray-200 bg-gray-50 opacity-75"
+    status === "completed" && "border-green-300 bg-green-50 dark:border-green-600 dark:bg-green-900/30",
+    status === "available" && "border-primary/40 bg-primary/5 dark:border-primary/50 dark:bg-primary/10",
+    status === "in_progress" && "border-amber-400 bg-amber-50 dark:border-amber-500 dark:bg-amber-900/30 animate-pulse",
+    status === "locked" && "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 opacity-75"
   );
 
   const inner = (
     <div className="flex items-start gap-3">
-      {isLocked && <Lock className="h-5 w-5 text-gray-400 shrink-0 mt-0.5" />}
+      {isLocked && <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" />}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-medium text-gray-900">{displayTitle}</span>
-          {status === "completed" && <span className="text-green-600">✓</span>}
+          <span className="font-medium text-gray-900 dark:text-gray-100">{displayTitle}</span>
+          {status === "completed" && <span className="text-green-600 dark:text-green-400">✓</span>}
           {status === "completed" && redoHref && (
-            <Button variant="ghost" size="sm" className="h-7 text-gray-600 shrink-0" asChild>
+            <Button variant="ghost" size="sm" className="h-7 text-gray-600 dark:text-gray-400 shrink-0" asChild>
               <Link href={redoHref} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
                 <RotateCcw className="h-3.5 w-3.5 mr-1" />
                 Redo (no XP)
@@ -51,7 +51,7 @@ export function LessonNode({ topic, status }: LessonNodeProps) {
           )}
         </div>
         {description && (
-          <p className="mt-1 text-sm text-gray-600 leading-snug">{description}</p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-snug">{description}</p>
         )}
       </div>
     </div>

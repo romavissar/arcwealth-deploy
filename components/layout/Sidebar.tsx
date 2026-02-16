@@ -17,7 +17,7 @@ const nav = [
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="hidden md:flex flex-col w-56 border-r border-gray-200 bg-white p-4">
+    <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-30 w-56 border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 p-4">
       <Link href="/dashboard" className="font-bold text-xl text-primary mb-6">
         ArcWealth
       </Link>
@@ -29,8 +29,8 @@ export function Sidebar() {
             className={cn(
               "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
               pathname === href || pathname.startsWith(href + "/")
-                ? "bg-primary/10 text-primary"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-primary/10 text-primary dark:bg-primary/20"
+                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
             )}
           >
             <Icon className="h-5 w-5" />

@@ -2,6 +2,7 @@
 
 import { useAuth } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 import { getRankBySlug } from "@/lib/ranks";
 
 export function RankBadge() {
@@ -19,7 +20,7 @@ export function RankBadge() {
   const rank = getRankBySlug(rankSlug);
 
   return (
-    <div className={`flex items-center gap-1 rounded-full px-2 py-1 text-sm font-semibold ${rank?.color ?? "bg-gray-100 text-gray-800"}`}>
+    <div className={cn("flex items-center gap-1 rounded-full px-2 py-1 text-sm font-semibold", rank?.color ?? "bg-gray-100 text-gray-800", rank?.darkColor)}>
       <span className="text-lg">{rank?.icon ?? "🌱"}</span>
       <span>{rank?.title ?? "Novice"}</span>
     </div>

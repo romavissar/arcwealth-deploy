@@ -62,7 +62,7 @@ export default async function TextbookTopicPage({
     const displayTitle = titleMatch ? titleMatch[1].trim() : topicTitle;
     const markdownBody = markdown.replace(/^#\s*[^\n]+\n+/, "").trim();
     return (
-      <div className="max-w-3xl mx-auto pb-12 relative">
+      <div className="max-w-3xl mx-auto pb-12 relative text-gray-900 dark:text-gray-100">
         <div className="absolute top-0 right-0">
           <Button asChild variant="ghost" size="lg">
             <Link href="/textbook">← All lessons</Link>
@@ -97,7 +97,7 @@ export default async function TextbookTopicPage({
   if (contentRes.data) {
     const content = (contentRes.data as { content: TextbookContent }).content;
     return (
-      <div className="max-w-3xl mx-auto pb-12 relative">
+      <div className="max-w-3xl mx-auto pb-12 relative text-gray-900 dark:text-gray-100">
         <div className="absolute top-0 right-0">
           <Button asChild variant="ghost" size="lg">
             <Link href="/textbook">← All lessons</Link>
@@ -124,20 +124,20 @@ export default async function TextbookTopicPage({
   }
 
   return (
-    <div className="max-w-3xl mx-auto pb-12 relative">
+    <div className="max-w-3xl mx-auto pb-12 relative text-gray-900 dark:text-gray-100">
       <div className="absolute top-0 right-0">
         <Button asChild variant="ghost" size="lg">
           <Link href="/textbook">← All lessons</Link>
         </Button>
       </div>
-      <article className="prose prose-gray max-w-none">
+      <article className="prose prose-gray dark:prose-invert max-w-none">
         <header className="mb-8">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Topic {levelNum} — {levelName} · Section {sectionNum} — {sectionName}
           </p>
-          <h1 className="mt-1 text-2xl font-bold text-gray-900">{topicTitle}</h1>
+          <h1 className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">{topicTitle}</h1>
         </header>
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 p-8 text-center text-gray-500 dark:text-gray-400">
           <p className="font-medium">Textbook content coming soon</p>
           <p className="text-sm mt-2">This lesson&apos;s reading material is not yet available.</p>
         </div>

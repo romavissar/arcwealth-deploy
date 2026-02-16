@@ -7,8 +7,13 @@
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
   }
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+  }
   body {
     @apply bg-white text-gray-900 antialiased;
+    @apply dark:bg-gray-900 dark:text-gray-100;
   }
 }
 
@@ -16,4 +21,34 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Clerk UserButton: hide "Secured by Clerk" / "Development mode" footer when appearance.elements not enough */
+body [id^="clerk-"] [data-state="open"] > div:last-child a[href*="clerk.com"],
+body [id^="clerk-"] [data-state="open"] div:has(a[href*="clerk.com"]) {
+  display: none !important;
+}
+
+/* Clerk UserButton: ensure email/secondary text is visible in dark mode and popover isn't too wide */
+.dark [id^="clerk-"] [data-state="open"] > div:last-child {
+  max-width: min(16rem, 90vw) !important;
+}
+.dark [id^="clerk-"] [data-state="open"] > div:last-child span,
+.dark [id^="clerk-"] [data-state="open"] > div:last-child p {
+  color: rgb(243 244 246) !important; /* gray-100 */
+}
+.dark [id^="clerk-"] [data-state="open"] > div:last-child p span:last-child,
+.dark [id^="clerk-"] [data-state="open"] > div:last-child p + p {
+  color: rgb(209 213 219) !important; /* gray-300 for email line */
+}
+
+/* Clerk UserButton: match site font and icon style */
+[id^="clerk-"] [data-state="open"] > div:last-child {
+  font-family: system-ui, ui-sans-serif, sans-serif !important;
+}
+[id^="clerk-"] [data-state="open"] > div:last-child button svg,
+[id^="clerk-"] [data-state="open"] > div:last-child a svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  color: inherit !important;
 }

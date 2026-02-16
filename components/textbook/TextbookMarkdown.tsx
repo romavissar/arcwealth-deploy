@@ -42,7 +42,7 @@ function ChartBlock({ src }: { src: string }) {
   if (src === "chart_1_1_3_C_annual_cost.png") return <AnnualCostChart />;
   if (src === "chart_1_1_3_D_waiting_effect.png") return <WaitingEffectChart />;
   return (
-    <div className="my-8 rounded-xl border border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
+    <div className="my-8 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 p-8 text-center text-gray-500 dark:text-gray-400">
       [Chart: {src}]
     </div>
   );
@@ -93,8 +93,8 @@ export function TextbookMarkdown({
         <h2
           className={
             isSummary
-              ? "mt-10 mb-4 text-xl font-semibold text-gray-900 rounded-t-xl border border-b-0 border-gray-200 bg-primary/5 px-4 py-3"
-              : "mt-10 mb-4 text-xl font-semibold text-gray-900 border-b border-gray-100 pb-2"
+              ? "mt-10 mb-4 text-xl font-semibold text-gray-900 dark:text-gray-100 rounded-t-xl border border-b-0 border-gray-200 dark:border-gray-600 bg-primary/5 dark:bg-primary/10 px-4 py-3"
+              : "mt-10 mb-4 text-xl font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-gray-700 pb-2"
           }
         >
           {children}
@@ -102,35 +102,35 @@ export function TextbookMarkdown({
       );
     },
     h3: ({ children }: { children?: React.ReactNode }) => (
-      <h3 className="mt-6 mb-3 text-lg font-semibold text-gray-800">{children}</h3>
+      <h3 className="mt-6 mb-3 text-lg font-semibold text-gray-800 dark:text-gray-200">{children}</h3>
     ),
-    p: ({ children }: { children?: React.ReactNode }) => <p className="text-gray-700 mb-4 leading-relaxed">{children}</p>,
+    p: ({ children }: { children?: React.ReactNode }) => <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{children}</p>,
     ul: ({ children }: { children?: React.ReactNode }) => (
-      <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4">{children}</ul>
+      <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">{children}</ul>
     ),
     ol: ({ children }: { children?: React.ReactNode }) => (
-      <ol className="list-decimal list-inside space-y-2 text-gray-700 mb-4">{children}</ol>
+      <ol className="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">{children}</ol>
     ),
     blockquote: ({ children }: { children?: React.ReactNode }) => (
-      <blockquote className="border-l-4 border-primary bg-primary/5 py-2 pl-4 pr-4 my-4 rounded-r-lg text-gray-700">
+      <blockquote className="border-l-4 border-primary bg-primary/5 dark:bg-primary/10 py-2 pl-4 pr-4 my-4 rounded-r-lg text-gray-700 dark:text-gray-300">
         {children}
       </blockquote>
     ),
     table: ({ children }: { children?: React.ReactNode }) => (
-      <div className="my-6 overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">{children}</table>
+      <div className="my-6 overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-600">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600 text-sm">{children}</table>
       </div>
     ),
-    thead: ({ children }: { children?: React.ReactNode }) => <thead className="bg-gray-50">{children}</thead>,
+    thead: ({ children }: { children?: React.ReactNode }) => <thead className="bg-gray-50 dark:bg-gray-800">{children}</thead>,
     th: ({ children }: { children?: React.ReactNode }) => (
-      <th className="px-4 py-3 text-left font-semibold text-gray-900">{children}</th>
+      <th className="px-4 py-3 text-left font-semibold text-gray-900 dark:text-gray-100">{children}</th>
     ),
     td: ({ children }: { children?: React.ReactNode }) => (
-      <td className="px-4 py-3 text-gray-700 border-t border-gray-100">{children}</td>
+      <td className="px-4 py-3 text-gray-700 dark:text-gray-300 border-t border-gray-100 dark:border-gray-700">{children}</td>
     ),
     tr: ({ children }: { children?: React.ReactNode }) => <tr>{children}</tr>,
-    tbody: ({ children }: { children?: React.ReactNode }) => <tbody className="divide-y divide-gray-100">{children}</tbody>,
-    strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold text-gray-900">{children}</strong>,
+    tbody: ({ children }: { children?: React.ReactNode }) => <tbody className="divide-y divide-gray-100 dark:divide-gray-700">{children}</tbody>,
+    strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>,
     em: ({ children }: { children?: React.ReactNode }) => <em className="italic">{children}</em>,
     a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
       if (href?.startsWith("/")) {
@@ -146,16 +146,16 @@ export function TextbookMarkdown({
         </a>
       );
     },
-    hr: () => <hr className="my-8 border-gray-200" />,
+    hr: () => <hr className="my-8 border-gray-200 dark:border-gray-700" />,
   };
 
   return (
-    <article className="prose prose-gray max-w-none">
+    <article className="prose prose-gray dark:prose-invert max-w-none">
       <header className="mb-8">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {levelName} · {sectionName}
         </p>
-        <h1 className="mt-1 text-2xl font-bold text-gray-900">
+        <h1 className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
           Topic {topicId} — {topicTitle}
         </h1>
       </header>

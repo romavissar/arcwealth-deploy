@@ -16,7 +16,7 @@ export function StreakBadge() {
   }, [isSignedIn]);
 
   return (
-    <div className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-1 text-amber-800">
+    <div className="flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-900/50 px-2 py-1 text-amber-800 dark:text-amber-200">
       <span className="text-lg">🔥</span>
       <span className="text-sm font-semibold">{streak}</span>
     </div>

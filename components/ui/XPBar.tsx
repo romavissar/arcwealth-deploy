@@ -23,9 +23,9 @@ export function XPBar() {
 
   return (
     <div className={cn("flex items-center gap-2 min-w-[120px] max-w-[200px]")}>
-      <span className="text-xs font-medium text-gray-500">Lvl {level}</span>
+      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Lvl {level}</span>
       <Progress value={percentage} className="h-2 flex-1" />
-      <span className="text-xs text-gray-400">{current}/{required}</span>
+      <span className="text-xs text-gray-400 dark:text-gray-500">{current}/{required}</span>
     </div>
   );
 }

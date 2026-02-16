@@ -32,10 +32,15 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
     else onWrong();
   }
 
+  const feedbackBoxClass = (fb: "correct" | "wrong") =>
+    fb === "correct"
+      ? "bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-100"
+      : "bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-100";
+
   if (exercise.kind === "multiple_choice") {
     return (
       <div className="w-full max-w-lg">
-        <p className="text-lg font-medium text-gray-900 mb-6">{exercise.question}</p>
+        <p className="text-lg font-medium text-gray-900 dark:text-white mb-6">{exercise.question}</p>
         <div className="space-y-3">
           {exercise.options.map((opt, i) => (
             <Button
@@ -57,9 +62,9 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
           ))}
         </div>
         {feedback && (
-          <div className={`mt-6 p-4 rounded-lg ${feedback === "correct" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>
+          <div className={`mt-6 p-4 rounded-lg ${feedbackBoxClass(feedback)}`}>
             <p className="font-medium">{feedback === "correct" ? "✓ Correct!" : "Incorrect"}</p>
-            <p className="text-sm mt-1">{exercise.explanation}</p>
+            <p className="text-sm mt-1 opacity-90">{exercise.explanation}</p>
             <Button className="mt-4" onClick={() => onNext(lastCorrect)}>Next</Button>
           </div>
         )}
@@ -70,7 +75,7 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
   if (exercise.kind === "true_false") {
     return (
       <div className="w-full max-w-lg">
-        <p className="text-lg font-medium text-gray-900 mb-6">{exercise.statement}</p>
+        <p className="text-lg font-medium text-gray-900 dark:text-white mb-6">{exercise.statement}</p>
         <div className="flex gap-4">
           <Button variant="outline" className="flex-1" disabled={answered} onClick={() => submitChoice(0)}>
             True
@@ -80,9 +85,9 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
           </Button>
         </div>
         {feedback && (
-          <div className={`mt-6 p-4 rounded-lg ${feedback === "correct" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>
+          <div className={`mt-6 p-4 rounded-lg ${feedbackBoxClass(feedback)}`}>
             <p className="font-medium">{feedback === "correct" ? "✓ Correct!" : "Incorrect"}</p>
-            <p className="text-sm mt-1">{exercise.explanation}</p>
+            <p className="text-sm mt-1 opacity-90">{exercise.explanation}</p>
             <Button className="mt-4" onClick={() => onNext(lastCorrect)}>Next</Button>
           </div>
         )}
@@ -93,7 +98,7 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
   if (exercise.kind === "fill_blank") {
     return (
       <div className="w-full max-w-lg">
-        <p className="text-lg font-medium text-gray-900 mb-6">
+        <p className="text-lg font-medium text-gray-900 dark:text-white mb-6">
           {exercise.sentence.replace("___", "______")}
         </p>
         <div className="flex flex-wrap gap-2">
@@ -104,9 +109,9 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
           ))}
         </div>
         {feedback && (
-          <div className={`mt-6 p-4 rounded-lg ${feedback === "correct" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>
+          <div className={`mt-6 p-4 rounded-lg ${feedbackBoxClass(feedback)}`}>
             <p className="font-medium">{feedback === "correct" ? "✓ Correct!" : "Incorrect"}</p>
-            <p className="text-sm mt-1">{exercise.explanation}</p>
+            <p className="text-sm mt-1 opacity-90">{exercise.explanation}</p>
             <Button className="mt-4" onClick={() => onNext(lastCorrect)}>Next</Button>
           </div>
         )}
@@ -117,10 +122,10 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
   if (exercise.kind === "scenario") {
     return (
       <div className="w-full max-w-lg">
-        <div className="rounded-lg bg-gray-100 p-4 mb-6">
-          <p className="text-gray-700">{exercise.scenario}</p>
+        <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-4 mb-6">
+          <p className="text-gray-700 dark:text-gray-200">{exercise.scenario}</p>
         </div>
-        <p className="text-lg font-medium text-gray-900 mb-4">{exercise.question}</p>
+        <p className="text-lg font-medium text-gray-900 dark:text-white mb-4">{exercise.question}</p>
         <div className="space-y-3">
           {exercise.options.map((opt, i) => (
             <Button
@@ -135,9 +140,9 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
           ))}
         </div>
         {feedback && (
-          <div className={`mt-6 p-4 rounded-lg ${feedback === "correct" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>
+          <div className={`mt-6 p-4 rounded-lg ${feedbackBoxClass(feedback)}`}>
             <p className="font-medium">{feedback === "correct" ? "✓ Correct!" : "Incorrect"}</p>
-            <p className="text-sm mt-1">{exercise.explanation}</p>
+            <p className="text-sm mt-1 opacity-90">{exercise.explanation}</p>
             <Button className="mt-4" onClick={() => onNext(lastCorrect)}>Next</Button>
           </div>
         )}
@@ -148,17 +153,17 @@ export function QuizQuestion({ exercise, onCorrect, onWrong, answered, onNext }:
   if (exercise.kind === "match_pairs") {
     return (
       <div className="w-full max-w-lg">
-        <p className="text-lg font-medium text-gray-900 mb-6">Match the pairs</p>
+        <p className="text-lg font-medium text-gray-900 dark:text-white mb-6">Match the pairs</p>
         <div className="space-y-2">
           {exercise.pairs.map((p, i) => (
-            <div key={i} className="flex justify-between items-center py-2 border-b border-gray-200">
-              <span className="text-gray-700">{p.left}</span>
-              <span className="text-gray-400">→</span>
-              <span className="text-gray-700">{p.right}</span>
+            <div key={i} className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+              <span className="text-gray-700 dark:text-gray-200">{p.left}</span>
+              <span className="text-gray-400 dark:text-gray-500">→</span>
+              <span className="text-gray-700 dark:text-gray-200">{p.right}</span>
             </div>
           ))}
         </div>
-        <p className="text-sm text-gray-500 mt-4">Match pairs (simplified: no drag for now)</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">Match pairs (simplified: no drag for now)</p>
         <Button className="mt-4" onClick={() => { setLastCorrect(true); setFeedback("correct"); onCorrect(); }}>I matched them</Button>
         {answered && (
           <Button className="mt-2 ml-2" onClick={() => onNext(lastCorrect)}>Next</Button>

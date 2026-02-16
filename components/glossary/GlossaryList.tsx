@@ -41,17 +41,17 @@ export function GlossaryList({
               {unlocked ? (
                 <Link
                   href={`/glossary/${encodeURIComponent(t.term)}`}
-                  className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-primary/30"
+                  className="block rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 hover:border-primary/30 dark:hover:border-primary/40"
                 >
-                  <p className="font-semibold text-gray-900">{t.term}</p>
-                  <p className="text-sm text-gray-600 line-clamp-1">{t.definition}</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">{t.term}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{t.definition}</p>
                 </Link>
               ) : (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center gap-3 opacity-80">
-                  <Lock className="h-5 w-5 text-gray-400 shrink-0" />
+                <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-4 flex items-center gap-3 opacity-80">
+                  <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500 shrink-0" />
                   <div>
-                    <p className="font-semibold text-gray-700">{t.term}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-semibold text-gray-700 dark:text-gray-300">{t.term}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       Complete {firstTopic ?? "previous lessons"} to unlock
                     </p>
                   </div>

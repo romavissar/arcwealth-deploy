@@ -16,17 +16,17 @@ export function TextbookLayout({ content, topicId, topicTitle }: TextbookLayoutP
   const sectionName = getSectionName(levelNum, sectionNum);
 
   return (
-    <article className="prose prose-gray max-w-none">
+    <article className="prose prose-gray dark:prose-invert max-w-none">
       <header className="mb-8">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Topic {levelNum} · {sectionName}
         </p>
-        <h1 className="text-2xl font-bold text-gray-900 mt-1">{topicTitle}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">{topicTitle}</h1>
       </header>
       {content.sections.map((section, i) => (
         <section key={i} className="mb-8">
           {section.heading && (
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">{section.heading}</h2>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{section.heading}</h2>
           )}
           {section.blocks.map((block, j) => (
             <Block key={j} block={block} />
@@ -34,9 +34,9 @@ export function TextbookLayout({ content, topicId, topicTitle }: TextbookLayoutP
         </section>
       ))}
       {content.key_takeaways?.length > 0 && (
-        <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-6 mt-8">
+        <div className="rounded-xl border-2 border-primary/20 dark:border-primary/30 bg-primary/5 dark:bg-primary/10 p-6 mt-8">
           <h3 className="text-sm font-semibold text-primary mb-2">Key takeaways</h3>
-          <ul className="list-disc list-inside space-y-1 text-gray-700">
+          <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
             {content.key_takeaways.map((item, k) => (
               <li key={k}>{item}</li>
             ))}
@@ -53,27 +53,27 @@ function Block({
   block: TextbookContent["sections"][0]["blocks"][0];
 }) {
   if (block.kind === "paragraph") {
-    return <p className="text-gray-700 mb-4">{block.text}</p>;
+    return <p className="text-gray-700 dark:text-gray-300 mb-4">{block.text}</p>;
   }
   if (block.kind === "key_concept") {
     return (
-      <div className="rounded-lg border-l-4 border-primary bg-primary/5 p-4 my-4">
-        <p className="font-semibold text-gray-900 mb-1">{block.title}</p>
-        <p className="text-gray-700 text-sm">{block.body}</p>
+      <div className="rounded-lg border-l-4 border-primary bg-primary/5 dark:bg-primary/10 p-4 my-4">
+        <p className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{block.title}</p>
+        <p className="text-gray-700 dark:text-gray-300 text-sm">{block.body}</p>
       </div>
     );
   }
   if (block.kind === "real_world_example") {
     return (
-      <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 my-4">
-        <p className="font-semibold text-amber-800 mb-1">💡 {block.title}</p>
-        <p className="text-gray-700 text-sm">{block.body}</p>
+      <div className="rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 p-4 my-4">
+        <p className="font-semibold text-amber-800 dark:text-amber-200 mb-1">💡 {block.title}</p>
+        <p className="text-gray-700 dark:text-gray-300 text-sm">{block.body}</p>
       </div>
     );
   }
   if (block.kind === "definition") {
     return (
-      <p className="my-2">
+      <p className="my-2 text-gray-700 dark:text-gray-300">
         <Link href={`/glossary/${encodeURIComponent(block.term)}`} className="font-medium text-primary underline">
           {block.term}
         </Link>
@@ -83,7 +83,7 @@ function Block({
   }
   if (block.kind === "bullet_list") {
     return (
-      <ul className="list-disc list-inside space-y-1 text-gray-700 mb-4">
+      <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 mb-4">
         {block.items.map((item, i) => (
           <li key={i}>{item}</li>
         ))}
@@ -92,9 +92,9 @@ function Block({
   }
   if (block.kind === "callout") {
     return (
-      <div className="rounded-lg bg-gray-100 p-4 my-4 flex gap-2">
+      <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-4 my-4 flex gap-2">
         <span>{block.icon}</span>
-        <p className="text-gray-700 text-sm">{block.text}</p>
+        <p className="text-gray-700 dark:text-gray-300 text-sm">{block.text}</p>
       </div>
     );
   }

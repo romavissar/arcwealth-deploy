@@ -73,9 +73,9 @@ export function LessonShell({ topicId, exercises = [], steps: stepsProp, redoMod
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-gray-50 z-50">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
-        <Link href="/learn" className="p-2 -m-2 text-gray-500 hover:text-gray-700 shrink-0">
+    <div className="fixed inset-0 flex flex-col bg-gray-50 dark:bg-gray-900 z-50">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+        <Link href="/learn" className="p-2 -m-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 shrink-0">
           <X className="h-5 w-5" />
         </Link>
         <div className="flex-1 flex justify-center items-center min-w-0 px-2">

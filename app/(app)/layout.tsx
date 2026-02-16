@@ -21,11 +21,11 @@ export default async function AppLayout({
     });
   }
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 md:ml-56">
         <TopBar />
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 p-4 md:p-6 text-gray-900 dark:text-gray-100">{children}</main>
       </div>
     </div>
   );

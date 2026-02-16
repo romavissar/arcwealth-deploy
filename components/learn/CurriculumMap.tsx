@@ -27,12 +27,12 @@ export function CurriculumMap({ topics, progressMap }: CurriculumMapProps) {
         return (
           <div key={topic.topic_id} className="mb-3">
             {isLevelStart && (
-              <div className="rounded-lg bg-primary/10 text-primary font-semibold px-4 py-2 mb-4">
+              <div className="rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-semibold px-4 py-2 mb-4">
                 Topic {topic.level_number} — {LEVEL_NAMES[topic.level_number as keyof typeof LEVEL_NAMES] ?? "Unknown"}
               </div>
             )}
             {isSectionStart && (
-              <div className="text-sm text-gray-500 font-medium mb-2">
+              <div className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-2">
                 {getSectionName(topic.level_number, topic.section_number)}
               </div>
             )}

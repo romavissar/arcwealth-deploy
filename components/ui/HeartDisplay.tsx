@@ -65,11 +65,11 @@ export function HeartDisplay() {
   }, [hearts, maxHearts, lastHeartsAt, refetchProfile]);
 
   return (
-    <div className="flex items-center gap-2 rounded-full bg-red-50 px-2 py-1 text-red-800">
+    <div className="flex items-center gap-2 rounded-full bg-red-50 dark:bg-red-900/40 px-2 py-1 text-red-800 dark:text-red-200">
       <span className="text-lg">❤️</span>
       <span className="text-sm font-semibold">{hearts}</span>
       {countdown !== null && (
-        <span className="text-xs text-red-600 tabular-nums">+1 in {countdown}</span>
+        <span className="text-xs text-red-600 dark:text-red-300 tabular-nums">+1 in {countdown}</span>
       )}
     </div>
   );
