@@ -5,7 +5,6 @@ import { XPBar } from "@/components/ui/XPBar";
 import { StreakBadge } from "@/components/ui/StreakBadge";
 import { RankBadge } from "@/components/ui/RankBadge";
 import { HeartDisplay } from "@/components/ui/HeartDisplay";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function TopBar() {
   return (
@@ -18,9 +17,10 @@ export function TopBar() {
         </div>
         <div className="flex items-center gap-2">
           <HeartDisplay />
-          <ThemeToggle />
           <UserButton
             afterSignOutUrl="/"
+            userProfileUrl="/settings"
+            userProfileMode="navigation"
             appearance={{
               baseTheme: undefined,
               variables: {

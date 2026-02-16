@@ -14,6 +14,15 @@ const MARKDOWN_BY_TOPIC: Record<string, string> = {
   "1.1.1": "topic-1-1-1-what-is-money.md",
   "1.1.2": "topic-1-1-2-needs-vs-wants.md",
   "1.1.3": "topic-1-1-3-impulse-spending.md",
+  "1.1.4": "topic-1-1-4-dopamine-rewards-spending.md",
+  "1.1.5": "topic-1-1-5-delayed-gratification.md",
+  "1.1.6": "topic-1-1-6-money-scripts-beliefs.md",
+  "1.1.7": "topic-1-1-7-emotions-spending.md",
+  "1.1.8": "topic-1-1-8-anchoring-pricing-psychology.md",
+  "1.1.9": "topic-1-1-9-scarcity-abundance-mindset.md",
+  "1.1.10": "topic-1-1-10-values-money.md",
+  "1.1.11": "topic-1-1-11-financial-goals.md",
+  "1.1.12": "topic-1-1-12-habits-build-wealth.md",
 };
 
 const ALL_TOPICS = getAllLessonTopics();

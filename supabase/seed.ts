@@ -103,10 +103,10 @@ const ACHIEVEMENTS = [
   { slug: "first_lesson", title: "First Step", description: "Complete your first lesson", icon: "🎯", xp_reward: 10 },
   { slug: "streak_7", title: "Week Warrior", description: "7-day learning streak", icon: "🔥", xp_reward: 50 },
   { slug: "streak_30", title: "Month Master", description: "30-day learning streak", icon: "💎", xp_reward: 200 },
-  { slug: "rank_apprentice", title: "Apprentice", description: "Rank up to Apprentice by completing Level 1", icon: "📘", xp_reward: 100 },
-  { slug: "rank_practitioner", title: "Practitioner", description: "Rank up to Practitioner by completing Level 2", icon: "🏦", xp_reward: 200 },
-  { slug: "rank_strategist", title: "Strategist", description: "Rank up to Strategist by completing Level 3", icon: "📈", xp_reward: 300 },
-  { slug: "rank_expert", title: "Expert", description: "Rank up to Expert by completing Level 4", icon: "🧠", xp_reward: 400 },
+  { slug: "rank_apprentice", title: "Apprentice", description: "Rank up to Apprentice by completing Topic 1", icon: "📘", xp_reward: 100 },
+  { slug: "rank_practitioner", title: "Practitioner", description: "Rank up to Practitioner by completing Topic 2", icon: "🏦", xp_reward: 200 },
+  { slug: "rank_strategist", title: "Strategist", description: "Rank up to Strategist by completing Topic 3", icon: "📈", xp_reward: 300 },
+  { slug: "rank_expert", title: "Expert", description: "Rank up to Expert by completing Topic 4", icon: "🧠", xp_reward: 400 },
   { slug: "hero", title: "ArcWealth Hero", description: "Complete the full ArcWealth curriculum", icon: "🏆", xp_reward: 1000 },
   { slug: "perfect_quiz", title: "Perfect Score", description: "Score 100% on a quiz", icon: "⭐", xp_reward: 25 },
   { slug: "xp_500", title: "XP Grinder", description: "Earn 500 total XP", icon: "⚡", xp_reward: 0 },
@@ -160,8 +160,51 @@ async function main() {
   console.log("Sample lesson content for", topicIdsForContent.length, "topics");
 
   const glossaryTerms = [
-    { term: "Money", definition: "A medium of exchange used to buy goods and services.", example: "You use money to pay for lunch.", related_topic_ids: ["1.1.1"] },
-    { term: "Medium of exchange", definition: "Something widely accepted in return for goods and services.", example: "Money is a medium of exchange.", related_topic_ids: ["1.1.1"] },
+    // 1.1.1 — What Is Money?
+    { term: "Money", definition: "Any widely accepted medium of exchange that people use to trade goods and services, store value over time, and measure the worth of things.", example: "You use money to pay for lunch.", related_topic_ids: ["1.1.1"] },
+    { term: "Medium of exchange", definition: "A tool people use to trade goods and services so you don't have to find someone who has what you want and wants what you have.", example: "You give €5, you get a coffee.", related_topic_ids: ["1.1.1"] },
+    { term: "Store of value", definition: "The ability of money to hold its worth over time so you can save it and spend it later.", example: "Money saved today can buy food next month.", related_topic_ids: ["1.1.1"] },
+    { term: "Unit of account", definition: "A common way to measure and compare the value of things.", example: "A laptop costs $800; headphones cost $150.", related_topic_ids: ["1.1.1"] },
+    // 1.1.2 — Needs vs. Wants
+    { term: "Need", definition: "Something essential for basic survival, health, safety, or participation in modern life. Without it, your wellbeing is genuinely at risk.", example: "Shelter, food, basic clothing, healthcare.", related_topic_ids: ["1.1.2"] },
+    { term: "Want", definition: "Something that improves comfort, enjoyment, or status, but is not required for your basic functioning and survival.", example: "Restaurants, gaming, designer clothes, streaming.", related_topic_ids: ["1.1.2"] },
+    { term: "Lifestyle inflation", definition: "When wants expand as income rises, so that more income doesn't automatically mean more savings.", example: "Spending more on wants as your salary grows instead of saving the difference.", related_topic_ids: ["1.1.2"] },
+    // 1.1.3 — Impulse Spending
+    { term: "Impulse spending", definition: "Any unplanned purchase made in the moment, driven by emotion, environment, or external triggers rather than considered need or pre-existing intention.", example: "Buying something you didn't plan to buy after seeing an ad or while bored.", related_topic_ids: ["1.1.3"] },
+    // 1.1.4 — Dopamine, Rewards, and Spending
+    { term: "Dopamine", definition: "A neurotransmitter that drives motivation and reward-seeking behaviour. It is released in anticipation of a potential reward — not just when the reward is received.", example: "The urge to buy something peaks at checkout, before the item arrives.", related_topic_ids: ["1.1.4"] },
+    { term: "Fixed reward schedule", definition: "A reward that comes after a predictable, consistent number of actions. You always know exactly when the reward comes.", example: "A coffee stamp card — buy 9, get the 10th free.", related_topic_ids: ["1.1.4"] },
+    { term: "Variable reward schedule", definition: "A reward that comes at unpredictable intervals. You might win after 2 tries or after 200. You never know when.", example: "A slot machine, a loot box, or a social media 'like'.", related_topic_ids: ["1.1.4"] },
+    { term: "Hedonic adaptation", definition: "The psychological tendency to return to a relatively stable level of happiness despite major positive or negative changes. No matter what you buy, you eventually get used to it.", example: "New trainers feel amazing for a week, then become 'just your trainers'.", related_topic_ids: ["1.1.4"] },
+    // 1.1.5 — Delayed Gratification
+    { term: "Delayed gratification", definition: "The ability to resist an immediate reward in favour of a larger or more valuable reward later. Self-control applied to time.", example: "Saving €50 today instead of spending it, so you have €80 in five years.", related_topic_ids: ["1.1.5"] },
+    { term: "Present bias", definition: "The tendency to value immediate rewards more highly than future ones, so the brain undervalues long-term benefits.", example: "Choosing to spend now instead of save for later, even when you know saving is better.", related_topic_ids: ["1.1.5"] },
+    // 1.1.6 — Money Scripts & Beliefs
+    { term: "Money scripts", definition: "Unconscious beliefs about money, formed primarily in childhood through family messages, cultural context, and early experiences. They operate automatically and influence financial behaviour without conscious awareness.", example: "Believing 'money is the root of all evil' or 'more money will make me happy'.", related_topic_ids: ["1.1.6"] },
+    // 1.1.7 — Emotions and Spending
+    { term: "Emotional spending", definition: "Spending money primarily to regulate emotions — to escape, soothe, reward, or distract from feelings — rather than to meet a genuine need or planned want.", example: "Retail therapy after a bad day, or splurging when stressed.", related_topic_ids: ["1.1.7"] },
+    // 1.1.8 — Anchoring and Pricing Psychology
+    { term: "Anchoring", definition: "A cognitive bias where the first number you see (the 'anchor') disproportionately influences your perception of subsequent numbers — even when the anchor is arbitrary, irrelevant, or false.", example: "A 'was €100, now €50' label makes €50 feel like a great deal.", related_topic_ids: ["1.1.8"] },
+    { term: "Left-digit effect", definition: "The tendency to give disproportionate weight to the first digit when reading a price. €29.99 is processed as '€20-something' while €30 is '€30-something'.", example: "Charm pricing (.99, .95) makes prices feel lower than the next round number.", related_topic_ids: ["1.1.8"] },
+    // 1.1.9 — Scarcity vs. Abundance Mindset
+    { term: "Scarcity mindset", definition: "A psychological pattern where you perceive resources (money, time, opportunities) as fundamentally limited and insufficient, leading to chronic anxiety, short-term thinking, and defensive behaviour.", example: "Avoiding investing because 'I can't afford to lose anything'.", related_topic_ids: ["1.1.9"] },
+    { term: "Abundance mindset", definition: "A psychological pattern where you perceive resources as renewable and sufficient. While recognising real constraints, you focus on possibility, growth, and strategic action rather than fear.", example: "Seeing a raise as a chance to save more, not just spend more.", related_topic_ids: ["1.1.9"] },
+    // 1.1.10 — Values and Money
+    { term: "Values", definition: "The principles, qualities, and experiences that matter most to you — what makes life feel meaningful. In a financial context, values are the north star that should guide where your money goes.", example: "If family is a top value, spending on a reunion may be values-aligned.", related_topic_ids: ["1.1.10"] },
+    { term: "Values-based spending", definition: "Spending money in ways that align with your core values, so you get more satisfaction per euro and fewer regrets.", example: "Spending on experiences you value (e.g. travel) and cutting spending that doesn't align.", related_topic_ids: ["1.1.10"] },
+    // 1.1.11 — Financial Goals That Stick
+    { term: "SMART goals", definition: "Goals that are Specific, Measurable, Achievable, Relevant, and Time-bound. This framework makes goals actionable and easier to track and achieve.", example: "Save €500 in a dedicated emergency fund by December 31.", related_topic_ids: ["1.1.11"] },
+    { term: "Milestone", definition: "A sub-goal or checkpoint on the way to a larger goal, often set every 30–60 days. Milestones make progress visible and sustain motivation.", example: "Save €200 by end of Month 1 on the way to €3,000.", related_topic_ids: ["1.1.11"] },
+    { term: "Accountability partner", definition: "Someone who checks in on your progress toward a goal, making it harder to quit and easier to stay on track.", example: "A friend you report to weekly on your savings goal.", related_topic_ids: ["1.1.11"] },
+    // 1.1.12 — Habits That Build Wealth
+    { term: "Habit loop", definition: "The four-stage cycle of habit: Cue (trigger) → Craving (motivation) → Routine (the behaviour) → Reward (satisfaction that reinforces the loop).", example: "Phone buzzes (cue) → want to check (craving) → scroll (routine) → dopamine hit (reward).", related_topic_ids: ["1.1.12"] },
+    { term: "Cue", definition: "The trigger that starts a habit — can be a time, place, emotion, or preceding action.", example: "Walking past a café (cue) triggers buying a coffee.", related_topic_ids: ["1.1.12"] },
+    { term: "Craving", definition: "In the habit loop, the motivational force behind the habit — what you want from the behaviour, not the behaviour itself.", example: "The desire to feel in control of your money that drives checking your budget.", related_topic_ids: ["1.1.12"] },
+    { term: "Routine", definition: "In the habit loop, the actual action or behaviour — the habit itself.", example: "The act of transferring €50 to savings every payday.", related_topic_ids: ["1.1.12"] },
+    { term: "Reward", definition: "In the habit loop, the benefit you get from the routine, which reinforces the loop and makes you want to repeat it.", example: "Feeling of security from seeing savings grow.", related_topic_ids: ["1.1.12"] },
+    { term: "Automate savings", definition: "Setting up automatic transfers from checking to savings or investment accounts (e.g. the day after payday) so you save without relying on willpower.", example: "10% of each paycheck goes to savings automatically.", related_topic_ids: ["1.1.12"] },
+    { term: "The Dip", definition: "The period around Week 3 of building a new habit when effort and difficulty peak and many people quit. Pushing through the dip leads to the habit becoming easier.", example: "Wanting to skip your new savings habit in week 3 — that's the dip.", related_topic_ids: ["1.1.12"] },
+    // Other (kept for topics beyond 1.1.12)
     { term: "Income", definition: "Money you receive, usually from working or investments.", example: "Your paycheck is income.", related_topic_ids: ["1.2.1"] },
   ];
   const { error: glossErr } = await supabase.from("glossary").upsert(glossaryTerms, { onConflict: "term" });

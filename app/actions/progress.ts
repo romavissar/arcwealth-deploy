@@ -5,6 +5,148 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { getLevelFromXP } from "@/lib/xp";
 import { getRankForCurriculumLevel } from "@/lib/ranks";
 import { applyRegeneration } from "@/lib/hearts";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+const FIRST_ACTIVITY_OF_DAY_BONUS_XP = 5;
+
+/** Grants an achievement to the user and adds its xp_reward to their total XP. Idempotent (no-op if already earned). */
+async function grantAchievement(
+  supabase: SupabaseClient,
+  userId: string,
+  achievementSlug: string
+): Promise<void> {
+  const { data: existing } = await supabase
+    .from("user_achievements")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("achievement_slug", achievementSlug)
+    .maybeSingle();
+  if (existing) return;
+
+  const { data: achievement } = await supabase
+    .from("achievements")
+    .select("xp_reward")
+    .eq("slug", achievementSlug)
+    .single();
+  const xpReward = achievement?.xp_reward ?? 0;
+
+  if (xpReward > 0) {
+    const { data: profile } = await supabase.from("user_profiles").select("xp").eq("id", userId).single();
+    const currentXp = profile?.xp ?? 0;
+    const newXp = currentXp + xpReward;
+    const level = getLevelFromXP(newXp);
+    await supabase
+      .from("user_profiles")
+      .update({ xp: newXp, level, updated_at: new Date().toISOString() })
+      .eq("id", userId);
+    await supabase.from("xp_events").insert({
+      user_id: userId,
+      amount: xpReward,
+      reason: `Achievement: ${achievementSlug}`,
+    });
+  }
+
+  await supabase.from("user_achievements").insert({
+    user_id: userId,
+    achievement_slug: achievementSlug,
+  });
+}
+
+/** Achievement slug -> requirement check. Returns true if the user has met the requirement (so they can collect it). */
+async function checkAchievementRequirement(
+  supabase: SupabaseClient,
+  userId: string,
+  slug: string,
+  profile: { xp: number; streak_days: number; rank: string; avatar_url: string | null },
+  earnedSet: Set<string>,
+  hasCompletedLesson: boolean,
+  hasPerfectQuiz: boolean
+): Promise<boolean> {
+  if (earnedSet.has(slug)) return false;
+  switch (slug) {
+    case "first_lesson":
+      return hasCompletedLesson;
+    case "streak_7":
+      return profile.streak_days >= 7;
+    case "streak_30":
+      return profile.streak_days >= 30;
+    case "rank_apprentice":
+      return ["apprentice", "practitioner", "strategist", "expert", "hero"].includes(profile.rank);
+    case "rank_practitioner":
+      return ["practitioner", "strategist", "expert", "hero"].includes(profile.rank);
+    case "rank_strategist":
+      return ["strategist", "expert", "hero"].includes(profile.rank);
+    case "rank_expert":
+      return ["expert", "hero"].includes(profile.rank);
+    case "hero":
+      return profile.rank === "hero";
+    case "perfect_quiz":
+      return hasPerfectQuiz;
+    case "xp_500":
+      return profile.xp >= 500;
+    case "profile_complete":
+      return !!profile.avatar_url?.trim();
+    default:
+      return false;
+  }
+}
+
+/** Checks all achievement requirements and grants any the user has earned but not yet collected. Call e.g. when opening the achievements page. */
+export async function syncAchievements(): Promise<{ error?: string }> {
+  const { userId } = await auth();
+  if (!userId) return { error: "Unauthorized" };
+
+  const supabase = createServiceClient();
+  const [profileRes, earnedRes, progressRes, topicsRes, achievementsRes] = await Promise.all([
+    supabase.from("user_profiles").select("xp, streak_days, rank, avatar_url").eq("id", userId).single(),
+    supabase.from("user_achievements").select("achievement_slug").eq("user_id", userId),
+    supabase.from("user_progress").select("topic_id, status, score").eq("user_id", userId),
+    supabase.from("topics").select("topic_id, topic_type"),
+    supabase.from("achievements").select("slug"),
+  ]);
+
+  const profile = profileRes.data;
+  if (!profile) return { error: "Profile not found" };
+
+  const topics = topicsRes.data ?? [];
+  const lessonTopicIds = new Set(topics.filter((t) => t.topic_type === "lesson").map((t) => t.topic_id));
+  const quizTopicIds = new Set(
+    topics.filter((t) => t.topic_type === "checkpoint" || t.topic_type === "boss_challenge").map((t) => t.topic_id)
+  );
+  const completedTopicIds = new Set((progressRes.data ?? []).filter((p) => p.status === "completed").map((p) => p.topic_id));
+  const progressByTopic = new Map((progressRes.data ?? []).map((p) => [p.topic_id, p]));
+
+  const hasCompletedLesson = [...completedTopicIds].some((id) => lessonTopicIds.has(id));
+  const hasPerfectQuiz = [...quizTopicIds].some((id) => progressByTopic.get(id)?.score === 100);
+
+  const earnedSet = new Set((earnedRes.data ?? []).map((e) => e.achievement_slug));
+  const slugs = (achievementsRes.data ?? []).map((a) => a.slug);
+
+  const profileData = {
+    xp: profile.xp ?? 0,
+    streak_days: profile.streak_days ?? 0,
+    rank: profile.rank ?? "novice",
+    avatar_url: profile.avatar_url ?? null,
+  };
+
+  for (const slug of slugs) {
+    const meets = await checkAchievementRequirement(
+      supabase,
+      userId,
+      slug,
+      profileData,
+      earnedSet,
+      hasCompletedLesson,
+      hasPerfectQuiz
+    );
+    if (meets) {
+      await grantAchievement(supabase, userId, slug);
+      earnedSet.add(slug);
+    }
+  }
+
+  return {};
+}
 
 export async function completeLesson(topicId: string, xpEarned: number, isRedo = false): Promise<{ error?: string }> {
   const { userId } = await auth();
@@ -38,7 +180,9 @@ export async function completeLesson(topicId: string, xpEarned: number, isRedo =
     newStreak = 1;
   }
 
-  const newXp = (profile?.xp ?? 0) + xpEarned;
+  const firstActivityOfDay = last !== today;
+  const dailyBonusXp = firstActivityOfDay ? FIRST_ACTIVITY_OF_DAY_BONUS_XP : 0;
+  const newXp = (profile?.xp ?? 0) + xpEarned + dailyBonusXp;
   const level = getLevelFromXP(newXp);
 
   await supabase.from("user_profiles").update({
@@ -55,6 +199,13 @@ export async function completeLesson(topicId: string, xpEarned: number, isRedo =
     reason: `Completed lesson ${topicId}`,
     topic_id: topicId,
   });
+  if (dailyBonusXp > 0) {
+    await supabase.from("xp_events").insert({
+      user_id: userId,
+      amount: dailyBonusXp,
+      reason: "First activity of the day",
+    });
+  }
 
   const { data: topics } = await supabase.from("topics").select("topic_id, order_index").order("order_index");
   const currentOrder = topics?.find((t) => t.topic_id === topicId)?.order_index ?? -1;
@@ -68,11 +219,10 @@ export async function completeLesson(topicId: string, xpEarned: number, isRedo =
 
   const isFirstLesson = !(await supabase.from("xp_events").select("id").eq("user_id", userId).neq("topic_id", topicId).limit(1).single()).data;
   if (isFirstLesson) {
-    void supabase.from("user_achievements").insert({
-      user_id: userId,
-      achievement_slug: "first_lesson",
-    }).then(() => {}, () => {});
+    await grantAchievement(supabase, userId, "first_lesson");
   }
+  if (newStreak === 7) await grantAchievement(supabase, userId, "streak_7");
+  if (newStreak === 30) await grantAchievement(supabase, userId, "streak_30");
 
   return {};
 }
@@ -108,7 +258,9 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
     else if (last === yesterday.toISOString().slice(0, 10)) newStreak += 1;
   } else newStreak = 1;
 
-  const newXp = (profile?.xp ?? 0) + xpEarned;
+  const firstActivityOfDay = last !== today;
+  const dailyBonusXp = firstActivityOfDay ? FIRST_ACTIVITY_OF_DAY_BONUS_XP : 0;
+  const newXp = (profile?.xp ?? 0) + xpEarned + dailyBonusXp;
   const level = getLevelFromXP(newXp);
 
   await supabase.from("user_profiles").update({
@@ -125,6 +277,13 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
     reason: `Completed quiz ${topicId}`,
     topic_id: topicId,
   });
+  if (dailyBonusXp > 0) {
+    await supabase.from("xp_events").insert({
+      user_id: userId,
+      amount: dailyBonusXp,
+      reason: "First activity of the day",
+    });
+  }
 
   let newRankSlug: string | undefined;
   if (isBoss && topic?.level_number) {
@@ -132,8 +291,13 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
     if (newRank.slug !== (profile?.rank ?? "novice")) {
       await supabase.from("user_profiles").update({ rank: newRank.slug }).eq("id", userId);
       newRankSlug = newRank.slug;
+      const rankAchievementSlug = newRank.slug === "hero" ? "hero" : `rank_${newRank.slug}`;
+      await grantAchievement(supabase, userId, rankAchievementSlug);
     }
   }
+  if (score === 100) await grantAchievement(supabase, userId, "perfect_quiz");
+  if (newStreak === 7) await grantAchievement(supabase, userId, "streak_7");
+  if (newStreak === 30) await grantAchievement(supabase, userId, "streak_30");
 
   const nextTopic = topicId.includes("checkpoint")
     ? topicId.replace(".checkpoint", "").split(".").slice(0, 2).join(".") + ".boss"

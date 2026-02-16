@@ -52,3 +52,285 @@ body [id^="clerk-"] [data-state="open"] div:has(a[href*="clerk.com"]) {
   height: 1.25rem !important;
   color: inherit !important;
 }
+
+/* Clerk UserProfile on /account-settings: root is the only card (keep border/radius/bg) */
+.account-settings-page [id^="clerk-"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  box-shadow: none !important;
+}
+/* Single card: no internal borders, no inner radius – content reads as one component */
+.account-settings-page [id^="clerk-"] div {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+.account-settings-page [id^="clerk-"] hr,
+.account-settings-page [id^="clerk-"] [class*="Divider"],
+.account-settings-page [id^="clerk-"] [class*="separator"] {
+  display: none !important;
+}
+.account-settings-page [id^="clerk-"] > div,
+.account-settings-page [id^="clerk-"] > div > div,
+.account-settings-page [id^="clerk-"] .cl-cardBox,
+.account-settings-page [id^="clerk-"] .cl-scrollBox,
+.account-settings-page [id^="clerk-"] .cl-pageScrollBox,
+.account-settings-page [id^="clerk-"] [class*="cardBox"],
+.account-settings-page [id^="clerk-"] [class*="scrollBox"],
+.account-settings-page [id^="clerk-"] [class*="pageScrollBox"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Force light theme when app is light (navbar was rendering dark by default) */
+.account-settings-page [id^="clerk-"] nav,
+.account-settings-page [id^="clerk-"] [role="navigation"],
+.account-settings-page [id^="clerk-"] aside,
+body:not(.dark) .account-settings-page [id^="clerk-"] {
+  background: rgb(255 255 255) !important; /* card white */
+  color: rgb(17 24 39) !important; /* gray-900 */
+}
+body:not(.dark) .account-settings-page [id^="clerk-"] nav,
+body:not(.dark) .account-settings-page [id^="clerk-"] [role="navigation"],
+body:not(.dark) .account-settings-page [id^="clerk-"] aside {
+  background: rgb(255 255 255) !important;
+  border-right: 1px solid rgb(229 231 235) !important; /* gray-200 */
+  color: rgb(17 24 39) !important;
+}
+body:not(.dark) .account-settings-page [id^="clerk-"] a,
+body:not(.dark) .account-settings-page [id^="clerk-"] button,
+body:not(.dark) .account-settings-page [id^="clerk-"] span,
+body:not(.dark) .account-settings-page [id^="clerk-"] p,
+body:not(.dark) .account-settings-page [id^="clerk-"] div {
+  color: inherit !important;
+}
+body:not(.dark) .account-settings-page [id^="clerk-"] [data-active="true"] {
+  background: rgb(243 244 246) !important; /* gray-100 */
+  color: rgb(17 24 39) !important;
+}
+
+/* Force dark theme when app is dark */
+.dark .account-settings-page [id^="clerk-"] {
+  background: rgb(17 24 39) !important; /* gray-900 */
+  color: rgb(243 244 246) !important;
+}
+.dark .account-settings-page [id^="clerk-"] nav,
+.dark .account-settings-page [id^="clerk-"] [role="navigation"],
+.dark .account-settings-page [id^="clerk-"] aside {
+  background: rgb(31 41 55) !important; /* gray-800 */
+  border-right: 1px solid rgb(75 85 99) !important;
+  color: rgb(243 244 246) !important;
+}
+.dark .account-settings-page [id^="clerk-"] a,
+.dark .account-settings-page [id^="clerk-"] button,
+.dark .account-settings-page [id^="clerk-"] span,
+.dark .account-settings-page [id^="clerk-"] p,
+.dark .account-settings-page [id^="clerk-"] div {
+  color: inherit !important;
+}
+.dark .account-settings-page [id^="clerk-"] [data-active="true"] {
+  background: rgb(55 65 81) !important; /* gray-700 */
+  color: rgb(243 244 246) !important;
+}
+
+/* Smooth join between our settings card and Clerk content: no truncation, full width */
+.account-settings-page .cl-pageScrollBox,
+.account-settings-page [class*="pageScrollBox"] {
+  padding-top: 0.5rem !important;
+  overflow: visible !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.account-settings-page [id^="clerk-"] .cl-cardBox,
+.account-settings-page [id^="clerk-"] [class*="cardBox"] {
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* Clerk verification modal (e.g. Connect Google/Apple): remove branding, match site style */
+.cl-userVerification-root .cl-footer,
+[class*="userVerification"] .cl-footer,
+.cl-modalContent .cl-footer {
+  display: none !important;
+}
+.cl-userVerification-root,
+[class*="userVerification"] {
+  font-family: system-ui, ui-sans-serif, sans-serif !important;
+}
+.cl-modalContent {
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25) !important;
+}
+.cl-userVerification-root .cl-card,
+[class*="userVerification"] .cl-card,
+.cl-userVerification-password {
+  border-radius: 0.75rem !important;
+  border: 1px solid rgb(229 231 235) !important;
+  background: rgb(255 255 255) !important;
+  color: rgb(17 24 39) !important;
+  box-shadow: none !important;
+}
+/* Dark mode: entire verification modal tree (modal can be in a portal; use html.dark so it works everywhere) */
+html.dark .cl-modalContent,
+html.dark .cl-userVerification-root .cl-card,
+html.dark [class*="userVerification"] .cl-card,
+html.dark .cl-userVerification-password,
+.dark .cl-modalContent,
+.dark .cl-userVerification-root .cl-card,
+.dark [class*="userVerification"] .cl-card,
+.dark .cl-userVerification-password {
+  border-color: rgb(75 85 99) !important;
+  background: rgb(31 41 55) !important;
+  color: rgb(243 244 246) !important;
+}
+html.dark .cl-modalContent > div,
+.dark .cl-modalContent > div {
+  background: rgb(31 41 55) !important;
+}
+html.dark .cl-userVerification-root .cl-cardBox,
+html.dark .cl-userVerification-root,
+html.dark [class*="userVerification"] .cl-cardBox,
+.dark .cl-userVerification-root .cl-cardBox,
+.dark .cl-userVerification-root,
+.dark [class*="userVerification"] .cl-cardBox {
+  background: transparent !important;
+}
+html.dark .cl-userVerification-root .cl-card label,
+html.dark .cl-userVerification-root .cl-card span,
+html.dark .cl-userVerification-root .cl-card p,
+html.dark .cl-userVerification-password label,
+html.dark .cl-userVerification-password span,
+html.dark .cl-userVerification-password p,
+.dark .cl-userVerification-root .cl-card label,
+.dark .cl-userVerification-root .cl-card span,
+.dark .cl-userVerification-root .cl-card p,
+.dark .cl-userVerification-password label,
+.dark .cl-userVerification-password span,
+.dark .cl-userVerification-password p {
+  color: rgb(243 244 246) !important;
+}
+html.dark .cl-userVerification-root .cl-header,
+html.dark .cl-userVerification-root .cl-headerTitle,
+html.dark .cl-userVerification-password .cl-header,
+html.dark .cl-userVerification-password .cl-headerTitle,
+.dark .cl-userVerification-root .cl-header,
+.dark .cl-userVerification-root .cl-headerTitle,
+.dark .cl-userVerification-password .cl-header,
+.dark .cl-userVerification-password .cl-headerTitle {
+  color: rgb(243 244 246) !important;
+}
+.cl-userVerification-root input,
+.cl-userVerification-root button,
+[class*="userVerification"] input,
+[class*="userVerification"] button {
+  font-family: inherit !important;
+  border-radius: 0.5rem !important;
+}
+.cl-userVerification-root input {
+  border: 1px solid rgb(209 213 219) !important;
+  background: rgb(255 255 255) !important;
+  color: rgb(17 24 39) !important;
+}
+html.dark .cl-userVerification-root input,
+.dark .cl-userVerification-root input {
+  border-color: rgb(75 85 99) !important;
+  background: rgb(31 41 55) !important;
+  color: rgb(243 244 246) !important;
+}
+html.dark .cl-userVerification-root input::placeholder,
+.dark .cl-userVerification-root input::placeholder {
+  color: rgb(156 163 175) !important;
+}
+/* Primary action (Continue): match site primary button – rounded-lg, primary bg, white text */
+.cl-userVerification-root .cl-formButtonPrimary,
+.cl-userVerification-root button[type="submit"],
+.cl-userVerification-password .cl-formButtonPrimary,
+.cl-userVerification-password button[type="submit"],
+[class*="userVerification"] .cl-formButtonPrimary,
+[class*="userVerification"] button[type="submit"] {
+  background: #4F46E5 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  height: 2.5rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: background-color 0.2s !important;
+}
+.cl-userVerification-root .cl-formButtonPrimary:hover,
+.cl-userVerification-root button[type="submit"]:hover,
+.cl-userVerification-password .cl-formButtonPrimary:hover,
+.cl-userVerification-password button[type="submit"]:hover,
+[class*="userVerification"] .cl-formButtonPrimary:hover,
+[class*="userVerification"] button[type="submit"]:hover {
+  background: #4338ca !important;
+  color: #fff !important;
+}
+/* Secondary link (Use another method): match site link style – primary color, underline on hover */
+.cl-userVerification-root a[role="button"],
+.cl-userVerification-root .cl-formButtonReset,
+.cl-userVerification-password a[role="button"],
+.cl-userVerification-password .cl-formButtonReset,
+[class*="userVerification"] a[role="button"],
+[class*="userVerification"] .cl-formButtonReset {
+  background: transparent !important;
+  color: #4F46E5 !important;
+  border: none !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+.cl-userVerification-root a[role="button"]:hover,
+.cl-userVerification-root .cl-formButtonReset:hover,
+.cl-userVerification-password a[role="button"]:hover,
+.cl-userVerification-password .cl-formButtonReset:hover,
+[class*="userVerification"] a[role="button"]:hover,
+[class*="userVerification"] .cl-formButtonReset:hover {
+  color: #4338ca !important;
+  text-decoration: underline !important;
+  background: transparent !important;
+}
+.dark .cl-userVerification-root a[role="button"],
+.dark .cl-userVerification-root .cl-formButtonReset,
+.dark [class*="userVerification"] a[role="button"],
+.dark [class*="userVerification"] .cl-formButtonReset {
+  color: #818cf8 !important;
+}
+.dark .cl-userVerification-root a[role="button"]:hover,
+.dark .cl-userVerification-root .cl-formButtonReset:hover,
+.dark [class*="userVerification"] a[role="button"]:hover,
+.dark [class*="userVerification"] .cl-formButtonReset:hover {
+  color: #a5b4fc !important;
+}
+/* Any link in verification modal (e.g. "Use another method") */
+.cl-userVerification-password a,
+[class*="userVerification"] .cl-card a {
+  color: #4F46E5 !important;
+  font-weight: 500 !important;
+}
+.cl-userVerification-password a:hover,
+[class*="userVerification"] .cl-card a:hover {
+  color: #4338ca !important;
+  text-decoration: underline !important;
+}
+.dark .cl-userVerification-password a,
+.dark [class*="userVerification"] .cl-card a {
+  color: #818cf8 !important;
+}
+.dark .cl-userVerification-password a:hover,
+.dark [class*="userVerification"] .cl-card a:hover {
+  color: #a5b4fc !important;
+}
+.cl-modalBackdrop {
+  background: rgb(0 0 0 / 0.5) !important;
+}

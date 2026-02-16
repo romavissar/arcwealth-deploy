@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, LayoutDashboard, Trophy, GraduationCap, ListOrdered, BookText } from "lucide-react";
+import { BookOpen, LayoutDashboard, Trophy, GraduationCap, ListOrdered, BookText, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -21,7 +21,7 @@ export function Sidebar() {
       <Link href="/dashboard" className="font-bold text-xl text-primary mb-6">
         ArcWealth
       </Link>
-      <nav className="flex flex-col gap-1">
+      <nav className="flex flex-col gap-1 flex-1">
         {nav.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
@@ -38,6 +38,18 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
+      <Link
+        href="/settings"
+        className={cn(
+          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors mt-auto",
+          pathname === "/settings" || pathname.startsWith("/settings/")
+            ? "bg-primary/10 text-primary dark:bg-primary/20"
+            : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+        )}
+      >
+        <Settings className="h-5 w-5" />
+        Settings
+      </Link>
     </aside>
   );
 }

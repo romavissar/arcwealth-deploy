@@ -1,10 +1,7 @@
-export const LEVEL_THRESHOLDS: number[] = [
-  0, 100, 250, 500, 850, 1300, 1900, 2650, 3600, 4800, 6300, 8100, 10200, 12650,
-  15450, 18600, 22100, 25950, 30150, 34700, 39600, 44850, 50450, 56400, 62700,
-  69350, 76350, 83700, 91400, 99450, 107850, 116600, 125700, 135150, 144950,
-  155100, 165600, 176450, 187650, 199200, 211100, 223350, 235950, 248900, 262200,
-  275850, 289850, 304200, 318900, 333950,
-];
+/** Total XP required to reach each level (1–50). Level 50 = 50,000 XP. Quadratic curve. */
+export const LEVEL_THRESHOLDS: number[] = Array.from({ length: 50 }, (_, i) =>
+  i === 0 ? 0 : Math.round(50_000 * (i / 49) ** 2)
+);
 
 export function getLevelFromXP(xp: number): number {
   let level = 1;

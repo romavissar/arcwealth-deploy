@@ -1,8 +1,12 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { getRankBySlug } from "@/lib/ranks";
 
+export const dynamic = "force-dynamic";
+
 export default async function LeaderboardPage() {
+  noStore();
   const supabase = createServiceClient();
   const { data: profiles } = await supabase
     .from("user_profiles")
