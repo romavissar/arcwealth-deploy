@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, LayoutDashboard, Trophy, GraduationCap, ListOrdered, BookText, Settings, Shield, Users } from "lucide-react";
+import { BookOpen, LayoutDashboard, Trophy, GraduationCap, ListOrdered, BookText, Settings, Shield, Users, School } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -29,46 +29,51 @@ export function Sidebar({ userRole, primaryEmail }: { userRole?: UserRole; prima
       </Link>
       <nav className="flex flex-col gap-1 flex-1">
         {nav.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              pathname === href || pathname.startsWith(href + "/")
-                ? "bg-primary/10 text-primary dark:bg-primary/20"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+          <span key={href} className="contents">
+            {href === "/profile" && (isAdminUser || showTeacher || userRole === "student") && (
+              <Link
+                href={isAdminUser ? "/admin/classrooms" : "/classroom"}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  isAdminUser
+                    ? pathname.startsWith("/admin/classrooms")
+                      ? "bg-primary/10 text-primary dark:bg-primary/20"
+                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                    : pathname === "/classroom" || pathname.startsWith("/classroom/")
+                      ? "bg-primary/10 text-primary dark:bg-primary/20"
+                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                )}
+              >
+                <School className="h-5 w-5" />
+                Classroom
+              </Link>
             )}
-          >
-            <Icon className="h-5 w-5" />
-            {label}
-          </Link>
+            <Link
+              href={href}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                pathname === href || pathname.startsWith(href + "/")
+                  ? "bg-primary/10 text-primary dark:bg-primary/20"
+                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+              )}
+            >
+              <Icon className="h-5 w-5" />
+              {label}
+            </Link>
+          </span>
         ))}
         {isAdminUser && (
           <Link
             href="/admin"
             className={cn(
               "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              pathname === "/admin" || pathname.startsWith("/admin/")
+              pathname === "/admin" && !pathname.startsWith("/admin/classrooms")
                 ? "bg-primary/10 text-primary dark:bg-primary/20"
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
             )}
           >
             <Shield className="h-5 w-5" />
             Admin
-          </Link>
-        )}
-        {showTeacher && (
-          <Link
-            href="/teacher"
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              pathname === "/teacher" || pathname.startsWith("/teacher/")
-                ? "bg-primary/10 text-primary dark:bg-primary/20"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-            )}
-          >
-            <Users className="h-5 w-5" />
-            My students
           </Link>
         )}
       </nav>

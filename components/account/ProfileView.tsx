@@ -50,7 +50,7 @@ function normalizeProvider(strategy: string) {
   return strategy.split("_")[1] ?? strategy;
 }
 
-export function ProfileView() {
+export function ProfileView({ isStudent = false }: { isStudent?: boolean }) {
   const { user } = useUser();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,7 +105,7 @@ export function ProfileView() {
 
   async function handleUpdateProfile(e: React.FormEvent) {
     e.preventDefault();
-    if (!user) return;
+    if (!user || isStudent) return;
     setSaving(true);
     try {
       await user.update({ firstName: firstName.trim() || undefined, lastName: lastName.trim() || undefined });
@@ -116,7 +116,7 @@ export function ProfileView() {
 
   async function handleAddEmail(e: React.FormEvent) {
     e.preventDefault();
-    if (!newEmail.trim() || !user) return;
+    if (!newEmail.trim() || !user || isStudent) return;
     setEmailError(null);
     setAddingEmail(true);
     try {
@@ -209,6 +209,11 @@ export function ProfileView() {
 
   return (
     <SettingsCard className="space-y-8">
+      {isStudent && (
+        <p className="text-sm text-gray-600 dark:text-gray-400 rounded-lg bg-gray-100 dark:bg-gray-800 px-4 py-3">
+          Name and email are managed by your school and cannot be changed here.
+        </p>
+      )}
       <section>
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Profile details</h2>
         <div className="flex flex-col sm:flex-row items-start gap-6">
@@ -242,14 +247,14 @@ export function ProfileView() {
               <div className="grid gap-2 sm:grid-cols-2">
                 <div>
                   <label htmlFor="firstName" className="text-sm font-medium text-gray-700 dark:text-gray-300">First name</label>
-                  <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="mt-1" />
+                  <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="mt-1" disabled={isStudent} />
                 </div>
                 <div>
                   <label htmlFor="lastName" className="text-sm font-medium text-gray-700 dark:text-gray-300">Last name</label>
-                  <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} className="mt-1" />
+                  <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} className="mt-1" disabled={isStudent} />
                 </div>
               </div>
-              <Button type="submit" disabled={saving}>Update profile</Button>
+              {!isStudent && <Button type="submit" disabled={saving}>Update profile</Button>}
             </form>
           </div>
         </div>
@@ -267,21 +272,23 @@ export function ProfileView() {
             </li>
           ))}
         </ul>
-        <form onSubmit={handleAddEmail} className="flex flex-wrap items-end gap-2">
-          <div className="flex-1 min-w-[200px]">
-            <label htmlFor="newEmail" className="sr-only">Add email address</label>
-            <Input
-              id="newEmail"
-              type="email"
-              placeholder="Add email address"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          <Button type="submit" variant="outline" disabled={addingEmail}>+ Add email address</Button>
-          {emailError && <p className="w-full text-sm text-red-600 dark:text-red-400">{emailError}</p>}
-        </form>
+        {!isStudent && (
+          <form onSubmit={handleAddEmail} className="flex flex-wrap items-end gap-2">
+            <div className="flex-1 min-w-[200px]">
+              <label htmlFor="newEmail" className="sr-only">Add email address</label>
+              <Input
+                id="newEmail"
+                type="email"
+                placeholder="Add email address"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <Button type="submit" variant="outline" disabled={addingEmail}>+ Add email address</Button>
+            {emailError && <p className="w-full text-sm text-red-600 dark:text-red-400">{emailError}</p>}
+          </form>
+        )}
       </section>
 
       <section>

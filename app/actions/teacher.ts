@@ -22,19 +22,28 @@ export type StudentProgress = {
   nextTopicId: string | null;
 };
 
-export async function getMyStudents(): Promise<
+/** Get students for a teacher. Pass teacherUserId when viewing as admin; otherwise uses current user. */
+export async function getMyStudents(teacherUserId?: string): Promise<
   { error?: string; students?: StudentProgress[] }
 > {
   try {
-  const ok = await canAccessTeacherDashboard();
-  if (!ok) return { error: "Forbidden" };
   const { userId } = await auth();
   if (!userId) return { error: "Unauthorized" };
+  const effectiveTeacherId = teacherUserId ?? userId;
+  if (effectiveTeacherId !== userId) {
+    const ok = await canAccessTeacherDashboard();
+    if (!ok) return { error: "Forbidden" };
+    const { isAdmin } = await import("@/lib/roles");
+    if (!(await isAdmin())) return { error: "Forbidden" };
+  } else {
+    const ok = await canAccessTeacherDashboard();
+    if (!ok) return { error: "Forbidden" };
+  }
   const supabase = createServiceClient();
   const { data: links, error: linksError } = await supabase
     .from("student_teacher")
     .select("student_user_id")
-    .eq("teacher_user_id", userId);
+    .eq("teacher_user_id", effectiveTeacherId);
   if (linksError) return { error: linksError.message };
   const studentIds = (links ?? []).map((l) => l.student_user_id);
   if (studentIds.length === 0) return { students: [] };

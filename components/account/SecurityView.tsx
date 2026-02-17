@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SettingsCard } from "./SettingsCard";
 
-export function SecurityView() {
+export function SecurityView({ isStudent = false }: { isStudent?: boolean }) {
   const { user } = useUser();
   const { sessions, isLoaded } = useSessionList();
   const { signOut } = useClerk();
@@ -236,12 +236,20 @@ export function SecurityView() {
 
       <section>
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Delete account</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-          Permanently delete your account and all data. This cannot be undone.
-        </p>
-        <Button variant="destructive" onClick={handleDeleteAccount} disabled={deleting}>
-          {deleting ? "Deleting…" : "Delete account"}
-        </Button>
+        {isStudent ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Account deletion is not available while you are assigned to a teacher. Contact your teacher or school admin if you need to leave the class.
+          </p>
+        ) : (
+          <>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+              Permanently delete your account and all data. This cannot be undone.
+            </p>
+            <Button variant="destructive" onClick={handleDeleteAccount} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete account"}
+            </Button>
+          </>
+        )}
       </section>
     </SettingsCard>
   );

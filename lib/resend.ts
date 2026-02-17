@@ -71,6 +71,69 @@ export async function sendCongratulationsEmail(
   return {};
 }
 
+function appUrl(): string {
+  return process.env.NEXT_PUBLIC_APP_URL ?? "https://localhost:3000";
+}
+
+/**
+ * Notify a student that their teacher posted a classroom announcement.
+ */
+export async function sendClassroomAnnouncementEmail(
+  to: string,
+  teacherName: string,
+  contentPreview: string
+): Promise<{ error?: string }> {
+  const resend = getResend();
+  if (!resend) return { error: "RESEND_API_KEY is not set" };
+  const from = getFrom();
+  const preview = contentPreview.length > 200 ? contentPreview.slice(0, 197) + "..." : contentPreview;
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Resend] Sending classroom announcement email to", to);
+  }
+  const result = await resend.emails.send({
+    from,
+    to: [to],
+    subject: `New announcement from ${teacherName}`,
+    html: `
+      <p>Your teacher <strong>${escapeHtml(teacherName)}</strong> posted a new announcement:</p>
+      <p>${escapeHtml(preview)}</p>
+      <p><a href="${appUrl()}/classroom">View in Classroom</a></p>
+    `.trim(),
+  });
+  if (result.error) return { error: result.error.message };
+  return {};
+}
+
+/**
+ * Notify a student that their teacher assigned a new assignment.
+ */
+export async function sendClassroomAssignmentEmail(
+  to: string,
+  teacherName: string,
+  assignmentLabel: string,
+  dueDisplay: string
+): Promise<{ error?: string }> {
+  const resend = getResend();
+  if (!resend) return { error: "RESEND_API_KEY is not set" };
+  const from = getFrom();
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Resend] Sending classroom assignment email to", to);
+  }
+  const result = await resend.emails.send({
+    from,
+    to: [to],
+    subject: `New assignment from ${teacherName}: ${assignmentLabel}`,
+    html: `
+      <p>Your teacher <strong>${escapeHtml(teacherName)}</strong> assigned a new task:</p>
+      <p><strong>${escapeHtml(assignmentLabel)}</strong></p>
+      <p>Due: ${escapeHtml(dueDisplay)}</p>
+      <p><a href="${appUrl()}/classroom">Open Classroom</a></p>
+    `.trim(),
+  });
+  if (result.error) return { error: result.error.message };
+  return {};
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")

@@ -39,25 +39,31 @@ export async function ensureUserInSupabase(
   };
 
   if (existing) {
-    // Always sync display name from Clerk so name changes (e.g. Rom AVISSAR → Rom School) appear everywhere
-    if (displayName) {
-      updatePayload.username = displayName;
-    }
-    // Re-apply teacher role from persistent list so it is never lost (e.g. by other code or sync)
     const { data: inTeacherList } = await supabase
       .from("teacher_list")
       .select("user_id")
       .eq("user_id", userId)
       .maybeSingle();
+    const { data: inStudentTeacher } = await supabase
+      .from("student_teacher")
+      .select("student_user_id")
+      .eq("student_user_id", userId)
+      .maybeSingle();
+    const isStudent = !!inStudentTeacher;
     if (inTeacherList) {
       updatePayload.role = "teacher";
+    }
+    // Students cannot change name or email: keep existing DB values (do not sync from Clerk)
+    if (!isStudent) {
+      if (displayName) updatePayload.username = displayName;
+      if (email != null) updatePayload.email = email;
     }
     if (Object.keys(updatePayload).length > 1) {
       const { error: updateErr } = await supabase
         .from("user_profiles")
         .update(updatePayload)
         .eq("id", userId);
-      if (updateErr && updateErr.code === "23505" && updatePayload.username) {
+      if (updateErr && updateErr.code === "23505" && updatePayload.username && !isStudent) {
         await supabase
           .from("user_profiles")
           .update({

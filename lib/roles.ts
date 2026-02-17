@@ -6,18 +6,21 @@ const ADMIN_EMAIL = "romavissar@gmail.com";
 
 export type { UserRole };
 
-/** Get current user's role (admin by email, else from DB). Returns null if not signed in. */
+/** Get current user's role (admin by email, else from DB). Returns null if not signed in.
+ * Users with a student_teacher link are treated as "student" so Classroom tab appears even if profile.role was never set. */
 export async function getCurrentUserRole(): Promise<UserRole | null> {
   const { userId } = await auth();
   if (!userId) return null;
   const supabase = createServiceClient();
-  const { data: profile } = await supabase
-    .from("user_profiles")
-    .select("role, email")
-    .eq("id", userId)
-    .single();
+  const [{ data: profile }, { data: inClassroom }] = await Promise.all([
+    supabase.from("user_profiles").select("role, email").eq("id", userId).single(),
+    supabase.from("student_teacher").select("student_user_id").eq("student_user_id", userId).maybeSingle(),
+  ]);
   const email = profile?.email ?? null;
-  return resolveRole(profile?.role ?? null, email);
+  let role = resolveRole(profile?.role ?? null, email);
+  // Show Classroom for anyone linked to a teacher, even if profile.role is still "user"
+  if (role === "user" && inClassroom) role = "student";
+  return role;
 }
 
 /** Primary email from Clerk (for admin/role checks). */
