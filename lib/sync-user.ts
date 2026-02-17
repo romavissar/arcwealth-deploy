@@ -26,13 +26,13 @@ export async function ensureUserInSupabase(userId: string, opts?: { username?: s
     if (displayName && looksLikeSlug(existing.username)) {
       const { error: updateErr } = await supabase.from("user_profiles").update({
         username: displayName,
-        ...(opts.imageUrl != null && { avatar_url: opts.imageUrl }),
+        ...(opts?.imageUrl != null && { avatar_url: opts?.imageUrl }),
         updated_at: new Date().toISOString(),
       }).eq("id", userId);
       if (updateErr && updateErr.code === "23505") {
         await supabase.from("user_profiles").update({
           username: fullNameWithSuffix,
-          ...(opts.imageUrl != null && { avatar_url: opts.imageUrl }),
+          ...(opts?.imageUrl != null && { avatar_url: opts?.imageUrl }),
           updated_at: new Date().toISOString(),
         }).eq("id", userId);
       }

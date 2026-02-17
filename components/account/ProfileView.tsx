@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser, useReverification } from "@clerk/nextjs";
+import type { CreateExternalAccountParams } from "@clerk/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -64,7 +65,7 @@ export function ProfileView() {
   const [expandedAccountId, setExpandedAccountId] = useState<string | null>(null);
   const [removingAccountId, setRemovingAccountId] = useState<string | null>(null);
 
-  const createExternalAccount = useReverification((params: { strategy: string; redirectUrl: string }) =>
+  const createExternalAccount = useReverification((params: CreateExternalAccountParams) =>
     user?.createExternalAccount(params)
   );
   const destroyExternalAccount = useReverification((account: { destroy: () => Promise<unknown> }) =>
@@ -104,6 +105,7 @@ export function ProfileView() {
 
   async function handleUpdateProfile(e: React.FormEvent) {
     e.preventDefault();
+    if (!user) return;
     setSaving(true);
     try {
       await user.update({ firstName: firstName.trim() || undefined, lastName: lastName.trim() || undefined });
@@ -114,7 +116,7 @@ export function ProfileView() {
 
   async function handleAddEmail(e: React.FormEvent) {
     e.preventDefault();
-    if (!newEmail.trim()) return;
+    if (!newEmail.trim() || !user) return;
     setEmailError(null);
     setAddingEmail(true);
     try {
@@ -134,7 +136,7 @@ export function ProfileView() {
 
   async function handleProfileImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) return;
+    if (!file || !file.type.startsWith("image/") || !user) return;
     if (file.size > 5 * 1024 * 1024) {
       alert("Please choose an image under 5MB.");
       return;
@@ -144,7 +146,7 @@ export function ProfileView() {
     try {
       const setProfileImage = (user as { setProfileImage: (opts: { file: File }) => Promise<unknown> }).setProfileImage;
       if (setProfileImage) await setProfileImage({ file });
-      else await user.update({ imageUrl: await uploadAndGetUrl(file) });
+      else await (user as { update: (p: { imageUrl?: string }) => Promise<unknown> }).update({ imageUrl: await uploadAndGetUrl(file) });
       await user.reload();
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to update photo");
@@ -162,7 +164,7 @@ export function ProfileView() {
     return data.url as string;
   }
 
-  async function handleConnectProvider(strategy: string) {
+  async function handleConnectProvider(strategy: CreateExternalAccountParams["strategy"]) {
     setConnectingProvider(strategy);
     try {
       const res = await createExternalAccount({
@@ -181,7 +183,7 @@ export function ProfileView() {
   }
 
   async function handleRemoveConnectedAccount(acc: ExternalAccountShape) {
-    if (!confirm(`Remove ${acc.provider} (${acc.emailAddress ?? acc.provider}) from your account? You can reconnect later.`)) return;
+    if (!confirm(`Remove ${acc.provider} (${acc.emailAddress ?? acc.provider}) from your account? You can reconnect later.`) || !user) return;
     setRemovingAccountId(acc.id);
     setExpandedAccountId(null);
     try {

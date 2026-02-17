@@ -24,7 +24,7 @@ export function CopingComparisonChart() {
           <YAxis tick={{ fill: "#6b7280", fontSize: 11 }} />
           <Tooltip
             contentStyle={{ borderRadius: "8px", border: "1px solid #e5e7eb" }}
-            formatter={(value: number, name: string, props: { payload: { measure?: string } }) => {
+            formatter={(value: number, name: string, props: { payload?: { measure?: string } }) => {
               const m = props.payload?.measure ?? "";
               const suffix = m.includes("Duration") ? "h" : m.includes("relief") || m.includes("effectiveness") ? "/10" : "";
               return [`${value}${suffix}`, name === "retail" ? "Retail therapy" : "Healthier coping"];

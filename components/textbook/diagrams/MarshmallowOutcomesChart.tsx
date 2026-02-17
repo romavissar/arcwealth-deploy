@@ -26,8 +26,8 @@ export function MarshmallowOutcomesChart() {
           <YAxis tick={{ fill: "#6b7280", fontSize: 11 }} />
           <Tooltip
             contentStyle={{ borderRadius: "8px", border: "1px solid #e5e7eb" }}
-            formatter={(value: number, name: string, props: { payload: { unit: string } }) => {
-              const u = props.payload.unit;
+            formatter={(value: number, name: string, props: { payload?: { unit: string } }) => {
+              const u = props.payload?.unit ?? "";
               return [u === "k" ? `€${value}k` : u === "/10" ? value : `${value}${u}`, name];
             }}
           />
