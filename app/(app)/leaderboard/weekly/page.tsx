@@ -57,7 +57,7 @@ export default async function LeaderboardWeeklyPage() {
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">XP earned in the last 7 days</p>
       <ul className="space-y-2">
         {ordered.map((p, i) => {
-          const rankInfo = getRankBySlug(p.rank);
+          const rankInfo = getRankBySlug(p.rank ?? "novice");
           const xp = xpMap.get(p.id) ?? 0;
           return (
             <li

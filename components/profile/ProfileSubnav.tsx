@@ -41,7 +41,7 @@ export function ProfileSubnav() {
   return (
     <nav className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
       {navItems.map((item) => {
-        const href = typeof item.href === "function" ? item.href(viewedUserId!) : item.href;
+        const href = item.href;
         const label = item.label;
         const Icon = item.icon;
         const isActive =

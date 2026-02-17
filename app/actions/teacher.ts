@@ -73,14 +73,14 @@ export async function getMyStudents(teacherUserId?: string): Promise<
     entry.topicIds.push(p.topic_id);
     if (level != null) entry.levels.add(level);
   }
-  function getNextTopicIdForUser(userId: string): string | null {
+  const getNextTopicIdForUser = (userId: string): string | null => {
     const comp = completedByUser.get(userId);
     if (!comp?.topicIds.length) return topicByOrder.get(0) ?? "1.1.1";
     const lastOrder = Math.max(...comp.topicIds.map((tid) => orderByTopic.get(tid) ?? -1));
     const nextOrder = lastOrder + 1;
     if (nextOrder > maxOrder) return null;
     return topicByOrder.get(nextOrder) ?? null;
-  }
+  };
   const { data: userAch } = await supabase
     .from("user_achievements")
     .select("user_id, achievement_slug")
