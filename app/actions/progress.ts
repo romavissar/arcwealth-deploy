@@ -52,6 +52,20 @@ async function grantAchievement(
   });
 }
 
+/** Mark any nudges for this student whose suggested lesson is this topic as read (hides dashboard popup, marks in bell). */
+async function markNudgesForTopicRead(
+  supabase: SupabaseClient,
+  userId: string,
+  topicId: string
+): Promise<void> {
+  await supabase
+    .from("teacher_nudges")
+    .update({ read_at: new Date().toISOString() })
+    .eq("student_user_id", userId)
+    .eq("next_topic_id", topicId)
+    .is("read_at", null);
+}
+
 /** Achievement slug -> requirement check. Returns true if the user has met the requirement (so they can collect it). */
 async function checkAchievementRequirement(
   supabase: SupabaseClient,
@@ -161,6 +175,8 @@ export async function completeLesson(topicId: string, xpEarned: number, isRedo =
     attempts: 1,
   }).eq("user_id", userId).eq("topic_id", topicId);
 
+  await markNudgesForTopicRead(supabase, userId, topicId);
+
   if (isRedo) {
     return {};
   }
@@ -243,6 +259,8 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
     xp_earned: xpEarned,
     completed_at: new Date().toISOString(),
   }).eq("user_id", userId).eq("topic_id", topicId);
+
+  await markNudgesForTopicRead(supabase, userId, topicId);
 
   if (isRedo) return {};
 

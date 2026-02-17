@@ -6,15 +6,19 @@ import { getXPProgressToNextLevel } from "@/lib/xp";
 import { getRankBySlug } from "@/lib/ranks";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getLatestNudge } from "@/app/actions/nudge";
+import { LESSON_TITLES } from "@/lib/curriculum";
+import { Send } from "lucide-react";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
   if (!userId) return null;
 
   const supabase = createServiceClient();
-  const [profileRes, progressRes] = await Promise.all([
+  const [profileRes, progressRes, nudge] = await Promise.all([
     supabase.from("user_profiles").select("xp, streak_days, rank, level").eq("id", userId).single(),
     supabase.from("user_progress").select("topic_id, status").eq("user_id", userId).order("topic_id"),
+    getLatestNudge(),
   ]);
 
   const profile = profileRes.data;
@@ -37,6 +41,31 @@ export default async function DashboardPage() {
           Keep building your money skills.
         </p>
       </div>
+
+      {nudge && (
+        <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/50 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <span className="rounded-full bg-amber-200 dark:bg-amber-800 p-2 shrink-0">
+              <Send className="h-5 w-5 text-amber-700 dark:text-amber-300" />
+            </span>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-gray-100">
+                {nudge.teacherUsername} nudged you to continue
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+                {nudge.nextTopicId
+                  ? `Next up: ${LESSON_TITLES[nudge.nextTopicId] ?? nudge.nextTopicId}`
+                  : "Keep going — you’re doing great!"}
+              </p>
+            </div>
+          </div>
+          {nudge.nextTopicId && (
+            <Button asChild size="sm" className="shrink-0">
+              <Link href={`/learn/${nudge.nextTopicId}`}>Do next lesson</Link>
+            </Button>
+          )}
+        </div>
+      )}
 
       {/* Current topic, level, XP, streak, rank */}
       <div className="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 p-5 shadow-sm">

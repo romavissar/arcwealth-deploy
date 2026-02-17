@@ -57,6 +57,8 @@ export interface Database {
           id: string;
           username: string;
           avatar_url: string | null;
+          email: string | null;
+          role: string;
           xp: number;
           level: number;
           rank: string;
@@ -130,6 +132,24 @@ export interface Database {
           earned_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["user_achievements"]["Insert"]>;
+      };
+      admin_config: {
+        Row: {
+          id: number;
+          allowed_student_email_endings: Json;
+          updated_at: string | null;
+        };
+        Insert: { id?: number; allowed_student_email_endings?: Json; updated_at?: string | null };
+        Update: Partial<Database["public"]["Tables"]["admin_config"]["Insert"]>;
+      };
+      student_teacher: {
+        Row: {
+          student_user_id: string;
+          teacher_user_id: string;
+          created_at: string | null;
+        };
+        Insert: { student_user_id: string; teacher_user_id: string; created_at?: string | null };
+        Update: Partial<Database["public"]["Tables"]["student_teacher"]["Insert"]>;
       };
     };
   };

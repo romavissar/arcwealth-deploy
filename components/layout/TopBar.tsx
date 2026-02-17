@@ -5,8 +5,10 @@ import { XPBar } from "@/components/ui/XPBar";
 import { StreakBadge } from "@/components/ui/StreakBadge";
 import { RankBadge } from "@/components/ui/RankBadge";
 import { HeartDisplay } from "@/components/ui/HeartDisplay";
+import { NotificationsButton } from "@/components/layout/NotificationsButton";
+import type { NotificationItem } from "@/app/actions/nudge";
 
-export function TopBar() {
+export function TopBar({ notifications = [] }: { notifications?: NotificationItem[] }) {
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur dark:border-gray-700 dark:bg-gray-900/95">
       <div className="flex h-14 items-center justify-between px-4 gap-4">
@@ -16,6 +18,7 @@ export function TopBar() {
           <XPBar />
         </div>
         <div className="flex items-center gap-2">
+          <NotificationsButton notifications={notifications} />
           <HeartDisplay />
           <UserButton
             afterSignOutUrl="/"

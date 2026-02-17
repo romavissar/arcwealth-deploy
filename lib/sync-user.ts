@@ -1,51 +1,88 @@
 import { createServiceClient } from "@/lib/supabase/server";
 
-/** True if the stored username looks like a slug (not a full name). */
-function looksLikeSlug(username: string | null): boolean {
-  if (!username) return true;
-  if (username === "user") return true;
-  if (!username.includes(" ")) return true;
-  if (username === username.toLowerCase()) return true;
-  return false;
+const ADMIN_EMAIL = "romavissar@gmail.com";
+
+export type UserRole = "admin" | "teacher" | "student" | "user";
+
+/** Resolve role for a user: admin by email, else from user_profiles.role. */
+export function resolveRole(profileRole: string | null, email: string | null | undefined): UserRole {
+  if (email?.toLowerCase() === ADMIN_EMAIL) return "admin";
+  return (profileRole as UserRole) ?? "user";
 }
 
 /**
  * Ensures a Clerk user has a row in user_profiles and user_progress.
- * Call from (app) layout or when loading profile so dev works without webhooks.
- * If profile exists with a slug-like username, updates it to Clerk's full name.
+ * Sets role to admin if email is ADMIN_EMAIL; otherwise keeps existing role.
+ * Syncs email to user_profiles for admin/student matching.
  */
-export async function ensureUserInSupabase(userId: string, opts?: { username?: string; imageUrl?: string }) {
+export async function ensureUserInSupabase(
+  userId: string,
+  opts?: { username?: string; imageUrl?: string; email?: string }
+) {
   const supabase = createServiceClient();
-  const { data: existing } = await supabase.from("user_profiles").select("id, username").eq("id", userId).single();
+  const { data: existing } = await supabase
+    .from("user_profiles")
+    .select("id, username, role")
+    .eq("id", userId)
+    .single();
 
   const displayName = opts?.username?.trim().slice(0, 50) || null;
   const suffix = Date.now().toString(36).slice(-6);
   const fullNameWithSuffix = displayName ? `${displayName}_${suffix}` : `user_${suffix}`;
+  const email = opts?.email?.trim().toLowerCase() || null;
+  const isAdminEmail = email === ADMIN_EMAIL;
+  const updatePayload: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
+    ...(opts?.imageUrl != null && { avatar_url: opts.imageUrl }),
+    ...(email != null && { email }),
+    ...(isAdminEmail && { role: "admin" }),
+  };
 
   if (existing) {
-    if (displayName && looksLikeSlug(existing.username)) {
-      const { error: updateErr } = await supabase.from("user_profiles").update({
-        username: displayName,
-        ...(opts?.imageUrl != null && { avatar_url: opts?.imageUrl }),
-        updated_at: new Date().toISOString(),
-      }).eq("id", userId);
-      if (updateErr && updateErr.code === "23505") {
-        await supabase.from("user_profiles").update({
-          username: fullNameWithSuffix,
-          ...(opts?.imageUrl != null && { avatar_url: opts?.imageUrl }),
-          updated_at: new Date().toISOString(),
-        }).eq("id", userId);
+    // Always sync display name from Clerk so name changes (e.g. Rom AVISSAR → Rom School) appear everywhere
+    if (displayName) {
+      updatePayload.username = displayName;
+    }
+    // Re-apply teacher role from persistent list so it is never lost (e.g. by other code or sync)
+    const { data: inTeacherList } = await supabase
+      .from("teacher_list")
+      .select("user_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (inTeacherList) {
+      updatePayload.role = "teacher";
+    }
+    if (Object.keys(updatePayload).length > 1) {
+      const { error: updateErr } = await supabase
+        .from("user_profiles")
+        .update(updatePayload)
+        .eq("id", userId);
+      if (updateErr && updateErr.code === "23505" && updatePayload.username) {
+        await supabase
+          .from("user_profiles")
+          .update({
+            username: fullNameWithSuffix,
+            ...(opts?.imageUrl != null && { avatar_url: opts.imageUrl }),
+            ...(email != null && { email }),
+            ...(isAdminEmail && { role: "admin" }),
+            ...(inTeacherList && { role: "teacher" }),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", userId);
       }
     }
     return;
   }
 
   const username = displayName || "user";
+  const role = isAdminEmail ? "admin" : "user";
   const { error: profileError } = await supabase.from("user_profiles").insert({
     id: userId,
     username,
     avatar_url: opts?.imageUrl ?? null,
     rank: "novice",
+    email: email ?? null,
+    role,
   });
   if (profileError) {
     await supabase.from("user_profiles").insert({
@@ -53,6 +90,8 @@ export async function ensureUserInSupabase(userId: string, opts?: { username?: s
       username: fullNameWithSuffix,
       avatar_url: opts?.imageUrl ?? null,
       rank: "novice",
+      email: email ?? null,
+      role: role as "admin" | "user",
     });
   }
   const { data: topics } = await supabase.from("topics").select("topic_id").order("order_index");
