@@ -9,6 +9,7 @@ import {
   getClassroomPeople,
   getMyAssignmentStatus,
 } from "@/app/actions/classroom";
+import { getFriendStatusForUsers } from "@/app/actions/friends";
 import { ClassroomViewTeacher } from "@/components/classroom/ClassroomViewTeacher";
 import { ClassroomViewStudent } from "@/components/classroom/ClassroomViewStudent";
 
@@ -65,14 +66,21 @@ export default async function ClassroomPage() {
         </div>
       );
     }
+    const people = peopleRes.people!;
+    const studentIds = people.students.map((s) => s.id);
+    const { statusByUserId } = studentIds.length
+      ? await getFriendStatusForUsers(studentIds)
+      : { statusByUserId: {} as Record<string, "friends" | "pending_sent" | "pending_received" | "none"> };
     return (
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Classroom</h1>
         <ClassroomViewStudent
-          people={peopleRes.people!}
+          people={people}
           messages={messagesRes.messages ?? []}
           assignments={assignmentsRes.assignments ?? []}
           assignmentStatus={statusRes}
+          friendStatusByUserId={statusByUserId ?? {}}
+          currentUserId={userId}
         />
       </div>
     );

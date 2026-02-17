@@ -5,6 +5,8 @@ import Image from "next/image";
 import { MessageSquare, Users, ClipboardList } from "lucide-react";
 import type { ClassroomMessage, ClassroomAssignment } from "@/app/actions/classroom";
 import type { ClassroomPeople } from "@/app/actions/classroom";
+import type { FriendStatus } from "@/app/actions/friends";
+import { LeaderboardRowFriendAction } from "@/components/leaderboard/LeaderboardRowFriendAction";
 import { getLessonTitle } from "@/lib/curriculum";
 import { formatDateTimeInBucharest } from "@/lib/bucharest-time";
 import Link from "next/link";
@@ -17,11 +19,15 @@ export function ClassroomViewStudent({
   messages,
   assignments,
   assignmentStatus,
+  friendStatusByUserId = {},
+  currentUserId,
 }: {
   people: ClassroomPeople;
   messages: ClassroomMessage[];
   assignments: ClassroomAssignment[];
   assignmentStatus: { assignmentId: string; topicId: string; dueAt: string; completed: boolean }[];
+  friendStatusByUserId?: Record<string, FriendStatus>;
+  currentUserId?: string;
 }) {
   const statusByAssignmentId = new Map(assignmentStatus.map((s) => [s.assignmentId, s]));
 
@@ -83,23 +89,32 @@ export function ClassroomViewStudent({
             <ul className="space-y-3">
               {people.students.map((s) => (
                 <li key={s.id} className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
-                  {s.avatarUrl ? (
-                    <Image
-                      src={s.avatarUrl}
-                      alt=""
-                      width={40}
-                      height={40}
-                      className="rounded-full object-cover h-10 w-10"
-                    />
-                  ) : (
-                    <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0">
-                      {s.username.slice(0, 1).toUpperCase()}
+                  <Link href={`/profile/${s.id}`} className="flex items-center gap-3 min-w-0 flex-1">
+                    {s.avatarUrl ? (
+                      <Image
+                        src={s.avatarUrl}
+                        alt=""
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover h-10 w-10"
+                      />
+                    ) : (
+                      <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0">
+                        {s.username.slice(0, 1).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-medium">{s.username}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{s.rank} · Level {s.level}</p>
                     </div>
+                  </Link>
+                  {currentUserId !== s.id && (
+                    <LeaderboardRowFriendAction
+                      userId={s.id}
+                      username={s.username}
+                      status={friendStatusByUserId[s.id] ?? "none"}
+                    />
                   )}
-                  <div>
-                    <p className="font-medium">{s.username}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{s.rank} · Level {s.level}</p>
-                  </div>
                 </li>
               ))}
             </ul>

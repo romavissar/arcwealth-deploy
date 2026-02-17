@@ -7,26 +7,58 @@ import { getRankBySlug } from "@/lib/ranks";
 
 export const dynamic = "force-dynamic";
 
-export default async function LeaderboardPage() {
+export default async function LeaderboardWeeklyPage() {
   noStore();
   const supabase = createServiceClient();
-  const [{ data: teacherRows }, { data: allProfiles }] = await Promise.all([
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const [{ data: teacherRows }, { data: events }] = await Promise.all([
     supabase.from("teacher_list").select("user_id"),
     supabase
-      .from("user_profiles")
-      .select("id, username, xp, rank, avatar_url")
-      .order("xp", { ascending: false })
-      .limit(50),
+      .from("xp_events")
+      .select("user_id, amount")
+      .gte("created_at", weekAgo.toISOString()),
   ]);
   const teacherIdSet = new Set((teacherRows ?? []).map((r) => r.user_id));
-  const profiles = (allProfiles ?? []).filter((p) => !teacherIdSet.has(p.id)).slice(0, 20);
+
+  const xpByUser = new Map<string, number>();
+  for (const e of events ?? []) {
+    if (teacherIdSet.has(e.user_id)) continue;
+    xpByUser.set(e.user_id, (xpByUser.get(e.user_id) ?? 0) + (e.amount ?? 0));
+  }
+  const topEntries = [...xpByUser.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20);
+  const topIds = topEntries.map(([id]) => id);
+  const xpMap = new Map(topEntries);
+
+  if (topIds.length === 0) {
+    return (
+      <>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Weekly Leaderboard</h1>
+        <p className="text-gray-500 dark:text-gray-400">No XP earned in the last 7 days. Complete lessons and quizzes to appear here!</p>
+      </>
+    );
+  }
+
+  const { data: profiles } = await supabase
+    .from("user_profiles")
+    .select("id, username, rank, avatar_url")
+    .in("id", topIds);
+
+  const ordered = topIds
+    .map((id) => profiles?.find((p) => p.id === id))
+    .filter(Boolean) as { id: string; username: string | null; rank: string | null; avatar_url: string | null }[];
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">All Time Leaderboard</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Weekly Leaderboard</h1>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">XP earned in the last 7 days</p>
       <ul className="space-y-2">
-        {(profiles ?? []).map((p, i) => {
+        {ordered.map((p, i) => {
           const rankInfo = getRankBySlug(p.rank);
+          const xp = xpMap.get(p.id) ?? 0;
           return (
             <li
               key={p.id}
@@ -52,7 +84,7 @@ export default async function LeaderboardPage() {
               <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-sm shrink-0", rankInfo?.color ?? "bg-gray-100", rankInfo?.darkColor)}>
                 {rankInfo?.icon ?? "🌱"} {rankInfo?.title ?? "Novice"}
               </span>
-              <span className="text-primary font-semibold shrink-0 ml-auto">{p.xp ?? 0} XP</span>
+              <span className="text-primary font-semibold shrink-0 ml-auto">{xp} XP</span>
             </li>
           );
         })}
