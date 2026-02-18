@@ -46,8 +46,8 @@ const EXERCISES_1_1_12: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Habit stacking means attaching a new habit to an existing one using the formula: 'After [CURRENT HABIT], I will [NEW HABIT].'",
-    correct: true,
+    statement: "Habit stacking means replacing an existing habit entirely with a new one.",
+    correct: false,
     explanation: "Existing habits are reliable cues. No new cue needed — the old habit reminds you.",
   },
   {

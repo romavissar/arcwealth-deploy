@@ -42,8 +42,8 @@ const EXERCISES_1_1_5: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "The most effective strategies for building delayed gratification are structural — like automating savings — rather than relying on willpower alone.",
-    correct: true,
+    statement: "The most effective way to build delayed gratification is to rely on willpower alone.",
+    correct: false,
     explanation: "Strategies that remove the decision and make delayed gratification the default vastly outperform repeated willpower. Automation ranks highest.",
   },
   {

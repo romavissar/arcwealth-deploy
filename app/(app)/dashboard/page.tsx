@@ -7,7 +7,7 @@ import { getRankBySlug } from "@/lib/ranks";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getLatestNudge } from "@/app/actions/nudge";
-import { LESSON_TITLES } from "@/lib/curriculum";
+import { LESSON_TITLES, VALID_LEARN_TOPIC_IDS } from "@/lib/curriculum";
 import { Send } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -15,19 +15,36 @@ export default async function DashboardPage() {
   if (!userId) return null;
 
   const supabase = createServiceClient();
-  const [profileRes, progressRes, nudge] = await Promise.all([
+  const [profileRes, progressRes, topicsRes, nudge] = await Promise.all([
     supabase.from("user_profiles").select("xp, streak_days, rank, level").eq("id", userId).single(),
-    supabase.from("user_progress").select("topic_id, status").eq("user_id", userId).order("topic_id"),
+    supabase.from("user_progress").select("topic_id, status").eq("user_id", userId),
+    supabase.from("topics").select("topic_id, order_index").order("order_index"),
     getLatestNudge(),
   ]);
 
   const profile = profileRes.data;
   const progress = progressRes.data ?? [];
+  const topics = (topicsRes.data ?? []).filter((t) => VALID_LEARN_TOPIC_IDS.has(t.topic_id));
+  const progressByTopic = new Map(progress.map((p) => [p.topic_id, p.status as string]));
   const xp = profile?.xp ?? 0;
   const { percentage, current: xpInLevel, required: xpToNextLevel } = getXPProgressToNextLevel(xp);
   const rank = profile ? getRankBySlug(profile.rank ?? "novice") : null;
-  const inProgressTopic = progress.find((p) => p.status === "in_progress");
-  const continueTopic = progress.find((p) => p.status === "available" || p.status === "in_progress");
+
+  let inProgressTopic: { topic_id: string } | undefined;
+  let continueTopic: { topic_id: string } | undefined;
+  for (let i = 0; i < topics.length; i++) {
+    const t = topics[i];
+    const status = progressByTopic.get(t.topic_id);
+    if (status === "in_progress") inProgressTopic = t;
+    if (status === "available" || status === "in_progress") {
+      continueTopic = t;
+      break;
+    }
+    if ((status === undefined || status === "locked") && i > 0 && progressByTopic.get(topics[i - 1].topic_id) === "completed") {
+      continueTopic = t;
+      break;
+    }
+  }
   const currentTopicId = inProgressTopic?.topic_id ?? continueTopic?.topic_id ?? "1.1.1";
   const nextTopicId = continueTopic?.topic_id ?? "1.1.1";
 

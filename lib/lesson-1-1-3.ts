@@ -59,8 +59,8 @@ const EXERCISES_1_1_3: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Adding friction to purchases — e.g. removing saved card details or using a wishlist — reduces impulse completion because it creates a pause that allows rational thinking to engage.",
-    correct: true,
+    statement: "Adding friction to purchases (e.g. removing saved card details or using a wishlist) has no effect on whether people complete impulse buys.",
+    correct: false,
     explanation: "Retailers remove friction to make you spend more; you can add it back deliberately. Friction doesn't make buying impossible, it creates a pause.",
   },
   {

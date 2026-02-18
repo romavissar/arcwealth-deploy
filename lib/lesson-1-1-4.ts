@@ -47,8 +47,8 @@ const EXERCISES_1_1_4: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Research consistently finds that experiences (e.g. travel, concerts, meals with friends) retain satisfaction longer than material purchases.",
-    correct: true,
+    statement: "Research shows that material purchases typically retain satisfaction longer than experiences like travel or meals with friends.",
+    correct: false,
     explanation: "Experiences retain satisfaction significantly longer than material goods — memory maintains emotional warmth and they become part of your story.",
   },
   {

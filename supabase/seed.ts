@@ -4,12 +4,12 @@
  */
 import { config } from "dotenv";
 import { resolve } from "path";
+import { createClient } from "@supabase/supabase-js";
+import { LESSON_TITLES } from "@/lib/curriculum";
 
 // Load .env then .env.local so local overrides (same order as Next.js)
 config({ path: resolve(process.cwd(), ".env") });
 config({ path: resolve(process.cwd(), ".env.local") });
-
-import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -61,12 +61,13 @@ function buildTopics(): { topic_id: string; level_number: number; section_number
     if (s.type === "lesson" && s.lessonStart < s.lessonEnd) {
       const count = s.lessonEnd - s.lessonStart + 1;
       for (let i = 1; i <= count; i++) {
+        const topic_id = `${s.level}.${s.section}.${i}`;
         topics.push({
-          topic_id: `${s.level}.${s.section}.${i}`,
+          topic_id,
           level_number: s.level,
           section_number: s.section,
           lesson_number: i,
-          title: `Lesson ${i}`,
+          title: LESSON_TITLES[topic_id] ?? `Lesson ${i}`,
           topic_type: "lesson",
           xp_reward: 10,
           order_index: orderIndex++,

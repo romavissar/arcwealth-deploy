@@ -46,8 +46,8 @@ const EXERCISES_1_2_2: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "A salaried employee earning €31,200/year with 4 weeks paid holiday receives that full amount even when not working those weeks. A waged employee at €15/hour who takes 4 weeks unpaid holiday earns €2,400 less annually (48 weeks × 40h × €15).",
-    correct: true,
+    statement: "A waged employee at €15/hour who takes 4 weeks unpaid holiday earns the same annual amount as a salaried employee at €31,200/year with 4 weeks paid holiday.",
+    correct: false,
     explanation: "True hourly comparison must include paid time off. Salary with paid leave can be worth more in total than the same hourly rate with unpaid leave.",
   },
   {

@@ -71,8 +71,8 @@ const EXERCISES_1_2_3: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Pension contributions (employee share) are not a tax — the money is yours in retirement. Opting out of an employer pension that includes matching is usually refusing free money.",
-    correct: true,
+    statement: "Opting out of an employer pension that includes matching is usually a good way to increase take-home pay without losing anything.",
+    correct: false,
     explanation: "Employer matching is free money. Sophie's opt-out cost her the match plus decades of compound growth.",
   },
   {

@@ -83,9 +83,9 @@ const EXERCISES_1_2_4: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "The lesson recommends a 7-step monthly payslip check: receive → check gross → verify hours → check deductions → verify net → check YTD → file and save. It takes about 5 minutes.",
-    correct: true,
-    explanation: "Save payslips for at least 6 years (legal requirement in many countries).",
+    statement: "The lesson says checking your payslip thoroughly takes at least 30 minutes, so you should only do it once a year.",
+    correct: false,
+    explanation: "The 7-step check takes about 5 minutes. Do it every month and save payslips for at least 6 years.",
   },
 ];
 

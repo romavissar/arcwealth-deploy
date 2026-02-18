@@ -57,8 +57,8 @@ const EXERCISES_1_1_1: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Limited supply is an important property of money — if something can be created infinitely, it tends to become worthless.",
-    correct: true,
+    statement: "Limited supply is not important for money — anything can work as money even if it can be created in unlimited amounts.",
+    correct: false,
     explanation: "Gold must be mined; governments control printing. Without limited supply, money would lose its value.",
   },
   // After 04 — How Money Evolved

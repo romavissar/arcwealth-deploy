@@ -47,9 +47,9 @@ const EXERCISES_1_1_2: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Person A (saving €200/month) and Person B (saving €50/month) with the same income can end up with a large gap in wealth after 10 years, mainly because of the needs/wants distinction applied over time.",
-    correct: true,
-    explanation: "The lesson shows that consistent clarity about needs vs wants, and saving the difference, compounds into roughly four times more wealth for Person A over 10 years.",
+    statement: "Person A (saving €200/month) and Person B (saving €50/month) with the same income will have roughly the same wealth after 10 years.",
+    correct: false,
+    explanation: "Small differences in saving (needs vs wants) compound. Person A can end up with a much larger gap in wealth over time.",
   },
   {
     kind: "multiple_choice",

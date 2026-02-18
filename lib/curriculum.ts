@@ -54,6 +54,16 @@ const LESSON_COUNTS: { level: number; section: number; count: number }[] = [
   { level: 5, section: 1, count: 15 },
 ];
 
+/** Topic IDs that belong on the learn path (lessons + checkpoints + boss). Used to hide stale DB rows (e.g. "Lesson 13"). */
+export const VALID_LEARN_TOPIC_IDS: Set<string> = (() => {
+  const set = new Set<string>();
+  for (const r of LESSON_COUNTS) {
+    for (let i = 1; i <= r.count; i++) set.add(`${r.level}.${r.section}.${i}`);
+  }
+  ["1.1.checkpoint", "1.2.checkpoint", "2.1.checkpoint", "3.1.checkpoint", "4.1.checkpoint", "1.boss", "2.boss", "3.boss"].forEach((id) => set.add(id));
+  return set;
+})();
+
 export function getNextTopicId(topicId: string): string | null {
   const p = parseTopicId(topicId);
   if (!p) return null;
@@ -290,7 +300,11 @@ export function getLessonTitle(topicId: string): string {
   return LESSON_TITLES[topicId] ?? (p ? `Lesson ${p.lesson}` : topicId);
 }
 
+const CHECKPOINT_DESCRIPTION =
+  "Test your understanding of this section with a short quiz. Pass with 80% or higher to unlock the next section.";
+
 export function getLessonDescription(topicId: string): string | null {
+  if (topicId.endsWith(".checkpoint")) return CHECKPOINT_DESCRIPTION;
   return LESSON_DESCRIPTIONS[topicId] ?? null;
 }
 

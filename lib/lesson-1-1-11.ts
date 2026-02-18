@@ -41,9 +41,9 @@ const EXERCISES_1_1_11: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "The most powerful predictor of goal achievement isn't the goal itself — it's why you want it. Goals tied to core values have strong intrinsic drive.",
-    correct: true,
-    explanation: "Connect every goal to your 'why' using the 5-Whys. When motivation dips, reconnect to the value.",
+    statement: "Vague goals and SMART goals have similar achievement rates in research.",
+    correct: false,
+    explanation: "SMART goals achieve roughly 6× higher completion rates than vague goals in studies. Specific, measurable, time-bound goals work.",
   },
   {
     kind: "multiple_choice",

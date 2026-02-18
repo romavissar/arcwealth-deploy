@@ -40,6 +40,7 @@ export type LessonExercise =
       explanation: string;
     }
   | {
+      /** Balance true_false exercises: aim for ~50% correct: true and ~50% correct: false so learners don't guess "true". Use false statements (common myths) with explanations that correct them. */
       kind: "true_false";
       statement: string;
       correct: boolean;

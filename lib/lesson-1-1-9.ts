@@ -47,8 +47,8 @@ const EXERCISES_1_1_9: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "People with abundance mindset (compared to scarcity) show roughly 4–5× higher savings rates, about half the financial stress, and more than 3× income growth over 5 years in studies.",
-    correct: true,
+    statement: "People with scarcity mindset and abundance mindset show similar savings rates, financial stress, and income growth in studies.",
+    correct: false,
     explanation: "Mindset drives behaviour: abundance leads to calculated risks and investment in growth; scarcity leads to risk avoidance and stagnation.",
   },
   {

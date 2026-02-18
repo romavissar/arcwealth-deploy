@@ -1,5 +1,5 @@
-/** Heart regeneration: 1 heart every this many seconds (for now 10s for testing). */
-export const REGEN_SECONDS = 10;
+/** Heart regeneration: 1 heart every 5 minutes. */
+export const REGEN_SECONDS = 5 * 60;
 const MAX_HEARTS_DEFAULT = 5;
 
 /**

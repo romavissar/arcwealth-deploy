@@ -47,8 +47,8 @@ const EXERCISES_1_1_7: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "The STOP framework stands for: Stop physically, Take breaths, Observe the emotion, Pick an alternative. The key is inserting a pause between emotion and purchase.",
-    correct: true,
+    statement: "The STOP framework recommends buying immediately to relieve the emotion, then reflecting later.",
+    correct: false,
     explanation: "The pause creates space for choice. You can't stop emotional spending by willpower alone — you need a system like STOP.",
   },
   {

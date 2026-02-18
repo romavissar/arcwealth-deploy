@@ -15,16 +15,18 @@ interface ResultsScreenProps {
 
 export function ResultsScreen({ topicId, xpEarned, totalExercises, wrongCount, redoMode = false, onContinue }: ResultsScreenProps) {
   const perfect = wrongCount === 0;
-  const loseHeart = totalExercises > 0 && wrongCount / totalExercises > 0.3;
+  const correctPct = totalExercises > 0 ? (totalExercises - wrongCount) / totalExercises : 1;
+  const passed = correctPct >= 0.7;
+  const loseHeart = totalExercises > 0 && correctPct < 0.7;
   const heartDecrementedRef = useRef(false);
   const lessonCompletedRef = useRef(false);
 
   useEffect(() => {
-    if (perfect && !lessonCompletedRef.current) {
+    if (passed && !lessonCompletedRef.current) {
       lessonCompletedRef.current = true;
       completeLesson(topicId, xpEarned, redoMode).catch(() => {});
     }
-  }, [perfect, topicId, xpEarned, redoMode]);
+  }, [passed, topicId, xpEarned, redoMode]);
 
   useEffect(() => {
     if (loseHeart && !heartDecrementedRef.current) {
@@ -43,14 +45,18 @@ export function ResultsScreen({ topicId, xpEarned, totalExercises, wrongCount, r
           <p className="text-gray-600 dark:text-gray-300 mb-8">
             You finished {totalExercises} exercise{totalExercises !== 1 ? "s" : ""} with no mistakes. Keep it up!
           </p>
+        ) : passed ? (
+          <p className="text-gray-600 dark:text-gray-300 mb-8">
+            You had {wrongCount} mistake{wrongCount !== 1 ? "s" : ""}. Lesson marked complete — next one unlocked!
+          </p>
         ) : (
           <p className="text-gray-600 dark:text-gray-300 mb-8">
-            You had {wrongCount} mistake{wrongCount !== 1 ? "s" : ""}. Redo the lesson with no mistakes to mark it
-            complete.
+            You had {wrongCount} mistake{wrongCount !== 1 ? "s" : ""}. Get at least 70% correct to mark the lesson
+            complete and unlock the next.
           </p>
         )}
         {loseHeart && (
-          <p className="text-red-600 dark:text-red-400 text-sm mb-4">More than 30% wrong — one heart lost.</p>
+          <p className="text-red-600 dark:text-red-400 text-sm mb-4">Below 70% — one heart lost.</p>
         )}
         <Button size="lg" className="w-full" onClick={onContinue}>
           Continue

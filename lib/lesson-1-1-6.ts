@@ -42,8 +42,8 @@ const EXERCISES_1_1_6: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "The lesson suggests that the question about a money belief is not whether it's objectively true, but whether it serves you — limiting beliefs can be reframed to open possibility.",
-    correct: true,
+    statement: "The lesson says the key question about a money belief is only whether it is objectively true — not whether it serves you.",
+    correct: false,
     explanation: "Beliefs aren't true or false, they're useful or not. Reframing isn't about denying reality but opening possibility.",
   },
   {

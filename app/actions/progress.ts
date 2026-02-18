@@ -168,12 +168,17 @@ export async function completeLesson(topicId: string, xpEarned: number, isRedo =
 
   const supabase = createServiceClient();
 
-  await supabase.from("user_progress").update({
-    status: "completed",
-    xp_earned: xpEarned,
-    completed_at: new Date().toISOString(),
-    attempts: 1,
-  }).eq("user_id", userId).eq("topic_id", topicId);
+  await supabase.from("user_progress").upsert(
+    {
+      user_id: userId,
+      topic_id: topicId,
+      status: "completed",
+      xp_earned: xpEarned,
+      completed_at: new Date().toISOString(),
+      attempts: 1,
+    },
+    { onConflict: "user_id,topic_id" }
+  );
 
   await markNudgesForTopicRead(supabase, userId, topicId);
 
@@ -250,7 +255,8 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
   const supabase = createServiceClient();
   const { data: topic } = await supabase.from("topics").select("topic_type, level_number").eq("topic_id", topicId).single();
   const isBoss = topic?.topic_type === "boss_challenge";
-  const threshold = isBoss ? 80 : 70;
+  const isCheckpoint = topic?.topic_type === "checkpoint";
+  const threshold = isCheckpoint ? 80 : isBoss ? 80 : 70;
   if (score < threshold) return { error: "Score too low to pass" };
 
   await supabase.from("user_progress").update({
@@ -317,9 +323,12 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
   if (newStreak === 7) await grantAchievement(supabase, userId, "streak_7");
   if (newStreak === 30) await grantAchievement(supabase, userId, "streak_30");
 
-  const nextTopic = topicId.includes("checkpoint")
-    ? topicId.replace(".checkpoint", "").split(".").slice(0, 2).join(".") + ".boss"
-    : null;
+  let nextTopic: string | null = null;
+  if (topicId.includes("checkpoint")) {
+    const [level, section] = topicId.replace(".checkpoint", "").split(".");
+    const nextSection = Number(section) + 1;
+    nextTopic = `${level}.${nextSection}.1`;
+  }
   if (nextTopic) {
     await supabase.from("user_progress").upsert(
       { user_id: userId, topic_id: nextTopic, status: "available" },

@@ -42,9 +42,9 @@ const EXERCISES_1_1_8: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Price framing (e.g. 'Only €2.50/day' instead of '€912/year') makes the same amount feel smaller by using small time units that hide the total cost.",
-    correct: true,
-    explanation: "€2.50/day feels trivial; €912/year feels significant. They're the same. Always convert subscriptions to annual cost.",
+    statement: "Showing a price as '€2.50/day' instead of '€912/year' has no effect on how people perceive the cost.",
+    correct: false,
+    explanation: "Price framing works: small time units make the same amount feel smaller. Always convert to annual cost to compare fairly.",
   },
   {
     kind: "multiple_choice",

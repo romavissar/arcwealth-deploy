@@ -78,8 +78,8 @@ const EXERCISES_1_2_1: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Income and wealth are not the same: income is the flow of money coming in; wealth is the accumulated stock of assets. High income doesn't guarantee wealth.",
-    correct: true,
+    statement: "Income and wealth are the same thing — high income always means high wealth.",
+    correct: false,
     explanation: "Many high earners spend everything. Modest income, saved and invested consistently, can build significant wealth over time.",
   },
 ];

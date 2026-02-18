@@ -42,8 +42,8 @@ const EXERCISES_1_1_10: LessonExercise[] = [
   },
   {
     kind: "true_false",
-    statement: "Values-based spending (vs typical) nearly triples the share of income going to aligned priorities — e.g. 52% vs 18% — without earning more.",
-    correct: true,
+    statement: "Values-based spending has no measurable effect on how much of your income goes to what actually matters to you.",
+    correct: false,
     explanation: "By cutting misaligned spending and redirecting it to aligned priorities, you can dramatically increase satisfaction per euro. Same income, different allocation.",
   },
   {

@@ -18,7 +18,10 @@ export function LessonNode({ topic, status }: LessonNodeProps) {
   const isLesson = topic.topic_type === "lesson";
   const href = isLocked ? undefined : isLesson ? `/learn/${topic.topic_id}/lesson` : `/learn/${topic.topic_id}`;
   const displayTitle = topic.topic_type === "lesson" ? getLessonTitle(topic.topic_id) : topic.title;
-  const description = topic.topic_type === "lesson" ? getLessonDescription(topic.topic_id) : null;
+  const description =
+    topic.topic_type === "lesson" || topic.topic_type === "checkpoint"
+      ? getLessonDescription(topic.topic_id)
+      : null;
   const isQuiz = topic.topic_type === "checkpoint" || topic.topic_type === "boss_challenge";
   const redoHref = isLesson
     ? `/learn/${topic.topic_id}/lesson?redo=1`
