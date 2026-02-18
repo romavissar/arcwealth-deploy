@@ -16,6 +16,10 @@ import { buildLessonSteps1_1_9 } from "@/lib/lesson-1-1-9";
 import { buildLessonSteps1_1_10 } from "@/lib/lesson-1-1-10";
 import { buildLessonSteps1_1_11 } from "@/lib/lesson-1-1-11";
 import { buildLessonSteps1_1_12 } from "@/lib/lesson-1-1-12";
+import { buildLessonSteps1_2_1 } from "@/lib/lesson-1-2-1";
+import { buildLessonSteps1_2_2 } from "@/lib/lesson-1-2-2";
+import { buildLessonSteps1_2_3 } from "@/lib/lesson-1-2-3";
+import { buildLessonSteps1_2_4 } from "@/lib/lesson-1-2-4";
 
 const TEXTBOOK_PATHS: Record<string, string> = {
   "1.1.1": join(process.cwd(), "textbook", "topic-1-1-1-what-is-money.md"),
@@ -30,6 +34,10 @@ const TEXTBOOK_PATHS: Record<string, string> = {
   "1.1.10": join(process.cwd(), "textbook", "topic-1-1-10-values-money.md"),
   "1.1.11": join(process.cwd(), "textbook", "topic-1-1-11-financial-goals.md"),
   "1.1.12": join(process.cwd(), "textbook", "topic-1-1-12-habits-build-wealth.md"),
+  "1.2.1": join(process.cwd(), "textbook", "topic-1-2-1-what-is-income.md"),
+  "1.2.2": join(process.cwd(), "textbook", "topic-1-2-2-salary-wages-paychecks.md"),
+  "1.2.3": join(process.cwd(), "textbook", "topic-1-2-3-net-vs-gross.md"),
+  "1.2.4": join(process.cwd(), "textbook", "topic-1-2-4-how-to-read-payslip.md"),
 };
 
 export default async function LessonPage({
@@ -55,8 +63,8 @@ export default async function LessonPage({
 
   if (progressRes.data?.status === "locked") redirect("/learn");
 
-  // Topic 1.1.1–1.1.12: textbook-based lesson (aligned with /textbook/[topicId])
-  if (topicId === "1.1.1" || topicId === "1.1.2" || topicId === "1.1.3" || topicId === "1.1.4" || topicId === "1.1.5" || topicId === "1.1.6" || topicId === "1.1.7" || topicId === "1.1.8" || topicId === "1.1.9" || topicId === "1.1.10" || topicId === "1.1.11" || topicId === "1.1.12") {
+  // Topic 1.1.x and 1.2.1: textbook-based lesson (aligned with /textbook/[topicId])
+  if (topicId === "1.1.1" || topicId === "1.1.2" || topicId === "1.1.3" || topicId === "1.1.4" || topicId === "1.1.5" || topicId === "1.1.6" || topicId === "1.1.7" || topicId === "1.1.8" || topicId === "1.1.9" || topicId === "1.1.10" || topicId === "1.1.11" || topicId === "1.1.12" || topicId === "1.2.1" || topicId === "1.2.2" || topicId === "1.2.3" || topicId === "1.2.4") {
     const path = TEXTBOOK_PATHS[topicId];
     if (!path) notFound();
     let markdown: string;
@@ -66,29 +74,37 @@ export default async function LessonPage({
       notFound();
     }
     const steps =
-      topicId === "1.1.1"
-        ? buildLessonSteps1_1_1(markdown)
-        : topicId === "1.1.2"
-          ? buildLessonSteps1_1_2(markdown)
-          : topicId === "1.1.3"
-            ? buildLessonSteps1_1_3(markdown)
-            : topicId === "1.1.4"
-              ? buildLessonSteps1_1_4(markdown)
-              : topicId === "1.1.5"
-                ? buildLessonSteps1_1_5(markdown)
-                : topicId === "1.1.6"
-                  ? buildLessonSteps1_1_6(markdown)
-                  : topicId === "1.1.7"
-                    ? buildLessonSteps1_1_7(markdown)
-                    : topicId === "1.1.8"
-                      ? buildLessonSteps1_1_8(markdown)
-                      : topicId === "1.1.9"
-                        ? buildLessonSteps1_1_9(markdown)
-                        : topicId === "1.1.10"
-                          ? buildLessonSteps1_1_10(markdown)
-                          : topicId === "1.1.11"
-                            ? buildLessonSteps1_1_11(markdown)
-                            : buildLessonSteps1_1_12(markdown);
+      topicId === "1.2.4"
+        ? buildLessonSteps1_2_4(markdown)
+        : topicId === "1.2.3"
+          ? buildLessonSteps1_2_3(markdown)
+          : topicId === "1.2.2"
+            ? buildLessonSteps1_2_2(markdown)
+            : topicId === "1.2.1"
+              ? buildLessonSteps1_2_1(markdown)
+              : topicId === "1.1.1"
+          ? buildLessonSteps1_1_1(markdown)
+          : topicId === "1.1.2"
+            ? buildLessonSteps1_1_2(markdown)
+            : topicId === "1.1.3"
+              ? buildLessonSteps1_1_3(markdown)
+              : topicId === "1.1.4"
+                ? buildLessonSteps1_1_4(markdown)
+                : topicId === "1.1.5"
+                  ? buildLessonSteps1_1_5(markdown)
+                  : topicId === "1.1.6"
+                    ? buildLessonSteps1_1_6(markdown)
+                    : topicId === "1.1.7"
+                      ? buildLessonSteps1_1_7(markdown)
+                      : topicId === "1.1.8"
+                        ? buildLessonSteps1_1_8(markdown)
+                        : topicId === "1.1.9"
+                          ? buildLessonSteps1_1_9(markdown)
+                          : topicId === "1.1.10"
+                            ? buildLessonSteps1_1_10(markdown)
+                            : topicId === "1.1.11"
+                              ? buildLessonSteps1_1_11(markdown)
+                              : buildLessonSteps1_1_12(markdown);
     if (steps.length === 0) notFound();
     return <LessonShell topicId={topicId} steps={steps} redoMode={redoMode} />;
   }

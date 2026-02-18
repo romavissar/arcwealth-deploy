@@ -50,6 +50,21 @@ import { HabitLoopChart } from "@/components/textbook/diagrams/HabitLoopChart";
 import { HabitsRankedChart } from "@/components/textbook/diagrams/HabitsRankedChart";
 import { CompoundingHabitsChart } from "@/components/textbook/diagrams/CompoundingHabitsChart";
 import { HabitFormationChart } from "@/components/textbook/diagrams/HabitFormationChart";
+import { IncomeTypesChart } from "@/components/textbook/diagrams/IncomeTypesChart";
+import { IncomeByWealthChart } from "@/components/textbook/diagrams/IncomeByWealthChart";
+import { GrossVsNetChart } from "@/components/textbook/diagrams/GrossVsNetChart";
+import { IncomeStrategiesChart } from "@/components/textbook/diagrams/IncomeStrategiesChart";
+import { SalaryVsWageChart } from "@/components/textbook/diagrams/SalaryVsWageChart";
+import { PayFrequencyChart } from "@/components/textbook/diagrams/PayFrequencyChart";
+import { OvertimeChart } from "@/components/textbook/diagrams/OvertimeChart";
+import { AnnualComparisonChart } from "@/components/textbook/diagrams/AnnualComparisonChart";
+import { GrossToNetChart } from "@/components/textbook/diagrams/GrossToNetChart";
+import { TakehomeByIncomeChart } from "@/components/textbook/diagrams/TakehomeByIncomeChart";
+import { BudgetingMistakeChart } from "@/components/textbook/diagrams/BudgetingMistakeChart";
+import { PayslipAnatomyChart } from "@/components/textbook/diagrams/PayslipAnatomyChart";
+import { CommonPayslipErrorsChart } from "@/components/textbook/diagrams/CommonPayslipErrorsChart";
+import { TaxCodeImpactChart } from "@/components/textbook/diagrams/TaxCodeImpactChart";
+import { PayslipCheckingRoutineChart } from "@/components/textbook/diagrams/PayslipCheckingRoutineChart";
 
 const CHART_SRC = [
   "chart_properties_radar.png",
@@ -99,6 +114,21 @@ const CHART_SRC = [
   "chart_1_1_12_B_habits_ranked.png",
   "chart_1_1_12_C_compounding_habits.png",
   "chart_1_1_12_D_habit_formation.png",
+  "chart_1_2_1_A_income_types.png",
+  "chart_1_2_1_B_income_by_wealth.png",
+  "chart_1_2_1_C_gross_vs_net.png",
+  "chart_1_2_1_D_income_strategies.png",
+  "chart_1_2_2_v2_A_salary_vs_wage.png",
+  "chart_1_2_2_v2_B_pay_frequency.png",
+  "chart_1_2_2_v2_C_overtime.png",
+  "chart_1_2_2_v2_D_annual_comparison.png",
+  "chart_1_2_3_v2_A_gross_to_net.png",
+  "chart_1_2_3_v2_B_takehome_by_income.png",
+  "chart_1_2_3_v2_D_budgeting_mistake.png",
+  "chart_1_2_4_v2_A_payslip_anatomy.png",
+  "chart_1_2_4_v2_B_common_errors.png",
+  "chart_1_2_4_v2_C_tax_code_impact.png",
+  "chart_1_2_4_v2_D_checking_routine.png",
 ] as const;
 
 function ChartBlock({ src }: { src: string }) {
@@ -149,6 +179,21 @@ function ChartBlock({ src }: { src: string }) {
   if (src === "chart_1_1_12_B_habits_ranked.png") return <HabitsRankedChart />;
   if (src === "chart_1_1_12_C_compounding_habits.png") return <CompoundingHabitsChart />;
   if (src === "chart_1_1_12_D_habit_formation.png") return <HabitFormationChart />;
+  if (src === "chart_1_2_1_A_income_types.png") return <IncomeTypesChart />;
+  if (src === "chart_1_2_1_B_income_by_wealth.png") return <IncomeByWealthChart />;
+  if (src === "chart_1_2_1_C_gross_vs_net.png") return <GrossVsNetChart />;
+  if (src === "chart_1_2_1_D_income_strategies.png") return <IncomeStrategiesChart />;
+  if (src === "chart_1_2_2_v2_A_salary_vs_wage.png") return <SalaryVsWageChart />;
+  if (src === "chart_1_2_2_v2_B_pay_frequency.png") return <PayFrequencyChart />;
+  if (src === "chart_1_2_2_v2_C_overtime.png") return <OvertimeChart />;
+  if (src === "chart_1_2_2_v2_D_annual_comparison.png") return <AnnualComparisonChart />;
+  if (src === "chart_1_2_3_v2_A_gross_to_net.png") return <GrossToNetChart />;
+  if (src === "chart_1_2_3_v2_B_takehome_by_income.png") return <TakehomeByIncomeChart />;
+  if (src === "chart_1_2_3_v2_D_budgeting_mistake.png") return <BudgetingMistakeChart />;
+  if (src === "chart_1_2_4_v2_A_payslip_anatomy.png") return <PayslipAnatomyChart />;
+  if (src === "chart_1_2_4_v2_B_common_errors.png") return <CommonPayslipErrorsChart />;
+  if (src === "chart_1_2_4_v2_C_tax_code_impact.png") return <TaxCodeImpactChart />;
+  if (src === "chart_1_2_4_v2_D_checking_routine.png") return <PayslipCheckingRoutineChart />;
   return (
     <div className="my-4 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 py-6 text-center text-sm text-gray-500 dark:text-gray-300">
       [Chart: {src}]

@@ -132,7 +132,7 @@ When you earn €35,000/year, you don't receive €35,000. You receive significa
 > **Definition — Net Income (Take-Home Pay):** The amount that actually arrives in your bank account after all taxes, insurance contributions, and other mandatory deductions.
 
 ![Gross vs. Net Income: The Money You Earn vs. The Money You Keep](chart_1_2_1_C_gross_vs_net.png)
-*Figure 1.2.1-C — Example breakdown of a EUR35,000 gross salary. Take-home pay (net) is approximately EUR25,600 in this illustrative example. Actual deductions vary significantly by country, circumstances, and individual tax situation.*
+*Figure 1.2.1-C — Example breakdown of a €35,000 gross salary. Take-home pay (net) is approximately €25,600 in this illustrative example. Actual deductions vary significantly by country, circumstances, and individual tax situation.*
 
 ### What Gets Deducted
 
@@ -144,7 +144,7 @@ When you earn €35,000/year, you don't receive €35,000. You receive significa
 
 **Pension Contributions (Employee):** In many employment contracts, you contribute a percentage to a pension fund. This isn't "lost" — it's future income — but it reduces current take-home.
 
-### Table 1.2.1-B — Gross vs. Net: A EUR35,000 Example (Illustrative)
+### Table 1.2.1-B — Gross vs. Net: A €35,000 Example (Illustrative)
 
 | Component | Amount | % of Gross |
 |---|---|---|
@@ -233,7 +233,7 @@ Not all income growth strategies are equal. They differ by effort required, how 
 
 ### Example 1 — Same Hours, Very Different Income Structures
 
-> *"Two people work 40 hours a week. Alex is a salaried employee earning EUR42,000/year — 100% active income. Sophia earns EUR30,000 in salary, EUR6,000 in freelance design work, and EUR4,200 in annual dividends from EUR70,000 invested over seven years. Combined: EUR40,200 — slightly less than Alex. But Sophia's income doesn't fully stop if she loses her job. And her portfolio will keep growing. In 10 years, her dividends alone could exceed EUR10,000/year with no extra work."*
+> *"Two people work 40 hours a week. Alex is a salaried employee earning €42,000/year — 100% active income. Sophia earns €30,000 in salary, €6,000 in freelance design work, and €4,200 in annual dividends from €70,000 invested over seven years. Combined: €40,200 — slightly less than Alex. But Sophia's income doesn't fully stop if she loses her job. And her portfolio will keep growing. In 10 years, her dividends alone could exceed €10,000/year with no extra work."*
 
 **The lesson:** Total income matters. Income source and structure matter more. Sophia has lower income today but far greater long-term financial security.
 
@@ -241,7 +241,7 @@ Not all income growth strategies are equal. They differ by effort required, how 
 
 ### Example 2 — The Payslip Shock
 
-> *"Kaito accepted a graduate job offer at EUR28,000. His first payslip arrived. He expected roughly EUR2,333 per month. He received EUR1,820. He was shocked — what happened to EUR513? The deductions: income tax EUR280, social insurance EUR112, USC EUR85, pension contribution EUR36. His employer had enrolled him in a pension plan automatically. He hadn't read the contract carefully. Not a disaster — the pension was actually valuable — but he'd been planning his budget on the wrong figure."*
+> *"Kaito accepted a graduate job offer at €28,000. His first payslip arrived. He expected roughly €2,333 per month. He received €1,820. He was shocked — what happened to €513? The deductions: income tax €280, social insurance €112, USC €85, pension contribution €36. His employer had enrolled him in a pension plan automatically. He hadn't read the contract carefully. Not a disaster — the pension was actually valuable — but he'd been planning his budget on the wrong figure."*
 
 **The lesson:** Always calculate net, not gross. Job offers are quoted in gross. Your rent landlord wants net. Build your budget from the money that actually arrives in your account.
 
@@ -249,7 +249,7 @@ Not all income growth strategies are equal. They differ by effort required, how 
 
 ### Example 3 — Mia's Income Layer Cake
 
-> *"Mia, 29, started with one income stream: a marketing job at EUR32,000/year. Over six years she systematically added: (1) Invested 15% of her salary monthly into index funds from age 23 — her portfolio now generates EUR1,200/year in dividends. (2) Built a social media content newsletter — EUR4,800/year. (3) Created a EUR49 guide about her professional expertise — sells 8 copies/month passively = EUR4,700/year. Total income today: EUR42,700. If she lost her job tomorrow, she'd still have EUR10,700 coming in while she job-searched."*
+> *"Mia, 29, started with one income stream: a marketing job at €32,000/year. Over six years she systematically added: (1) Invested 15% of her salary monthly into index funds from age 23 — her portfolio now generates €1,200/year in dividends. (2) Built a social media content newsletter — €4,800/year. (3) Created a €49 guide about her professional expertise — sells 8 copies/month passively = €4,700/year. Total income today: €42,700. If she lost her job tomorrow, she'd still have €10,700 coming in while she job-searched."*
 
 **The lesson:** Mia didn't build all three streams at once. She added one at a time over years, reinvesting everything. What looks like a complicated income structure was built with patience and consistency, not genius.
 

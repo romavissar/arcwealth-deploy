@@ -23,6 +23,10 @@ const MARKDOWN_BY_TOPIC: Record<string, string> = {
   "1.1.10": "topic-1-1-10-values-money.md",
   "1.1.11": "topic-1-1-11-financial-goals.md",
   "1.1.12": "topic-1-1-12-habits-build-wealth.md",
+  "1.2.1": "topic-1-2-1-what-is-income.md",
+  "1.2.2": "topic-1-2-2-salary-wages-paychecks.md",
+  "1.2.3": "topic-1-2-3-net-vs-gross.md",
+  "1.2.4": "topic-1-2-4-how-to-read-payslip.md",
 };
 
 const ALL_TOPICS = getAllLessonTopics();
