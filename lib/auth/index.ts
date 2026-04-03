@@ -8,3 +8,6 @@ export {
   requireSession,
   type AppSession,
 } from "./session";
+export { getAppleOAuth, getGoogleOAuth, getAppUrl } from "./oauth-config";
+export { respondOAuthSession, redirectOAuthLoginError } from "./oauth-finish";
+export { upsertOAuthUser, type OAuthFlowResult } from "./oauth-flow";
