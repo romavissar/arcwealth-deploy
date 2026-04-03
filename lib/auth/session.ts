@@ -83,3 +83,9 @@ export async function destroySession(): Promise<void> {
     await supabase.from("auth_session").delete().eq("id", s.sessionId);
   }
 }
+
+/** Invalidate every session for a user (e.g. password reset). */
+export async function deleteAllSessionsForUser(userId: string): Promise<void> {
+  const supabase = createServiceClient();
+  await supabase.from("auth_session").delete().eq("user_id", userId);
+}

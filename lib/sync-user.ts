@@ -1,6 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 
-const ADMIN_EMAIL = "romavissar@gmail.com";
+export const ADMIN_EMAIL = "romavissar@gmail.com";
 
 export type UserRole = "admin" | "teacher" | "student" | "user";
 
@@ -102,14 +102,32 @@ export async function ensureUserInSupabase(
   }
   const { data: topics } = await supabase.from("topics").select("topic_id").order("order_index");
   if (topics?.length) {
+    const firstTopicId = topics[0].topic_id;
     const rows = topics.map((t) => ({
       user_id: userId,
       topic_id: t.topic_id,
-      status: t.topic_id === "1.1.1" ? "available" : "locked",
+      status: t.topic_id === firstTopicId ? "available" : "locked",
     }));
     await supabase.from("user_progress").upsert(rows, {
       onConflict: "user_id,topic_id",
       ignoreDuplicates: true,
     });
   }
+}
+
+/** Seed topic progress for a new user (same rules as first sign-up). */
+export async function seedTopicsProgressForUser(userId: string) {
+  const supabase = createServiceClient();
+  const { data: topics } = await supabase.from("topics").select("topic_id").order("order_index");
+  if (!topics?.length) return;
+  const firstTopicId = topics[0].topic_id;
+  const rows = topics.map((t) => ({
+    user_id: userId,
+    topic_id: t.topic_id,
+    status: t.topic_id === firstTopicId ? "available" : "locked",
+  }));
+  await supabase.from("user_progress").upsert(rows, {
+    onConflict: "user_id,topic_id",
+    ignoreDuplicates: true,
+  });
 }
