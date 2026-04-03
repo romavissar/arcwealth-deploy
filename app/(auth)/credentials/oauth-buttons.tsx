@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { getAppleOAuth, getGoogleOAuth } from "@/lib/auth/oauth-config";
+import { getGoogleOAuth } from "@/lib/auth/oauth-config";
 import { Button } from "@/components/ui/button";
 
 export function OAuthProviderButtons() {
   const google = getGoogleOAuth();
-  const apple = getAppleOAuth();
-  if (!google && !apple) return null;
+  if (!google) return null;
 
   return (
     <div className="space-y-3">
@@ -18,16 +17,9 @@ export function OAuthProviderButtons() {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        {google && (
-          <Button variant="outline" className="w-full" asChild>
-            <Link href="/api/auth/google">Continue with Google</Link>
-          </Button>
-        )}
-        {apple && (
-          <Button variant="outline" className="w-full" asChild>
-            <Link href="/api/auth/apple">Continue with Apple</Link>
-          </Button>
-        )}
+        <Button variant="outline" className="w-full" asChild>
+          <Link href="/api/auth/google">Continue with Google</Link>
+        </Button>
       </div>
     </div>
   );

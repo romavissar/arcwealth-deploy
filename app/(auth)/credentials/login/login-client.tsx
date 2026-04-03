@@ -21,21 +21,14 @@ function oauthErrorLabel(code: string | null): string | null {
   if (!code) return null;
   const labels: Record<string, string> = {
     google_config: "Google sign-in is not configured on this server.",
-    apple_config: "Apple sign-in is not configured on this server.",
     state: "Sign-in session expired or invalid. Please try again.",
     missing: "Missing authorization code. Please try again.",
     token: "Could not complete sign-in with the provider. Please try again.",
     userinfo: "Could not load your profile from Google. Please try again.",
     no_email: "Your Google account did not share an email address.",
-    no_id_token: "Apple did not return an identity token.",
-    id_token: "Could not read Apple identity token.",
-    no_sub: "Apple token did not include a user id.",
-    body: "Invalid request from Apple. Please try again.",
     link_denied: "Account linking was blocked for this email.",
     db: "Could not save your account. Please try again later.",
     session: "Signed in with the provider but session could not be created.",
-    apple_no_email:
-      "Apple did not return an email. Use the same Apple ID as your first sign-in, or sign in with email and password.",
   };
   return labels[code] ?? `Sign-in could not complete (${code}).`;
 }

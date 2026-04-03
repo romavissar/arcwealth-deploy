@@ -24,7 +24,7 @@ export type OAuthFlowResult = { ok: true; userId: string } | { ok: false; code: 
  * - Else create auth_user + user_profiles + oauth_account + progress.
  */
 export async function upsertOAuthUser(params: {
-  provider: "google" | "apple";
+  provider: "google";
   providerAccountId: string;
   email: string;
   emailVerified: boolean;
