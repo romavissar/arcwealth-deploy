@@ -11,7 +11,7 @@ export default async function SettingsSecurityPage() {
   const custom = await getSession();
 
   if (!useLegacyClerk && !custom) {
-    redirect("/credentials/login");
+    redirect("/sign-in");
   }
 
   if (useLegacyClerk) {

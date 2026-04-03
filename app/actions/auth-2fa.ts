@@ -90,7 +90,7 @@ export async function verifyTwoFactorLoginAction(
   }
 
   if (process.env.USE_LEGACY_CLERK !== "false") {
-    redirect("/credentials/login?custom_session=1");
+    redirect("/sign-in?custom_session=1");
   }
   redirect("/dashboard");
 }
@@ -201,5 +201,5 @@ export async function disableTotpAction(_prev: TwofaFormState, formData: FormDat
   await supabase.from("auth_recovery_code").delete().eq("user_id", s.userId);
   await deleteAllSessionsForUser(s.userId);
   await destroySession();
-  redirect("/credentials/login?twofa_disabled=1");
+  redirect("/sign-in?twofa_disabled=1");
 }

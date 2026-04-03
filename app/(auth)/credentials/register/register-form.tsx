@@ -16,7 +16,7 @@ function Submit({ label }: { label: string }) {
   );
 }
 
-export function RegisterForm() {
+export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref?: string }) {
   const [state, formAction] = useFormState(registerAction, null as AuthFormState);
 
   return (
@@ -55,10 +55,18 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-gray-600 dark:text-gray-400">
         Already have an account?{" "}
-        <Link href="/credentials/login" className="text-primary font-medium">
+        <Link href={signInHref} className="text-primary font-medium">
           Sign in
         </Link>
       </p>
+      {signInHref === "/sign-in" ? (
+        <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+          Alternate:{" "}
+          <Link href="/credentials/login" className="underline">
+            /credentials/login
+          </Link>
+        </p>
+      ) : null}
     </>
   );
 }

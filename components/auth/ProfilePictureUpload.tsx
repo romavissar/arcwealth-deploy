@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@clerk/nextjs";
 
 interface ProfilePictureUploadProps {
   onUploaded?: (url: string) => void;
@@ -10,13 +9,12 @@ interface ProfilePictureUploadProps {
 }
 
 export function ProfilePictureUpload({ onUploaded, onClose }: ProfilePictureUploadProps) {
-  const { isSignedIn } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file || !isSignedIn) return;
+    if (!file) return;
     if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
       setError("Please choose a JPG, PNG, or WEBP image under 5MB.");
       return;

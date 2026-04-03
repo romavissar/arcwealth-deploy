@@ -53,7 +53,7 @@ export default function TwoFactorChallengePage() {
       </form>
 
       <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-        <Link href="/credentials/login" className="text-primary">
+        <Link href="/sign-in" className="text-primary">
           Cancel and return to sign in
         </Link>
       </p>

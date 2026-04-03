@@ -17,7 +17,7 @@ export default function VerifyEmailResultPage({
     body = (
       <p className="text-gray-600 dark:text-gray-300">
         Your email is confirmed. You can{" "}
-        <Link href="/credentials/login" className="text-primary font-medium">
+        <Link href="/sign-in" className="text-primary font-medium">
           sign in with your password
         </Link>
         .
@@ -36,7 +36,7 @@ export default function VerifyEmailResultPage({
       <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">{title}</h1>
       {body}
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        <Link href="/credentials/login" className="text-primary">
+        <Link href="/sign-in" className="text-primary">
           Sign in
         </Link>{" "}
         ·{" "}

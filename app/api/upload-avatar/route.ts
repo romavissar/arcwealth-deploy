@@ -1,10 +1,18 @@
 import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase/server";
+import { getSession } from "@/lib/auth/session";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const custom = await getSession();
+  let userId = custom?.userId ?? null;
+  if (!userId && process.env.USE_LEGACY_CLERK !== "false") {
+    const { userId: clerkId } = await auth();
+    userId = clerkId ?? null;
+  }
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const formData = await req.formData();
   const file = formData.get("file") as File | null;

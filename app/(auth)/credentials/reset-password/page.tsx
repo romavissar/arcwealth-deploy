@@ -79,14 +79,14 @@ function ResetForm() {
           minLength={8}
           autoComplete="new-password"
         />
-        <p className="text-xs text-gray-500 dark:text-gray-400">At least 8 characters.</p>
+        <p className="text-xs text-gray-600 dark:text-gray-400">At least 8 characters.</p>
       </div>
       <Button type="submit" className="w-full" disabled={status === "loading" || status === "done"}>
         {status === "loading" ? "Saving…" : "Update password"}
       </Button>
       {status === "done" && (
         <p className="text-center text-sm">
-          <Link href="/credentials/login" className="text-primary font-medium">
+          <Link href="/sign-in" className="text-primary font-medium">
             Sign in
           </Link>
         </p>
@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Reset password</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Choose a new password for your account.</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Choose a new password for your account.</p>
       </div>
       <Suspense fallback={<p className="text-sm text-gray-500">Loading…</p>}>
         <ResetForm />

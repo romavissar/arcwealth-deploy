@@ -79,11 +79,12 @@ export function LoginMessages() {
   );
 }
 
-export function LoginForm() {
+export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [state, formAction] = useFormState(loginAction, null as AuthFormState);
 
   return (
     <form action={formAction} className="space-y-4">
+      {redirectTo ? <input type="hidden" name="redirect_url" value={redirectTo} /> : null}
       {state?.error && (
         <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/40 dark:border-red-800 px-3 py-2 text-sm text-red-800 dark:text-red-200">
           {state.error}
@@ -102,7 +103,29 @@ export function LoginForm() {
   );
 }
 
-export function LoginFooter() {
+export function LoginFooter({ variant = "credentials" }: { variant?: "credentials" | "public" }) {
+  if (variant === "public") {
+    return (
+      <div className="flex flex-col gap-2 text-center text-sm text-gray-600 dark:text-gray-400">
+        <Link href="/credentials/forgot-password" className="text-primary">
+          Forgot password?
+        </Link>
+        <p>
+          No account?{" "}
+          <Link href="/sign-up" className="text-primary font-medium">
+            Sign up
+          </Link>
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Alternate:{" "}
+          <Link href="/credentials/login" className="underline">
+            /credentials/login
+          </Link>
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2 text-center text-sm text-gray-600 dark:text-gray-400">
       <Link href="/credentials/forgot-password" className="text-primary">
@@ -113,9 +136,9 @@ export function LoginFooter() {
         <Link href="/credentials/register" className="text-primary font-medium">
           Register
         </Link>{" "}
-        · Clerk:{" "}
-        <Link href="/sign-in" className="underline">
-          Sign in
+        ·{" "}
+        <Link href="/sign-in" className="font-medium text-primary underline">
+          Main sign in
         </Link>
       </p>
     </div>

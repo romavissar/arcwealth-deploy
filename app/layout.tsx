@@ -8,18 +8,24 @@ export const metadata: Metadata = {
   description: "Financial literacy for teens, one lesson at a time.",
 };
 
+const useLegacyClerk = process.env.USE_LEGACY_CLERK !== "false";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className="min-h-screen font-sans antialiased">
-          <ThemeProvider>{children}</ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+  const shell = (
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen font-sans antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
   );
+
+  if (useLegacyClerk) {
+    return <ClerkProvider>{shell}</ClerkProvider>;
+  }
+
+  return shell;
 }

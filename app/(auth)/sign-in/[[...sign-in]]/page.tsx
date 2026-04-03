@@ -1,54 +1,38 @@
-import { SignIn } from "@clerk/nextjs";
+import { Suspense } from "react";
 import Link from "next/link";
+import { OAuthProviderButtons } from "@/app/(auth)/credentials/oauth-buttons";
+import { LoginFooter, LoginForm, LoginMessages } from "@/app/(auth)/credentials/login/login-client";
 
-export default function SignInPage() {
+export default function SignInPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  const raw = searchParams.redirect_url;
+  const redirectTo = Array.isArray(raw) ? raw[0] : raw;
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md flex flex-col items-center gap-6">
-        <Link href="/" className="font-bold text-xl text-primary">
-          ArcWealth
-        </Link>
-        <SignIn
-          appearance={{
-            layout: {
-              logoPlacement: "none",
-            },
-            variables: {
-              colorPrimary: "#4F46E5",
-              colorText: "#111827",
-              colorTextSecondary: "#6b7280",
-              colorBackground: "#ffffff",
-              colorInputBackground: "#f9fafb",
-              colorInputText: "#111827",
-              colorBorder: "#e5e7eb",
-              borderRadius: "0.75rem",
-            },
-            elements: {
-              rootBox: "w-full mx-auto",
-              card: "w-full shadow-sm border border-gray-200 rounded-xl",
-              headerTitle: "hidden",
-              headerSubtitle: "text-gray-500",
-              footer: "hidden",
-              footerAction: "hidden",
-              footerPages: "hidden",
-              formButtonPrimary:
-                "bg-primary hover:opacity-90 text-white font-medium",
-              formFieldInput:
-                "border-gray-200 bg-gray-50 focus:ring-primary focus:border-primary",
-              dividerLine: "bg-gray-200",
-              dividerText: "text-gray-500",
-            },
-          }}
-          afterSignInUrl="/dashboard"
-          signUpUrl="/sign-up"
-        />
-        <p className="text-sm text-gray-600">
-          Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="font-medium text-primary hover:underline">
-            Sign up
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Sign in</h1>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          Email, password, or Google. New here?{" "}
+          <Link href="/sign-up" className="text-primary font-medium underline">
+            Create an account
           </Link>
+          .
         </p>
       </div>
+
+      <OAuthProviderButtons />
+
+      <Suspense fallback={null}>
+        <LoginMessages />
+      </Suspense>
+
+      <LoginForm redirectTo={redirectTo ?? undefined} />
+
+      <LoginFooter variant="public" />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { generateOpaqueToken, hashToken } from "@/lib/auth/tokens";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
 import { isPasswordLoginEnabled } from "@/lib/auth/app-config";
 import { completePasswordLoginOrTwoFactor } from "@/lib/auth/login-complete";
+import { safeInternalPath } from "@/lib/auth/safe-redirect";
 import { destroySession } from "@/lib/auth/session";
 import { sendVerificationEmail } from "@/lib/email/auth-emails";
 import { ADMIN_EMAIL, seedTopicsProgressForUser } from "@/lib/sync-user";
@@ -124,7 +125,7 @@ export async function registerAction(_prev: AuthFormState, formData: FormData): 
     return { error: send.error };
   }
 
-  redirect("/credentials/login?registered=1");
+  redirect("/sign-in?registered=1");
 }
 
 export async function loginAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
@@ -165,11 +166,12 @@ export async function loginAction(_prev: AuthFormState, formData: FormData): Pro
     return { error: "Please verify your email before signing in. Check your inbox for the link." };
   }
 
-  await completePasswordLoginOrTwoFactor(user.id);
+  const nextPath = safeInternalPath(formData.get("redirect_url"));
+  await completePasswordLoginOrTwoFactor(user.id, nextPath);
   return null;
 }
 
 export async function logoutAction(): Promise<void> {
   await destroySession();
-  redirect("/credentials/login");
+  redirect("/sign-in");
 }
