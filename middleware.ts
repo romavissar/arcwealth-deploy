@@ -33,5 +33,7 @@ export default useLegacyClerk
     };
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|sign-in|sign-up).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|sign-in|sign-up|credentials|api/auth|verify-email).*)",
+  ],
 };
