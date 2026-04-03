@@ -58,6 +58,7 @@ export interface Database {
           username: string;
           avatar_url: string | null;
           email: string | null;
+          birth_date: string | null;
           role: string;
           xp: number;
           level: number;
@@ -150,6 +151,112 @@ export interface Database {
         };
         Insert: { student_user_id: string; teacher_user_id: string; created_at?: string | null };
         Update: Partial<Database["public"]["Tables"]["student_teacher"]["Insert"]>;
+      };
+      auth_user: {
+        Row: {
+          id: string;
+          email: string;
+          email_verified_at: string | null;
+          password_hash: string | null;
+          first_name: string | null;
+          last_name: string | null;
+          birth_date: string | null;
+          two_factor_enabled: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          email: string;
+          email_verified_at?: string | null;
+          password_hash?: string | null;
+          first_name?: string | null;
+          last_name?: string | null;
+          birth_date?: string | null;
+          two_factor_enabled?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["auth_user"]["Insert"]>;
+      };
+      auth_session: {
+        Row: {
+          id: string;
+          user_id: string;
+          expires_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          user_id: string;
+          expires_at: string;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["auth_session"]["Insert"]>;
+      };
+      oauth_account: {
+        Row: {
+          id: string;
+          user_id: string;
+          provider: string;
+          provider_account_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          provider: string;
+          provider_account_id: string;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["oauth_account"]["Insert"]>;
+      };
+      auth_token: {
+        Row: {
+          id: string;
+          user_id: string;
+          token_hash: string;
+          purpose: string;
+          expires_at: string;
+          used_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          token_hash: string;
+          purpose: string;
+          expires_at: string;
+          used_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["auth_token"]["Insert"]>;
+      };
+      user_id_migration: {
+        Row: {
+          old_id: string;
+          new_id: string;
+          migrated_at: string;
+        };
+        Insert: {
+          old_id: string;
+          new_id: string;
+          migrated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["user_id_migration"]["Insert"]>;
+      };
+      app_config: {
+        Row: {
+          key: string;
+          value: Json;
+          updated_at: string;
+        };
+        Insert: {
+          key: string;
+          value: Json;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["app_config"]["Insert"]>;
       };
     };
   };
