@@ -34,6 +34,8 @@ export default useLegacyClerk
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sign-in|sign-up|credentials|api/auth|verify-email).*)",
+    // Skip all Next internals (`/_next/*`) and public auth routes. Excluding only
+    // `_next/static` lets middleware run on `/_next/data` and other internals and can break dev chunks/CSS.
+    "/((?!_next|sign-in|sign-up|credentials|api/auth|verify-email|favicon.ico).*)",
   ],
 };
