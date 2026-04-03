@@ -7,8 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SettingsCard } from "./SettingsCard";
+import { TwoFactorSettings } from "./TwoFactorSettings";
 
-export function SecurityView({ isStudent = false }: { isStudent?: boolean }) {
+export function SecurityView({
+  isStudent = false,
+  twoFactorState = null,
+}: {
+  isStudent?: boolean;
+  twoFactorState?: { enabled: boolean; recoveryRemaining: number } | null;
+}) {
   const { user } = useUser();
   const { sessions, isLoaded } = useSessionList();
   const { signOut } = useClerk();
@@ -94,6 +101,18 @@ export function SecurityView({ isStudent = false }: { isStudent?: boolean }) {
 
   return (
     <SettingsCard className="space-y-8">
+      {twoFactorState ? (
+        <TwoFactorSettings
+          initialEnabled={twoFactorState.enabled}
+          recoveryRemaining={twoFactorState.recoveryRemaining}
+        />
+      ) : (
+        <p className="text-sm text-gray-500 dark:text-gray-400 -mt-2">
+          Authenticator-based two-factor authentication is available when you sign in with email and password (custom
+          auth). SMS 2FA is not supported.
+        </p>
+      )}
+
       <section>
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Password</h2>
         <div className="border-b border-gray-200 dark:border-gray-600 pb-3 mb-3" />

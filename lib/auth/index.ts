@@ -11,3 +11,9 @@ export {
 export { getGoogleOAuth, getAppUrl } from "./oauth-config";
 export { respondOAuthSession, redirectOAuthLoginError } from "./oauth-finish";
 export { upsertOAuthUser, type OAuthFlowResult } from "./oauth-flow";
+export {
+  encryptTotpSecret,
+  decryptTotpSecret,
+  verifyTotpToken,
+  generateTotpSecretBase32,
+} from "./totp";

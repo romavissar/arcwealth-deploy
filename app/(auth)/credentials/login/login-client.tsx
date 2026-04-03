@@ -40,9 +40,15 @@ export function LoginMessages() {
   const custom = sp.get("custom_session");
   const oauthError = sp.get("oauth_error");
   const oauthDetail = sp.get("msg");
+  const twofaDisabled = sp.get("twofa_disabled");
 
   return (
     <>
+      {twofaDisabled === "1" && (
+        <div className="rounded-lg border border-green-200 bg-green-50 dark:bg-green-950/40 dark:border-green-800 px-3 py-2 text-sm text-green-800 dark:text-green-200">
+          Two-factor authentication was turned off. Sign in with your email and password.
+        </div>
+      )}
       {oauthError && (
         <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/40 dark:border-red-800 px-3 py-2 text-sm text-red-800 dark:text-red-200">
           {oauthDetail ?? oauthErrorLabel(oauthError)}

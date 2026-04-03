@@ -6,7 +6,7 @@ import {
   OAUTH_COOKIE_GOOGLE_STATE,
 } from "@/lib/auth/oauth-config";
 import { upsertOAuthUser } from "@/lib/auth/oauth-flow";
-import { redirectOAuthLoginError, respondOAuthSession } from "@/lib/auth/oauth-finish";
+import { redirectOAuthLoginError, respondAuthSuccessRedirect } from "@/lib/auth/oauth-finish";
 
 type GoogleUserInfo = {
   sub: string;
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
     return redirectOAuthLoginError(result.code === "link_denied" ? "link_denied" : "db", result.message);
   }
   try {
-    return await respondOAuthSession(result.userId);
+    return await respondAuthSuccessRedirect(result.userId);
   } catch {
     return redirectOAuthLoginError("session");
   }

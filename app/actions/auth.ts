@@ -8,7 +8,8 @@ import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { generateOpaqueToken, hashToken } from "@/lib/auth/tokens";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
 import { isPasswordLoginEnabled } from "@/lib/auth/app-config";
-import { createSession, destroySession } from "@/lib/auth/session";
+import { completePasswordLoginOrTwoFactor } from "@/lib/auth/login-complete";
+import { destroySession } from "@/lib/auth/session";
 import { sendVerificationEmail } from "@/lib/email/auth-emails";
 import { ADMIN_EMAIL, seedTopicsProgressForUser } from "@/lib/sync-user";
 
@@ -69,7 +70,9 @@ export async function registerAction(_prev: AuthFormState, formData: FormData): 
 
   const userId = newUserId();
   const passwordHash = await hashPassword(password);
-  const username = `${firstName} ${lastName}`.slice(0, 50);
+  // username is UNIQUE — same display name must not collide (sync-user uses suffix too).
+  const displayBase = `${firstName} ${lastName}`.trim().slice(0, 40) || "user";
+  const username = `${displayBase}_${userId.slice(-6)}`.slice(0, 50);
   const role = emailNorm === ADMIN_EMAIL.toLowerCase() ? "admin" : "user";
 
   const { error: e1 } = await supabase.from("auth_user").insert({
@@ -162,19 +165,8 @@ export async function loginAction(_prev: AuthFormState, formData: FormData): Pro
     return { error: "Please verify your email before signing in. Check your inbox for the link." };
   }
 
-  try {
-    await createSession(user.id);
-  } catch {
-    return {
-      error:
-        "Session could not be created. Set AUTH_SECRET (32+ chars) in .env.local for custom login.",
-    };
-  }
-
-  if (process.env.USE_LEGACY_CLERK !== "false") {
-    redirect("/credentials/login?custom_session=1");
-  }
-  redirect("/dashboard");
+  await completePasswordLoginOrTwoFactor(user.id);
+  return null;
 }
 
 export async function logoutAction(): Promise<void> {
