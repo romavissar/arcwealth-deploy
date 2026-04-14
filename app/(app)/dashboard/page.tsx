@@ -9,17 +9,21 @@ import { getLessonDescription, getLessonTitle, isKnownCurriculumTopic } from "@/
 import { ProgressTrackCard } from "@/components/dashboard/ProgressTrackCard";
 import { XPBar } from "@/components/ui/XPBar";
 import { ArrowRight, BookOpenText, Flame, Send, Target, Trophy, Zap } from "lucide-react";
+import { getAppPrimaryEmail } from "@/lib/auth/server-user";
+import { canReplayTutorialForEmail } from "@/lib/onboarding/replay-access";
+import { restartTutorialFromDashboardAction } from "@/app/actions/onboarding";
 
 export default async function DashboardPage() {
   const userId = await getAppUserId();
   if (!userId) return null;
 
   const supabase = createServiceClient();
-  const [profileRes, progressRes, topicsRes, nudge] = await Promise.all([
+  const [profileRes, progressRes, topicsRes, nudge, primaryEmail] = await Promise.all([
     supabase.from("user_profiles").select("username, xp, streak_days, rank, level").eq("id", userId).single(),
     supabase.from("user_progress").select("topic_id, status, completed_at").eq("user_id", userId),
     supabase.from("topics").select("topic_id, order_index").order("order_index"),
     getLatestNudge(),
+    getAppPrimaryEmail(),
   ]);
 
   const profile = profileRes.data;
@@ -80,16 +84,24 @@ export default async function DashboardPage() {
         ? "Nice momentum. One more lesson today keeps you climbing."
         : "Start a fresh streak today with one reading and one level.";
 
+  const canReplayTutorial = canReplayTutorialForEmail(primaryEmail);
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 pb-4">
-      <section className="overflow-hidden rounded-2xl border border-indigo-500/80 bg-indigo-100/70 shadow-sm dark:border-indigo-500/90 dark:bg-indigo-900/35">
+      <section
+        data-tour-id="xp-overview"
+        className="overflow-hidden rounded-2xl border border-indigo-500/80 bg-indigo-100/70 shadow-sm dark:border-indigo-500/90 dark:bg-indigo-900/35"
+      >
         <XPBar
           fullWidth
           className="rounded-none border-0 bg-transparent px-4 py-3"
         />
       </section>
 
-      <section className="rounded-2xl border border-[#8B5CF6]/55 bg-white p-5 shadow-sm dark:border-[#8B5CF6]/45 dark:bg-gray-900/60">
+      <section
+        data-tour-id="dashboard-momentum"
+        className="rounded-2xl border border-[#8B5CF6]/55 bg-white p-5 shadow-sm dark:border-[#8B5CF6]/45 dark:bg-gray-900/60"
+      >
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Momentum</h2>
           <p className="text-sm text-gray-600 dark:text-gray-300">{momentumMessage}</p>
@@ -174,7 +186,7 @@ export default async function DashboardPage() {
         </section>
       )}
 
-      <section className="grid gap-4 lg:grid-cols-2">
+      <section data-tour-id="progress-tracks" className="grid gap-4 lg:grid-cols-2">
         <ProgressTrackCard
           icon={Zap}
           eyebrow="Level Path"
@@ -208,7 +220,10 @@ export default async function DashboardPage() {
         />
       </section>
 
-      <section className="rounded-2xl border-2 border-[#8B5CF6]/55 bg-primary/5 p-5 dark:border-[#8B5CF6]/45 dark:bg-primary/10">
+      <section
+        data-tour-id="next-actions"
+        className="rounded-2xl border-2 border-[#8B5CF6]/55 bg-primary/5 p-5 dark:border-[#8B5CF6]/45 dark:bg-primary/10"
+      >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Pick your next win</h2>
@@ -229,6 +244,24 @@ export default async function DashboardPage() {
           </div>
         </div>
       </section>
+
+      {canReplayTutorial && (
+        <section className="rounded-2xl border border-dashed border-primary/60 bg-white p-4 dark:bg-gray-900/60">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Testing tools</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">
+                Start the guided tutorial again from your dashboard.
+              </p>
+            </div>
+            <form action={restartTutorialFromDashboardAction}>
+              <Button type="submit" variant="secondary">
+                Start tutorial again
+              </Button>
+            </form>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

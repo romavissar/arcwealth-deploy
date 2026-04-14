@@ -19,11 +19,11 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         month: "space-y-3",
         month_caption: "relative flex h-10 items-center justify-center",
         caption_label: "text-sm font-semibold tracking-tight",
-        nav: "absolute inset-x-0 top-1 flex items-center justify-between px-0.5",
+        nav: "absolute inset-x-0 top-0 z-10 flex items-center justify-between px-0.5",
         button_previous:
-          "inline-flex h-10 w-10 cursor-pointer touch-manipulation items-center justify-center rounded-md text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100",
+          "relative z-20 pointer-events-auto inline-flex h-10 w-10 cursor-pointer touch-manipulation items-center justify-center rounded-md text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100",
         button_next:
-          "inline-flex h-10 w-10 cursor-pointer touch-manipulation items-center justify-center rounded-md text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100",
+          "relative z-20 pointer-events-auto inline-flex h-10 w-10 cursor-pointer touch-manipulation items-center justify-center rounded-md text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100",
         month_grid: "w-full border-collapse table-fixed",
         weekdays: "border-b border-gray-200 dark:border-gray-700",
         weekday: "h-9 w-10 pb-1 text-center text-xs font-medium text-gray-500 dark:text-gray-400",

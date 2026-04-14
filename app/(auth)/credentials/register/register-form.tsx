@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { format, parseISO } from "date-fns";
+import { format, isValid, parse, parseISO } from "date-fns";
 import { CalendarIcon, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { registerAction, type AuthFormState } from "@/app/actions/auth";
@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function Submit({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -82,11 +81,43 @@ function getAgeFromBirthDate(isoDate: string): number | null {
   return age;
 }
 
+function isValidBirthDateInRange(isoDate: string): boolean {
+  const parsed = parseISO(isoDate);
+  if (Number.isNaN(parsed.getTime())) return false;
+  const min = new Date(1940, 0, 1);
+  const max = new Date();
+  return parsed >= min && parsed <= max;
+}
+
+function parseBirthDateInput(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return isValidBirthDateInRange(trimmed) ? trimmed : null;
+  }
+
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) return null;
+  const parsed = parse(trimmed, "dd/MM/yyyy", new Date());
+  if (!isValid(parsed)) return null;
+  if (format(parsed, "dd/MM/yyyy") !== trimmed) return null;
+  const iso = format(parsed, "yyyy-MM-dd");
+  return isValidBirthDateInRange(iso) ? iso : null;
+}
+
+function formatBirthDateInputForTyping(value: string): string {
+  const digitsOnly = value.replace(/\D/g, "").slice(0, 8);
+  if (digitsOnly.length <= 2) return digitsOnly;
+  if (digitsOnly.length <= 4) return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2)}`;
+  return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4)}`;
+}
+
 export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref?: string }) {
   const [state, formAction] = useFormState(registerAction, null as AuthFormState);
   const [step, setStep] = useState(1);
   const [clientError, setClientError] = useState<string | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [birthDateInput, setBirthDateInput] = useState("");
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -293,21 +324,44 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
             <div className="space-y-1.5">
               <Label htmlFor="birthDate">Birth date</Label>
               <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    id="birthDate"
-                    type="button"
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-between border-gray-300 bg-white text-left font-normal text-gray-900 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900",
-                      !birthDate && "text-gray-500 dark:text-gray-400"
-                    )}
-                    aria-label="Select birth date"
-                  >
-                    {selectedDate ? format(selectedDate, "dd MMM yyyy") : "Select your birth date"}
-                    <CalendarIcon className="h-4 w-4 opacity-80" />
-                  </Button>
-                </PopoverTrigger>
+                <PopoverAnchor asChild>
+                  <div className="relative">
+                    <Input
+                      id="birthDate"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="bday"
+                      placeholder="dd/mm/yyyy"
+                      value={birthDateInput}
+                      onFocus={() => setCalendarOpen(true)}
+                      onClick={() => setCalendarOpen(true)}
+                      onChange={(event) => {
+                        const value = formatBirthDateInputForTyping(event.target.value);
+                        setBirthDateInput(value);
+                        setClientError(null);
+                        const parsedIso = parseBirthDateInput(value);
+                        if (parsedIso) {
+                          setBirthDate(parsedIso);
+                          setCalendarOpen(true);
+                          return;
+                        }
+                        setBirthDate("");
+                      }}
+                      className="pr-10"
+                      aria-label="Birth date"
+                    />
+                    <PopoverTrigger asChild>
+                      <button
+                        id="birthDatePicker"
+                        type="button"
+                        className="absolute inset-y-0 right-0 inline-flex w-10 items-center justify-center rounded-r-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-200"
+                        aria-label="Open birth date calendar"
+                      >
+                        <CalendarIcon className="h-4 w-4 opacity-80" />
+                      </button>
+                    </PopoverTrigger>
+                  </div>
+                </PopoverAnchor>
                 <PopoverContent
                   align="start"
                   className="w-[19rem] rounded-2xl border-gray-200 bg-white p-3 shadow-2xl dark:border-gray-700/70 dark:bg-gray-950"
@@ -318,6 +372,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                     onSelect={(date) => {
                       if (!date) return;
                       setBirthDate(format(date, "yyyy-MM-dd"));
+                      setBirthDateInput(format(date, "dd/MM/yyyy"));
                       setClientError(null);
                       setCalendarOpen(false);
                     }}
@@ -329,7 +384,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                 </PopoverContent>
               </Popover>
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                Use the calendar for an accurate date (day, month, year).
+                Type as dd/mm/yyyy or pick from the calendar.
               </p>
             </div>
 
@@ -483,14 +538,6 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
           Sign in
         </Link>
       </p>
-      {signInHref === "/sign-in" ? (
-        <p className="text-center text-xs text-gray-500 dark:text-gray-400">
-          Alternate:{" "}
-          <Link href="/credentials/login" className="underline">
-            /credentials/login
-          </Link>
-        </p>
-      ) : null}
     </>
   );
 }

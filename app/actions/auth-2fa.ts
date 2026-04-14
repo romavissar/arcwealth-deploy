@@ -22,6 +22,7 @@ import {
   otpauthUri,
   verifyTotpToken,
 } from "@/lib/auth/totp";
+import { resolvePostAuthRoute } from "@/lib/auth/resolve-post-auth-route";
 
 export type TwofaFormState = { error?: string; ok?: boolean; recoveryCodes?: string[] } | null;
 
@@ -89,7 +90,8 @@ export async function verifyTwoFactorLoginAction(
     return { error: "Could not create session. Check AUTH_SECRET in .env.local." };
   }
 
-  redirect("/dashboard");
+  const dest = await resolvePostAuthRoute(pendingId);
+  redirect(dest);
 }
 
 export async function startTotpEnrollmentAction(): Promise<

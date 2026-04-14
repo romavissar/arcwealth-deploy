@@ -3,12 +3,14 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { createSession } from "./session";
 import { getAppUrl } from "./oauth-config";
 import { setTwoFactorPendingCookie } from "./two-factor-cookies";
+import { resolvePostAuthRoute } from "./resolve-post-auth-route";
 
 /** Issue JWT session and redirect after OAuth. */
 export async function respondOAuthSession(userId: string): Promise<NextResponse> {
   await createSession(userId);
   const base = getAppUrl();
-  return NextResponse.redirect(`${base}/dashboard`);
+  const dest = await resolvePostAuthRoute(userId);
+  return NextResponse.redirect(`${base}${dest}`);
 }
 
 /** OAuth callback: if 2FA is enabled, pending cookie + TOTP step; else full session. */

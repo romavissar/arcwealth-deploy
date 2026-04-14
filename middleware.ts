@@ -14,6 +14,7 @@ const PROTECTED_PREFIXES = [
   "/textbook",
   "/admin",
   "/teacher",
+  "/welcome",
 ] as const;
 
 const AUTH_ENTRY_PREFIXES = ["/sign-in", "/sign-up"] as const;

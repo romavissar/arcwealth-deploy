@@ -14,7 +14,7 @@ export default async function GlossaryPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl pb-12">
+    <div data-tour-id="glossary-overview" className="mx-auto max-w-4xl pb-12">
       <GlossaryList terms={terms} progressMap={progressMap} />
     </div>
   );

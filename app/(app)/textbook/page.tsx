@@ -105,7 +105,10 @@ export default async function TextbookIndexPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-5 pb-12">
-      <section className="rounded-2xl border border-[#8B5CF6]/55 bg-gradient-to-br from-primary/10 via-indigo-50/40 to-amber-50 p-6 shadow-sm dark:border-[#8B5CF6]/45 dark:from-primary/20 dark:via-indigo-950/25 dark:to-gray-900">
+      <section
+        data-tour-id="textbook-overview"
+        className="rounded-2xl border border-[#8B5CF6]/55 bg-gradient-to-br from-primary/10 via-indigo-50/40 to-amber-50 p-6 shadow-sm dark:border-[#8B5CF6]/45 dark:from-primary/20 dark:via-indigo-950/25 dark:to-gray-900"
+      >
         <div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">ArcWealth Textbook</p>
@@ -143,7 +146,10 @@ export default async function TextbookIndexPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900/60 md:p-5">
+      <section
+        data-tour-id="textbook-map"
+        className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900/60 md:p-5"
+      >
         <div className="mb-4 flex items-center gap-2 text-gray-700 dark:text-gray-200">
           <FileText className="h-4 w-4 text-primary" aria-hidden="true" />
           <p className="text-sm font-semibold">Curriculum map</p>

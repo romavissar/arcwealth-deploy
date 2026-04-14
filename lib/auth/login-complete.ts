@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { safeInternalPath } from "./safe-redirect";
 import { createSession } from "./session";
 import { setTwoFactorPendingCookie } from "./two-factor-cookies";
+import { resolvePostAuthRoute } from "./resolve-post-auth-route";
 
 /**
  * After email+password verification (or equivalent). If 2FA is on, set pending cookie and
@@ -23,6 +24,7 @@ export async function completePasswordLoginOrTwoFactor(
   } catch {
     return redirect("/sign-in");
   }
-  const dest = safeInternalPath(redirectAfterLogin) ?? "/dashboard";
+  const requestedPath = safeInternalPath(redirectAfterLogin);
+  const dest = await resolvePostAuthRoute(userId, requestedPath);
   return redirect(dest);
 }

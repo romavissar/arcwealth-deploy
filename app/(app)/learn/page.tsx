@@ -44,8 +44,12 @@ export default async function LearnPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Your learning path</h1>
-      <CurriculumMap topics={filteredTopics} progressMap={effectiveMap} scoreMap={scoreMap} />
+      <h1 data-tour-id="learn-overview" className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+        Your learning path
+      </h1>
+      <div data-tour-id="learn-map">
+        <CurriculumMap topics={filteredTopics} progressMap={effectiveMap} scoreMap={scoreMap} />
+      </div>
     </div>
   );
 }

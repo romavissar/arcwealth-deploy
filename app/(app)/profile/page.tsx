@@ -25,27 +25,29 @@ export default async function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <ProfileHeroCard
-        username={profile.username}
-        avatarUrl={profile.avatarUrl}
-        rankTitle={rank?.title ?? profile.rank}
-        rankIcon={rank?.icon}
-        rankClassName={rankClass}
-        level={profile.level}
-        xp={profile.xp}
-        weeklyXp={profile.weeklyXp}
-        lessonsCompletedThisWeek={profile.lessonsCompletedThisWeek}
-        actionSlot={
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Button asChild>
-              <Link href="/learn">Continue learning</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/textbook">Open textbook</Link>
-            </Button>
-          </div>
-        }
-      />
+      <div data-tour-id="profile-overview">
+        <ProfileHeroCard
+          username={profile.username}
+          avatarUrl={profile.avatarUrl}
+          rankTitle={rank?.title ?? profile.rank}
+          rankIcon={rank?.icon}
+          rankClassName={rankClass}
+          level={profile.level}
+          xp={profile.xp}
+          weeklyXp={profile.weeklyXp}
+          lessonsCompletedThisWeek={profile.lessonsCompletedThisWeek}
+          actionSlot={
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button asChild>
+                <Link href="/learn">Continue learning</Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link href="/textbook">Open textbook</Link>
+              </Button>
+            </div>
+          }
+        />
+      </div>
 
       <ProfileStatsGrid
         streakDays={profile.streakDays}
@@ -55,20 +57,22 @@ export default async function ProfilePage() {
         allTimeRank={profile.allTimeRank}
       />
 
-      <ProfileProgressModules
-        xpInLevel={profile.xpInLevel}
-        xpToNextLevel={profile.xpToNextLevel}
-        xpProgressPercent={profile.xpProgressPercent}
-        lessonsCompletedThisWeek={profile.lessonsCompletedThisWeek}
-        weeklyXp={profile.weeklyXp}
-        completedTopicCount={profile.completedTopicCount}
-        totalTopicCount={totalTopicCount ?? 0}
-        achievementCount={profile.achievementCount}
-        learningCtaLabel="Continue learning"
-        learningCtaHref="/learn"
-        textbookCtaLabel="Continue textbook"
-        textbookCtaHref="/textbook"
-      />
+      <div data-tour-id="profile-progress">
+        <ProfileProgressModules
+          xpInLevel={profile.xpInLevel}
+          xpToNextLevel={profile.xpToNextLevel}
+          xpProgressPercent={profile.xpProgressPercent}
+          lessonsCompletedThisWeek={profile.lessonsCompletedThisWeek}
+          weeklyXp={profile.weeklyXp}
+          completedTopicCount={profile.completedTopicCount}
+          totalTopicCount={totalTopicCount ?? 0}
+          achievementCount={profile.achievementCount}
+          learningCtaLabel="Continue learning"
+          learningCtaHref="/learn"
+          textbookCtaLabel="Continue textbook"
+          textbookCtaHref="/textbook"
+        />
+      </div>
 
       <section className="rounded-2xl border border-[#8B5CF6]/55 bg-primary/5 p-5 dark:border-[#8B5CF6]/45 dark:bg-primary/10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

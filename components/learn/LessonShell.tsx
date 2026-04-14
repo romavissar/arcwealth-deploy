@@ -215,7 +215,7 @@ export function LessonShell({
           <span className="text-sm font-medium text-[var(--indigo-fill)]">{streakDays} day streak</span>
         </div>
       </div>
-      <div className="flex-1 overflow-auto flex flex-col items-center justify-start p-6">
+      <div className="flex-1 overflow-auto flex flex-col items-center justify-center p-6">
         {current?.type === "hook" && (
           <LessonContentStep key={step} title={current.title} body={current.body} onNext={handleNext} />
         )}

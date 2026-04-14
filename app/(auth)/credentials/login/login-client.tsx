@@ -104,12 +104,6 @@ export function LoginFooter({ variant = "credentials" }: { variant?: "credential
             Sign up
           </Link>
         </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Alternate:{" "}
-          <Link href="/credentials/login" className="underline">
-            /credentials/login
-          </Link>
-        </p>
       </div>
     );
   }

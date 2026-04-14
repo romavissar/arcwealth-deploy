@@ -22,7 +22,10 @@ export default async function LeaderboardPage() {
   const profiles = (allProfiles ?? []).filter((p) => !teacherIdSet.has(p.id)).slice(0, 20);
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900/60">
+    <section
+      data-tour-id="leaderboard-overview"
+      className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900/60"
+    >
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">

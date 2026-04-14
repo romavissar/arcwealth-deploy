@@ -25,7 +25,10 @@ export function TopBar({
   const signOutFormRef = useRef<HTMLFormElement>(null);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200/80 bg-white/85 backdrop-blur-xl dark:border-gray-700/80 dark:bg-gray-900/85">
+    <header
+      data-tour-id="top-metrics"
+      className="sticky top-0 z-40 border-b border-gray-200/80 bg-white/85 backdrop-blur-xl dark:border-gray-700/80 dark:bg-gray-900/85"
+    >
       <div className="flex min-h-16 items-center justify-between gap-3 px-3 md:px-4">
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <HeartDisplay />
