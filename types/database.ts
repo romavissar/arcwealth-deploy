@@ -59,6 +59,13 @@ export interface Database {
           avatar_url: string | null;
           email: string | null;
           birth_date: string | null;
+          school: string | null;
+          country: string | null;
+          city: string | null;
+          gender: string | null;
+          grade_level: string | null;
+          learning_goal: string | null;
+          guardian_email: string | null;
           role: string;
           xp: number;
           level: number;
@@ -93,6 +100,21 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["user_progress"]["Insert"]>;
+      };
+      user_textbook_progress: {
+        Row: {
+          id: string;
+          user_id: string;
+          topic_id: string;
+          completed_at: string;
+          created_at: string;
+        };
+        Insert: Omit<Database["public"]["Tables"]["user_textbook_progress"]["Row"], "id" | "created_at" | "completed_at"> & {
+          id?: string;
+          created_at?: string;
+          completed_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["user_textbook_progress"]["Insert"]>;
       };
       xp_events: {
         Row: {

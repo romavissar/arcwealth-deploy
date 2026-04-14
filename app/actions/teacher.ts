@@ -1,9 +1,9 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { canAccessTeacherDashboard } from "@/lib/roles";
-import { LESSON_TITLES } from "@/lib/curriculum";
+import { getLessonTitle } from "@/lib/curriculum";
 import { sendNudgeEmail, sendCongratulationsEmail } from "@/lib/resend";
 
 export type StudentProgress = {
@@ -27,7 +27,7 @@ export async function getMyStudents(teacherUserId?: string): Promise<
   { error?: string; students?: StudentProgress[] }
 > {
   try {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const effectiveTeacherId = teacherUserId ?? userId;
   if (effectiveTeacherId !== userId) {
@@ -127,7 +127,7 @@ export async function nudgeStudent(studentUserId: string): Promise<{ error?: str
   try {
     const ok = await canAccessTeacherDashboard();
     if (!ok) return { error: "Forbidden" };
-    const { userId } = await auth();
+    const userId = await getAppUserId();
     if (!userId) return { error: "Unauthorized" };
     const supabase = createServiceClient();
     const { data: link } = await supabase
@@ -139,7 +139,7 @@ export async function nudgeStudent(studentUserId: string): Promise<{ error?: str
     if (!link) return { error: "Student is not assigned to you" };
     const nextTopicId = await getNextTopicIdForStudent(supabase, studentUserId);
     const lessonLabel = nextTopicId
-      ? `Lesson ${nextTopicId} – ${LESSON_TITLES[nextTopicId] ?? nextTopicId}`
+      ? `Lesson ${nextTopicId} – ${getLessonTitle(nextTopicId)}`
       : "your next lesson";
 
     // 1) In-app notification (shows in bell / dashboard)
@@ -173,7 +173,7 @@ export async function congratulateStudent(studentUserId: string): Promise<{ erro
   try {
     const ok = await canAccessTeacherDashboard();
     if (!ok) return { error: "Forbidden" };
-    const { userId } = await auth();
+    const userId = await getAppUserId();
     if (!userId) return { error: "Unauthorized" };
     const supabase = createServiceClient();
     const { data: link } = await supabase

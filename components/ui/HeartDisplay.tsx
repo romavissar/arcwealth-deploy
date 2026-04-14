@@ -1,7 +1,7 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Heart } from "lucide-react";
 import { REGEN_SECONDS } from "@/lib/hearts";
 
 function formatCountdown(secondsLeft: number): string {
@@ -12,7 +12,6 @@ function formatCountdown(secondsLeft: number): string {
 }
 
 export function HeartDisplay() {
-  const { isSignedIn } = useAuth();
   const [hearts, setHearts] = useState(5);
   const [maxHearts, setMaxHearts] = useState(5);
   const [lastHeartsAt, setLastHeartsAt] = useState<string | null>(null);
@@ -31,9 +30,8 @@ export function HeartDisplay() {
   }, []);
 
   useEffect(() => {
-    if (!isSignedIn) return;
     refetchProfile();
-  }, [isSignedIn, refetchProfile]);
+  }, [refetchProfile]);
 
   useEffect(() => {
     prevSecondsLeftRef.current = null;
@@ -65,11 +63,13 @@ export function HeartDisplay() {
   }, [hearts, maxHearts, lastHeartsAt, refetchProfile]);
 
   return (
-    <div className="flex items-center gap-2 rounded-full bg-red-50 dark:bg-red-900/40 px-2 py-1 text-red-800 dark:text-red-200">
-      <span className="text-lg">❤️</span>
-      <span className="text-sm font-semibold">{hearts}</span>
+    <div className="inline-flex items-center gap-2 rounded-xl border border-rose-300/80 bg-rose-50 px-2.5 py-1.5 text-sm font-semibold text-rose-800 dark:border-rose-700/70 dark:bg-rose-900/30 dark:text-rose-200">
+      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-500/15 dark:bg-rose-400/20">
+        <Heart className="h-3.5 w-3.5 text-rose-600 dark:text-rose-300" aria-hidden="true" />
+      </span>
+      <span className="tabular-nums">{hearts}</span>
       {countdown !== null && (
-        <span className="text-xs text-red-600 dark:text-red-300 tabular-nums">+1 in {countdown}</span>
+        <span className="text-xs text-rose-700/90 dark:text-rose-200/90 tabular-nums">+1 in {countdown}</span>
       )}
     </div>
   );

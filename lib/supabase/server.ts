@@ -3,9 +3,9 @@
  * -----------------------------------------------
  * The app uses the **service role** key on the server (`createServiceClient`) for most reads/writes.
  * Row Level Security policies use `auth.uid()` from **Supabase Auth JWT**, but this app does not
- * rely on end-user Supabase sessions today — identity comes from Clerk (later: custom JWT + session).
+ * rely on end-user Supabase sessions — identity comes from the app’s signed session cookie + JWT.
  * Until RLS is aligned with issued Supabase JWTs or session tokens, treat all authorization as
- * **application-layer** (Server Actions verify user id from Clerk/custom session). Never trust
+ * **application-layer** (Server Actions verify user id from the session). Never trust
  * client-supplied user ids. Revisit when moving to Supabase-issued JWTs for `auth.uid()` parity.
  */
 import { createServerClient } from "@supabase/ssr";

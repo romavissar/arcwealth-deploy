@@ -89,3 +89,9 @@ export async function deleteAllSessionsForUser(userId: string): Promise<void> {
   const supabase = createServiceClient();
   await supabase.from("auth_session").delete().eq("user_id", userId);
 }
+
+/** After password change: revoke other devices but keep the current session. */
+export async function revokeOtherSessions(userId: string, keepSessionId: string): Promise<void> {
+  const supabase = createServiceClient();
+  await supabase.from("auth_session").delete().eq("user_id", userId).neq("id", keepSessionId);
+}

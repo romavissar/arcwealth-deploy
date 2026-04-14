@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { VALID_LEARN_TOPIC_IDS } from "@/lib/curriculum";
+import { isKnownCurriculumTopic } from "@/lib/curriculum";
 
 export default async function TopicPage({
   params,
@@ -9,7 +9,7 @@ export default async function TopicPage({
   params: Promise<{ topicId: string }>;
 }) {
   const { topicId } = await params;
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) redirect("/sign-in");
 
   const supabase = createServiceClient();
@@ -23,9 +23,11 @@ export default async function TopicPage({
   let status = progress?.status ?? "locked";
   if (status === "locked") {
     const { data: allTopics } = await supabase.from("topics").select("topic_id, order_index").order("order_index");
-    const ordered = (allTopics ?? []).filter((t) => VALID_LEARN_TOPIC_IDS.has(t.topic_id));
+    const ordered = (allTopics ?? []).filter((t) => isKnownCurriculumTopic(t.topic_id));
     const idx = ordered.findIndex((t) => t.topic_id === topicId);
-    if (idx > 0) {
+    if (idx === 0) {
+      status = progress?.status ?? "available";
+    } else if (idx > 0) {
       const prevTopicId = ordered[idx - 1].topic_id;
       const { data: prevProgress } = await supabase
         .from("user_progress")

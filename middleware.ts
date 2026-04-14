@@ -1,41 +1,52 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifySessionCookie } from "@/lib/auth/session-edge";
 
-/**
- * `USE_LEGACY_CLERK` (default true): existing Clerk middleware.
- * Set to `false` after layouts/actions use custom auth — JWT session cookie (`arcwealth_session`) + AUTH_SECRET.
- */
-const useLegacyClerk = process.env.USE_LEGACY_CLERK !== "false";
+/** Protected app routes: require `arcwealth_session` JWT (see `lib/auth/session-edge`). */
+const PROTECTED_PREFIXES = [
+  "/dashboard",
+  "/learn",
+  "/glossary",
+  "/profile",
+  "/leaderboard",
+  "/settings",
+  "/classroom",
+  "/textbook",
+  "/admin",
+  "/teacher",
+] as const;
 
-const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/learn(.*)",
-  "/glossary(.*)",
-  "/profile(.*)",
-  "/leaderboard(.*)",
-]);
+const AUTH_ENTRY_PREFIXES = ["/sign-in", "/sign-up"] as const;
 
-export default useLegacyClerk
-  ? clerkMiddleware(async (auth, req) => {
-      if (isProtectedRoute(req)) await auth.protect();
-    })
-  : async function authMiddleware(req: NextRequest) {
-      if (!isProtectedRoute(req)) return NextResponse.next();
-      const session = await verifySessionCookie(req);
-      if (!session) {
-        const signIn = new URL("/sign-in", req.url);
-        signIn.searchParams.set("redirect_url", req.nextUrl.pathname + req.nextUrl.search);
-        return NextResponse.redirect(signIn);
-      }
-      return NextResponse.next();
-    };
+function isProtectedPath(pathname: string): boolean {
+  return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+function isAuthEntryPath(pathname: string): boolean {
+  return AUTH_ENTRY_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+export default async function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+  const session = await verifySessionCookie(req);
+
+  if (isAuthEntryPath(pathname) && session) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
+  if (isProtectedPath(pathname) && !session) {
+    const signIn = new URL("/sign-in", req.url);
+    signIn.searchParams.set("redirect_url", pathname + req.nextUrl.search);
+    return NextResponse.redirect(signIn);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [
-    // Skip all Next internals (`/_next/*`) and public auth routes. Excluding only
-    // `_next/static` lets middleware run on `/_next/data` and other internals and can break dev chunks/CSS.
     "/((?!_next|sign-in|sign-up|credentials|api/auth|verify-email|favicon.ico).*)",
+    "/sign-in/:path*",
+    "/sign-up/:path*",
   ],
 };

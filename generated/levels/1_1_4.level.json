@@ -1,0 +1,231 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.4",
+  "moduleNumber": 1,
+  "lessonNumber": 4,
+  "lessonTitle": "Hidden and One-Off Costs of Starting University",
+  "concept": "Before you attend a single lecture, you may spend $3,000–$10,000 on costs that almost nobody warns you about.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Priya budgeted perfectly for Year 1. Then the invoice for her visa, deposit, and laptop arrived.",
+    "question": "She had not budgeted for any of it."
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "**Startup costs** are the one-off expenses that hit before or during your first weeks at university. Unlike TCA categories, they do not repeat every year — but they must be paid before you even begin."
+    },
+    {
+      "title": "Card 2",
+      "body": "Application fees add up faster than expected. US university applications cost $50–$90 each. Applying to ten schools is $500–$900 before you have been accepted anywhere. Standardised tests (SAT, ACT, IELTS, TOEFL) add another $100–$250 each."
+    },
+    {
+      "title": "Card 3",
+      "body": "Visa fees and required health checks apply to most international students. A UK student visa costs £363 plus an Immigration Health Surcharge of £776 per year of study. US student visa (F-1) costs $160 plus the SEVIS fee of $350."
+    },
+    {
+      "title": "Card 4",
+      "body": "Housing deposits (typically one to two months' rent) must be paid upfront before you move in. First-month rent is often due simultaneously. Together, these can total $1,500–$3,000 before you have unpacked a single box."
+    },
+    {
+      "title": "Card 5",
+      "body": "Now test this: Technology, bedding, kitchenware, and travel to campus are all startup costs. A necessary laptop upgrade alone can be $500–$1,500. Most students spend $500–$1,500 on household supplies in their first month. Budget for all of it before you"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What makes startup costs different from regular TCA categories?",
+        "options": [
+          "They are smaller than regular costs",
+          "They occur only once, before or at the start of university",
+          "They are covered by student loans",
+          "They only apply to international students"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Startup costs are one-off expenses — they don't repeat annually like tuition or rent, but must be paid before your studies begin.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "Applying to 10 US universities costs less than $200 in application fees.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"US university applications typically cost $50–$90 each. Ten applications = $500–$900 in fees alone, before any test registration costs.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each startup cost to its approximate amount:",
+        "pairs": [
+          {
+            "left": "UK student visa + Immigration Health Surcharge (3",
+            "right": "~£2,700"
+          },
+          {
+            "left": "US F-1 visa + SEVIS fee",
+            "right": "~$510"
+          },
+          {
+            "left": "Housing deposit (2 months at €600/month)",
+            "right": "€1,200"
+          },
+          {
+            "left": "Laptop purchase",
+            "right": "$500–$1,500"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "Marcus is moving into a flat with €650/month rent. The landlord requires a 2-month deposit plus first month's rent upfront.",
+        "min": 500,
+        "max": 3000,
+        "correctValue": 1950,
+        "tolerance": 195,
+        "unitLabel": "€",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"2 months deposit = €1,300. First month's rent = €650. Total due before moving in: €1,950.\""
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"The one-off expenses paid before or at the start of university — including visa fees, deposits, and technology — are collectively called ___.\"",
+        "options": [
+          "startup costs",
+          "TCA",
+          "hidden tuition",
+          "living expenses"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Startup costs",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete the sentence: \"Even a student with enough savings for their full TCA can face problems because startup costs arrive ___ any loans are disbursed, and must be paid ___ the regular academic year budget begins.\"",
+        "options": [
+          "before",
+          "after",
+          "alongside",
+          "instead of",
+          "during"
+        ],
+        "correctAnswers": [
+          "before",
+          "before"
+        ],
+        "keyTerm": "Startup costs",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Priya's Year 1 savings plan: \"I've saved €26,000 for my TCA. I'm ready.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "Her TCA estimate is too low",
+          "She has not set aside €2,700 for startup costs that arrive before",
+          "Her savings are more than enough",
+          "Startup costs are covered by universities"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Priya's TCA savings are solid — but startup costs are separate and arrive first. Without an additional €2,700 buffer, she will need to pull from her TCA savings immediately.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "build_plan",
+        "difficulty": "moderate",
+        "character": "Kai",
+        "location": "UK",
+        "scenario": "Build Kai's startup cost budget for starting at a UK university:",
+        "prompt": "Choose the best decision.",
+        "explanation": "\"Kai's startup costs total over £6,000 — nearly half a year's living costs — before he has attended a single lecture.\"",
+        "answerMode": "typed_inputs",
+        "inputFields": [
+          {
+            "label": "Immigration Health Surcharge (3 years × £776)",
+            "correctValue": "IHS = £2"
+          },
+          {
+            "label": "Housing deposit (2 months × £700)",
+            "correctValue": "328 | Deposit = £1"
+          },
+          {
+            "label": "**Total startup costs",
+            "correctValue": "400 | Total = £6"
+          }
+        ]
+      },
+      {
+        "taskType": "decision_branch",
+        "difficulty": "hard",
+        "character": "Sofia",
+        "location": "Singapore",
+        "scenario": "Sofia has saved $25,000 for Year 1 at NUS Singapore. Her annual TCA is $38,000.",
+        "prompt": "What should she do?",
+        "explanation": "\"Sofia has a real $18,800 shortfall for Year 1 alone. Identifying this now — not after arriving in Singapore — gives her time to explore loans, family support, or part-time work before the crisis arrives.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Startup costs",
+    "takeaway": "Budget for startup costs separately from your TCA — they arrive first, before loans disburse or income begins, and they",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Startup costs",
+    "definition": "Startup costs anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Startup costs include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

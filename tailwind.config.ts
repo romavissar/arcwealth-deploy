@@ -10,10 +10,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: { DEFAULT: "#4F46E5", foreground: "#fff" },
-        accent: "#F59E0B",
-        success: "#10B981",
-        danger: "#EF4444",
+        primary: { DEFAULT: "var(--indigo-fill)", foreground: "var(--indigo-text)" },
+        accent: "var(--amber-fill)",
+        success: "var(--emerald-fill)",
+        danger: "var(--red-fill)",
+        "aw-bg-page": "var(--bg-page)",
+        "aw-bg-card": "var(--bg-card)",
+        "aw-text": "var(--text-primary)",
+        "aw-muted": "var(--text-muted)",
+        "aw-border": "var(--border)",
+        "aw-amber": "var(--amber-fill)",
+        "aw-amber-text": "var(--amber-text)",
+        "aw-emerald": "var(--emerald-fill)",
+        "aw-emerald-text": "var(--emerald-text)",
+        "aw-red": "var(--red-fill)",
+        "aw-red-text": "var(--red-text)",
       },
       fontFamily: {
         sans: ["system-ui", "ui-sans-serif", "sans-serif"],

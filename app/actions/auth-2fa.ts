@@ -89,9 +89,6 @@ export async function verifyTwoFactorLoginAction(
     return { error: "Could not create session. Check AUTH_SECRET in .env.local." };
   }
 
-  if (process.env.USE_LEGACY_CLERK !== "false") {
-    redirect("/sign-in?custom_session=1");
-  }
   redirect("/dashboard");
 }
 

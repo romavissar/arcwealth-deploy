@@ -9,6 +9,7 @@ import type { FriendStatus } from "@/app/actions/friends";
 import { LeaderboardRowFriendAction } from "@/components/leaderboard/LeaderboardRowFriendAction";
 import { getLessonTitle } from "@/lib/curriculum";
 import { formatDateTimeInBucharest } from "@/lib/bucharest-time";
+import { SettingsCard } from "@/components/account/SettingsCard";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -41,65 +42,89 @@ export function ClassroomViewStudent({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700 pb-2">
-        {tabs.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setTab(id)}
-            className={cn(
-              "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-              tab === id
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </button>
-        ))}
-      </div>
+      <nav
+        aria-label="Student classroom sections"
+        className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm dark:border-gray-700 dark:bg-gray-900/60"
+      >
+        <div className="flex flex-wrap gap-2">
+          {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setTab(id)}
+              className={cn(
+                "flex min-h-11 items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                tab === id
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {label}
+            </button>
+          ))}
+        </div>
+      </nav>
 
       {tab === "people" && (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-6">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Teacher</h3>
-          <div className="flex items-center gap-3">
-            {people.teacher.avatarUrl ? (
-              <Image
-                src={people.teacher.avatarUrl}
-                alt=""
-                width={40}
-                height={40}
-                className="rounded-full object-cover h-10 w-10"
-              />
-            ) : (
-              <div className="h-10 w-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-medium text-sm">
-                {people.teacher.username.slice(0, 1).toUpperCase()}
+        <SettingsCard className="space-y-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">People</p>
+            <h2 className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">Your classroom community</h2>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              See your teacher and classmates, then connect with friends directly.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-gray-200 bg-gray-50/80 p-4 dark:border-gray-700 dark:bg-gray-800/60">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-primary">Teacher</p>
+            <div className="flex items-center gap-3">
+              {people.teacher.avatarUrl ? (
+                <Image
+                  src={people.teacher.avatarUrl}
+                  alt={`${people.teacher.username} avatar`}
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-sm font-medium text-primary">
+                  {people.teacher.username.slice(0, 1).toUpperCase()}
+                </div>
+              )}
+              <div>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{people.teacher.username}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                  {people.teacher.rank} · Level {people.teacher.level}
+                </p>
               </div>
-            )}
-            <div>
-              <p className="text-gray-900 dark:text-gray-100 font-medium">{people.teacher.username}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{people.teacher.rank} · Level {people.teacher.level}</p>
             </div>
           </div>
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-4 mb-2">Classmates</h3>
+
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Classmates</p>
           {people.students.length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">No other students in this class yet.</p>
+              <p className="rounded-xl border border-dashed border-gray-300 p-4 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
+                No other students in this class yet.
+              </p>
           ) : (
             <ul className="space-y-3">
               {people.students.map((s) => (
-                <li key={s.id} className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                  <li
+                    key={s.id}
+                    className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50/80 p-3 text-gray-900 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-100"
+                  >
                   <Link href={`/profile/${s.id}`} className="flex items-center gap-3 min-w-0 flex-1">
                     {s.avatarUrl ? (
                       <Image
                         src={s.avatarUrl}
-                        alt=""
+                        alt={`${s.username} avatar`}
                         width={40}
                         height={40}
-                        className="rounded-full object-cover h-10 w-10"
+                          className="h-10 w-10 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0">
+                        <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm">
                         {s.username.slice(0, 1).toUpperCase()}
                       </div>
                     )}
@@ -118,39 +143,50 @@ export function ClassroomViewStudent({
                 </li>
               ))}
             </ul>
-          )}
-        </div>
+            )}
+          </div>
+        </SettingsCard>
       )}
 
       {tab === "announcements" && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Announcements</h3>
+        <SettingsCard className="space-y-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Announcements</p>
+            <h2 className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">From your teacher</h2>
+          </div>
           {messages.length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">No announcements yet.</p>
+            <p className="rounded-xl border border-dashed border-gray-300 p-4 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
+              No announcements yet.
+            </p>
           ) : (
             messages.map((m) => (
               <div
                 key={m.id}
-                className="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4"
+                className="rounded-xl border border-gray-200 bg-gray-50/80 p-4 dark:border-gray-700 dark:bg-gray-800/60"
               >
                 <p className="text-xs font-medium text-primary dark:text-primary/90 mb-1">
                   From your teacher, {people.teacher.username}
                 </p>
                 <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{m.content}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  {new Date(m.createdAt).toLocaleString()}
+                  {formatDateTimeInBucharest(m.createdAt)} (EET)
                 </p>
               </div>
             ))
           )}
-        </div>
+        </SettingsCard>
       )}
 
       {tab === "assignments" && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Assignments</h3>
+        <SettingsCard className="space-y-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Assignments</p>
+            <h2 className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">Your tasks</h2>
+          </div>
           {assignments.length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">No assignments yet.</p>
+            <p className="rounded-xl border border-dashed border-gray-300 p-4 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
+              No assignments yet.
+            </p>
           ) : (
             <div className="space-y-2">
               {assignments.map((a) => {
@@ -161,43 +197,50 @@ export function ClassroomViewStudent({
                 return (
                   <div
                     key={a.id}
-                    className="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 flex flex-wrap items-center justify-between gap-3"
+                    className="rounded-xl border border-gray-200 bg-gray-50/80 p-4 dark:border-gray-700 dark:bg-gray-800/60"
                   >
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">
-                        {a.title || getLessonTitle(a.topicId)}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Topic {a.topicId} · Due {formatDateTimeInBucharest(a.dueAt)} (EET)
-                        {isPastDue && !completed && (
-                          <span className="text-amber-600 dark:text-amber-400 ml-1">(past due)</span>
-                        )}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          {a.title || getLessonTitle(a.topicId)}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Topic {a.topicId} · Due {formatDateTimeInBucharest(a.dueAt)} (EET)
+                          {isPastDue && !completed && (
+                            <span className="text-amber-600 dark:text-amber-400 ml-1">(past due)</span>
+                          )}
+                        </p>
+                      </div>
                       <span
                         className={cn(
-                          "text-sm font-medium",
-                          completed ? "text-emerald-600 dark:text-emerald-400" : "text-gray-500"
+                          "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold",
+                          completed
+                            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                            : isPastDue
+                              ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+                              : "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200"
                         )}
                       >
-                        {completed ? "Done" : "Not done"}
+                        {completed ? "Done" : isPastDue ? "Past due" : "Not done"}
                       </span>
-                      {!completed && (
+                    </div>
+
+                    {!completed ? (
+                      <div className="mt-2">
                         <Link
                           href={`/learn/${a.topicId}`}
-                          className="text-sm text-primary hover:underline"
+                          className="inline-flex min-h-11 items-center rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                         >
                           Go to lesson
                         </Link>
-                      )}
-                    </div>
+                      </div>
+                    ) : null}
                   </div>
                 );
               })}
             </div>
           )}
-        </div>
+        </SettingsCard>
       )}
     </div>
   );

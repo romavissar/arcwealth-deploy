@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/roles";
 import { canAccessTeacherDashboard } from "@/lib/roles";
@@ -14,7 +14,7 @@ import {
 
 /** True if current user can access the given teacher's classroom as owner or admin. */
 async function canAccessClassroomAsTeacher(teacherUserId: string): Promise<boolean> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return false;
   if (userId === teacherUserId) {
     const ok = await canAccessTeacherDashboard();
@@ -25,7 +25,7 @@ async function canAccessClassroomAsTeacher(teacherUserId: string): Promise<boole
 
 /** True if current user is a student in the given teacher's classroom. */
 async function canAccessClassroomAsStudent(teacherUserId: string): Promise<boolean> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return false;
   const supabase = createServiceClient();
   const { data } = await supabase
@@ -76,7 +76,7 @@ export async function getClassroomStudents(teacherUserId: string): Promise<{
 }> {
   const ok = await canAccessClassroomAsTeacher(teacherUserId);
   if (!ok) return { error: "Forbidden" };
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const effectiveTeacherId = userId === teacherUserId ? userId : teacherUserId;
   const res = await getMyStudents(effectiveTeacherId);
@@ -225,7 +225,7 @@ export async function getAssignmentCompletion(assignmentId: string): Promise<{
   assignment?: { topicId: string; dueAt: string; title: string | null };
   completion?: AssignmentCompletionRow[];
 }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const supabase = createServiceClient();
   const { data: assignment, error: assignErr } = await supabase
@@ -295,7 +295,7 @@ export async function getAssignmentCompletion(assignmentId: string): Promise<{
 
 /** Get current user's teacher id if they are a student. */
 export async function getMyClassroomTeacherId(): Promise<string | null> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return null;
   const supabase = createServiceClient();
   const { data } = await supabase
@@ -354,7 +354,7 @@ export async function getMyAssignmentStatus(
 ): Promise<{ assignmentId: string; topicId: string; dueAt: string; completed: boolean }[]> {
   const ok = await canAccessClassroomAsStudent(teacherUserId);
   if (!ok) return [];
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const res = await getClassroomAssignments(teacherUserId);
   if (res.error || !res.assignments?.length) return [];

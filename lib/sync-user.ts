@@ -11,7 +11,7 @@ export function resolveRole(profileRole: string | null, email: string | null | u
 }
 
 /**
- * Ensures a Clerk user has a row in user_profiles and user_progress.
+ * Ensures the signed-in user has a row in user_profiles and user_progress.
  * Sets role to admin if email is ADMIN_EMAIL; otherwise keeps existing role.
  * Syncs email to user_profiles for admin/student matching.
  */
@@ -27,8 +27,6 @@ export async function ensureUserInSupabase(
     .single();
 
   const displayName = opts?.username?.trim().slice(0, 50) || null;
-  const suffix = Date.now().toString(36).slice(-6);
-  const fullNameWithSuffix = displayName ? `${displayName}_${suffix}` : `user_${suffix}`;
   const email = opts?.email?.trim().toLowerCase() || null;
   const isAdminEmail = email === ADMIN_EMAIL;
   const updatePayload: Record<string, unknown> = {
@@ -53,36 +51,20 @@ export async function ensureUserInSupabase(
     if (inTeacherList) {
       updatePayload.role = "teacher";
     }
-    // Students cannot change name or email: keep existing DB values (do not sync from Clerk)
+    // Students cannot change name or email: keep existing DB values (do not overwrite from OAuth/sync)
     if (!isStudent) {
       if (displayName) updatePayload.username = displayName;
       if (email != null) updatePayload.email = email;
     }
     if (Object.keys(updatePayload).length > 1) {
-      const { error: updateErr } = await supabase
-        .from("user_profiles")
-        .update(updatePayload)
-        .eq("id", userId);
-      if (updateErr && updateErr.code === "23505" && updatePayload.username && !isStudent) {
-        await supabase
-          .from("user_profiles")
-          .update({
-            username: fullNameWithSuffix,
-            ...(opts?.imageUrl != null && { avatar_url: opts.imageUrl }),
-            ...(email != null && { email }),
-            ...(isAdminEmail && { role: "admin" }),
-            ...(inTeacherList && { role: "teacher" }),
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", userId);
-      }
+      await supabase.from("user_profiles").update(updatePayload).eq("id", userId);
     }
     return;
   }
 
   const username = displayName || "user";
   const role = isAdminEmail ? "admin" : "user";
-  const { error: profileError } = await supabase.from("user_profiles").insert({
+  await supabase.from("user_profiles").insert({
     id: userId,
     username,
     avatar_url: opts?.imageUrl ?? null,
@@ -90,16 +72,7 @@ export async function ensureUserInSupabase(
     email: email ?? null,
     role,
   });
-  if (profileError) {
-    await supabase.from("user_profiles").insert({
-      id: userId,
-      username: fullNameWithSuffix,
-      avatar_url: opts?.imageUrl ?? null,
-      rank: "novice",
-      email: email ?? null,
-      role: role as "admin" | "user",
-    });
-  }
+
   const { data: topics } = await supabase.from("topics").select("topic_id").order("order_index");
   if (topics?.length) {
     const firstTopicId = topics[0].topic_id;

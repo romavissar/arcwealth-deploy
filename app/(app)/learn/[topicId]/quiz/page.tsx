@@ -1,9 +1,8 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { QuizPageClient } from "@/components/learn/QuizPageClient";
 import type { LessonExercise } from "@/types/curriculum";
-import { CHECKPOINT_1_1_EXERCISES } from "@/lib/checkpoint-1-1";
 
 export default async function QuizPage({
   params,
@@ -15,7 +14,7 @@ export default async function QuizPage({
   const { topicId } = await params;
   const { redo } = await searchParams;
   const redoMode = redo === "1" || redo === "true";
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) redirect("/sign-in");
 
   const supabase = createServiceClient();
@@ -27,15 +26,22 @@ export default async function QuizPage({
 
   if (progressRes.data?.status === "locked") redirect("/learn");
 
-  // Checkpoint 1.1: questions-only quiz from code (covers 1.1.1–1.1.12)
-  let exercises: LessonExercise[];
-  if (topicId === "1.1.checkpoint") {
-    exercises = CHECKPOINT_1_1_EXERCISES;
+  let exercises: LessonExercise[] | undefined;
+  const quizContent = contentRes.data?.content as { exercises?: LessonExercise[] } | undefined;
+  if (quizContent?.exercises?.length) {
+    exercises = quizContent.exercises;
   } else {
-    const content = contentRes.data?.content ?? contentRes.data ?? (await supabase.from("lesson_content").select("content").eq("topic_id", topicId).eq("content_type", "duolingo_lesson").single()).data?.content;
-    if (!content || !(content as { exercises?: LessonExercise[] }).exercises) notFound();
-    exercises = (content as { exercises: LessonExercise[] }).exercises;
+    const fallback = await supabase
+      .from("lesson_content")
+      .select("content")
+      .eq("topic_id", topicId)
+      .eq("content_type", "duolingo_lesson")
+      .single();
+    const c = fallback.data?.content as { exercises?: LessonExercise[] } | undefined;
+    exercises = c?.exercises;
   }
+
+  if (!exercises?.length) notFound();
 
   const topic = topicRes.data;
   const xpReward = topic?.xp_reward ?? 25;

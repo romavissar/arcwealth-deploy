@@ -4,13 +4,10 @@ import { createSession } from "./session";
 import { getAppUrl } from "./oauth-config";
 import { setTwoFactorPendingCookie } from "./two-factor-cookies";
 
-/** Issue JWT session and redirect (matches password login + Clerk migration flag). */
+/** Issue JWT session and redirect after OAuth. */
 export async function respondOAuthSession(userId: string): Promise<NextResponse> {
   await createSession(userId);
   const base = getAppUrl();
-  if (process.env.USE_LEGACY_CLERK !== "false") {
-    return NextResponse.redirect(`${base}/sign-in?custom_session=1`);
-  }
   return NextResponse.redirect(`${base}/dashboard`);
 }
 

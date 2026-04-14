@@ -1,0 +1,252 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.10",
+  "moduleNumber": 1,
+  "lessonNumber": 10,
+  "lessonTitle": "Building a Personal University Funding Plan",
+  "concept": "A funding plan is not a wish list — it is a specific, sourced, numbered account of how every year of your degree will be paid for.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Marcus has a university place. He has a vague sense his parents will help and he might get a scholarship.",
+    "question": "That is not a plan. That is a hope."
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "A **funding plan** is a document — however simple — that lists: your annual TCA, every confirmed source of funding, the gap between them, and specifically how that gap will be closed. Every item should be a confirmed number, not"
+    },
+    {
+      "title": "Card 2",
+      "body": "The four main funding sources to combine are: family contribution, scholarships and grants, student loans, and earned income. A strong plan does not rely entirely on any single one. Diversification in funding is as important as diversification in a financial"
+    },
+    {
+      "title": "Card 3",
+      "body": "Confirmed vs unconfirmed: family support is unconfirmed until a specific amount and payment schedule has been agreed. A scholarship application is unconfirmed until the award letter arrives. Build your plan on confirmed sources first, then layer in likely but unconfirmed"
+    },
+    {
+      "title": "Card 4",
+      "body": "Contingency planning means having a written answer to: \"What do I do if family support drops by 50%? What if I miss my scholarship? What if my part-time job disappears?\" A plan without contingencies is a plan that collapses at"
+    },
+    {
+      "title": "Card 5",
+      "body": "Now test this: Your funding plan should be rebuilt annually. Year 2 is different from Year 1: startup costs disappear, scholarship applications can be renewed or new ones sought, earned income typically increases as you find better campus roles. Review"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What makes a source of funding \"confirmed\" versus \"unconfirmed\"?",
+        "options": [
+          "It is from a government rather than a family",
+          "A specific amount and payment schedule has been agreed or awarded in",
+          "It is a loan rather than a gift",
+          "It has been received in your bank account"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Confirmed means a specific number is committed — a signed scholarship award, a loan approval, or a written family agreement with a stated amount.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "A funding plan only needs to be built once, before you start university.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Circumstances change every year — scholarships expire, family situations shift, work income varies. A good funding plan is rebuilt annually.\""
+      },
+      {
+        "type": "ordering",
+        "prompt": "Put these funding plan steps in the correct order:",
+        "items": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "correctOrder": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each funding source type to its reliability characteristic:",
+        "pairs": [
+          {
+            "left": "Confirmed scholarship",
+            "right": "High reliability — award letter received"
+          },
+          {
+            "left": "Verbal family promise",
+            "right": "Lower reliability — no written amount or schedule"
+          },
+          {
+            "left": "Student loan approval",
+            "right": "High reliability — formal approval letter"
+          },
+          {
+            "left": "Planned part-time work",
+            "right": "Medium reliability — income depends on finding and keeping the"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "\"A plan that lists each confirmed funding source, the gap between them and TCA, and a specific strategy to close that gap is called a ___.\" ___",
+        "options": [
+          "funding plan",
+          "scholarship strategy",
+          "budget forecast",
+          "TCA summary",
+          "buffer"
+        ],
+        "correctAnswers": [
+          "funding plan",
+          "funding plan"
+        ],
+        "keyTerm": "Funding plan",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "Priya's TCA: €26,000. Confirmed funding: €15,000 family + €4,000 scholarship + €5,000 loan = €___.",
+        "options": [
+          "€24,000",
+          "€26,000",
+          "gap",
+          "surplus"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Funding plan",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "Kai's Year 1 funding sources: family €18,000 | scholarship €3,000 | loan €5,000 | part-time work €4,500 | Total TCA: €28,000",
+        "min": 5000,
+        "max": 5000,
+        "correctValue": 5000,
+        "tolerance": 250,
+        "unitLabel": "€",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"€18,000 + €3,000 + €5,000 + €4,500 = €30,500... wait: let's recalculate. €18,000 + €3,000 = €21,000 + €5,000 = €26,000 + €4,500 = €30,500. TCA is €28,000. Surplus of €2,500 — Kai can set this aside as contingency or reduce his loan.\""
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Marcus's funding plan: \"My parents will cover everything. If that doesn't work out I'll think of something.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "He should have a student loan",
+          "He has no confirmed amounts, no contingency plan, and no fallback —",
+          "He should apply for more scholarships",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"A plan requires specific numbers and contingencies. 'My parents will cover it' with no written amount, no schedule, and no backup is the most common financial failure mode for international students.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "build_plan",
+        "difficulty": "moderate",
+        "character": "Sofia",
+        "location": "Singapore",
+        "scenario": "Build Sofia's complete Year 1 funding plan for NUS Singapore:",
+        "prompt": "Contingency question: If the tuition grant falls through, what is her new gap?",
+        "explanation": "Review the concept and try again.",
+        "answerMode": "typed_inputs",
+        "inputFields": [
+          {
+            "label": "Part-time campus work (15 hrs/wk, 30 weeks, S$14/hr)",
+            "correctValue": "W"
+          },
+          {
+            "label": "Total funding",
+            "correctValue": "k = S$6"
+          },
+          {
+            "label": "Gap or surplus",
+            "correctValue": "300. Total = S$44"
+          }
+        ]
+      },
+      {
+        "taskType": "decision_branch",
+        "difficulty": "hard",
+        "character": "Priya",
+        "location": "US",
+        "scenario": "Priya's Year 2 situation changes: her scholarship is not renewed (−€4,000) and her family increases support by €2,000.",
+        "prompt": "What is the smartest way to close it?",
+        "explanation": "\"Break-even is a fragile position — one unexpected expense wipes it out. Priya should treat the €4,000 scholarship loss as an immediate action item and find a replacement.\"",
+        "answerMode": "choice",
+        "options": [
+          "New funding = €21,000 + €0 + €5,000 = €26,000. No gap",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Funding plan",
+    "takeaway": "A real funding plan has specific confirmed numbers, a named strategy for every gap, and written answers to \"what if\"",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Funding plan",
+    "definition": "Funding plan anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Funding plan include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

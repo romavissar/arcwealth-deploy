@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,7 +6,7 @@ import { getFriendRequests } from "@/app/actions/friends";
 import { FriendRequestActions } from "./FriendRequestActions";
 
 export default async function ProfileRequestsPage() {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) redirect("/sign-in");
 
   const { error, incoming, outgoing } = await getFriendRequests();

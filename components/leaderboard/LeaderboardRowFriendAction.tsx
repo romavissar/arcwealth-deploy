@@ -30,17 +30,27 @@ export function LeaderboardRowFriendAction({
 
   if (status === "friends") {
     return (
-      <Link href={`/profile/${userId}`} className="text-sm font-medium text-primary hover:underline shrink-0">
+      <Link
+        href={`/profile/${userId}`}
+        className="shrink-0 rounded-md text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+      >
         Friends
       </Link>
     );
   }
   if (status === "pending_sent") {
-    return <span className="text-sm text-gray-500 dark:text-gray-400 shrink-0">Pending</span>;
+    return (
+      <span className="shrink-0 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+        Pending
+      </span>
+    );
   }
   if (status === "pending_received") {
     return (
-      <Link href="/profile/requests" className="text-sm text-primary hover:underline shrink-0">
+      <Link
+        href="/profile/requests"
+        className="shrink-0 rounded-md text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+      >
         Accept request
       </Link>
     );

@@ -39,16 +39,18 @@ export function TwoFactorSettings({
   const [enabled, setEnabled] = useState(initialEnabled);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [starting, setStarting] = useState(false);
+  const [startError, setStartError] = useState<string | null>(null);
   const [enrollState, confirmAction] = useFormState(confirmTotpEnrollmentAction, null as TwofaFormState);
   const [disableState, disableAction] = useFormState(disableTotpAction, null as TwofaFormState);
 
   async function handleStart() {
     setStarting(true);
     setQrDataUrl(null);
+    setStartError(null);
     try {
       const r = await startTotpEnrollmentAction();
       if (r.ok) setQrDataUrl(r.qrDataUrl);
-      else alert(r.error);
+      else setStartError(r.error);
     } finally {
       setStarting(false);
     }
@@ -56,12 +58,13 @@ export function TwoFactorSettings({
 
   if (enrollState?.ok && enrollState.recoveryCodes?.length) {
     return (
-      <section className="space-y-4 pb-8 border-b border-gray-200 dark:border-gray-600">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Save your recovery codes</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+      <section className="space-y-4 border-b border-gray-200 pb-8 dark:border-gray-700">
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Security</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Save your recovery codes</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           Each code works once. Store them somewhere safe — we won’t show them again.
         </p>
-        <ul className="rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 p-3 font-mono text-sm space-y-1">
+        <ul className="space-y-1 rounded-xl border border-gray-200 bg-gray-50 p-3 font-mono text-sm dark:border-gray-700 dark:bg-gray-800">
           {enrollState.recoveryCodes.map((c) => (
             <li key={c}>{c}</li>
           ))}
@@ -81,15 +84,16 @@ export function TwoFactorSettings({
   }
 
   return (
-    <section className="space-y-6 pb-8 border-b border-gray-200 dark:border-gray-600">
+    <section className="space-y-6 border-b border-gray-200 pb-8 dark:border-gray-700">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Two-factor authentication</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Security</p>
+        <h2 className="mt-1 text-xl font-bold text-gray-900 dark:text-gray-100">Two-factor authentication</h2>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
           Use an authenticator app (Google Authenticator, 1Password, etc.). SMS-based 2FA is not supported.
         </p>
 
         {enabled ? (
-          <div className="space-y-4">
+          <div className="mt-4 space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
             <p className="text-sm text-gray-700 dark:text-gray-300">
               2FA is <span className="font-medium text-green-700 dark:text-green-400">on</span>.
               {recoveryRemaining > 0 ? (
@@ -116,20 +120,21 @@ export function TwoFactorSettings({
             </form>
           </div>
         ) : (
-          <div className="space-y-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-4 space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               Protect your account with a time-based code from an app on your phone.
             </p>
             <Button type="button" variant="outline" onClick={handleStart} disabled={starting}>
-              {starting ? "Preparing…" : "Set up authenticator"}
+              {starting ? "Preparing..." : "Set up authenticator"}
             </Button>
+            {startError && <p className="text-sm text-red-600 dark:text-red-400">{startError}</p>}
 
             {qrDataUrl && (
-              <form action={confirmAction} className="space-y-4 pt-2 border-t border-gray-200 dark:border-gray-600">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+              <form action={confirmAction} className="space-y-4 border-t border-gray-200 pt-4 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   Scan the QR code, then enter the 6-digit code to confirm.
                 </p>
-                <div className="flex justify-center rounded-lg bg-white p-3 w-fit mx-auto border border-gray-200">
+                <div className="mx-auto flex w-fit justify-center rounded-xl border border-gray-200 bg-white p-3">
                   {/* eslint-disable-next-line @next/next/no-img-element -- data URL from server action */}
                   <img src={qrDataUrl} alt="Authenticator QR code" width={220} height={220} />
                 </div>

@@ -1,11 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { GlossaryList } from "@/components/glossary/GlossaryList";
+import { buildGlossaryFromCurrentTextbook } from "@/lib/glossary-from-textbook";
 
 export default async function GlossaryPage() {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   const supabase = createServiceClient();
-  const { data: terms } = await supabase.from("glossary").select("term, definition, example, related_topic_ids").order("term");
+  const terms = await buildGlossaryFromCurrentTextbook(supabase);
   const progressMap = new Map<string, string>();
   if (userId) {
     const { data: progress } = await supabase.from("user_progress").select("topic_id, status").eq("user_id", userId);
@@ -13,9 +14,8 @@ export default async function GlossaryPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Glossary</h1>
-      <GlossaryList terms={terms ?? []} progressMap={progressMap} />
+    <div className="mx-auto max-w-4xl pb-12">
+      <GlossaryList terms={terms} progressMap={progressMap} />
     </div>
   );
 }

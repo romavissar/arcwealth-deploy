@@ -1,9 +1,11 @@
-import { auth } from "@clerk/nextjs/server";
-import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { createServiceClient } from "@/lib/supabase/server";
+import { hashPassword, verifyPassword } from "@/lib/auth/password";
+import { getAppUserId } from "@/lib/auth/server-user";
+import { getSession, revokeOtherSessions } from "@/lib/auth/session";
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   let body: { currentPassword?: string; newPassword?: string };
@@ -23,22 +25,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "New password must be at least 8 characters" }, { status: 400 });
   }
 
-  try {
-    const client = await clerkClient();
-    await client.users.verifyPassword({ userId, password: currentPassword });
-    await client.users.updateUser(userId, {
-      password: newPassword,
-      signOutOfOtherSessions: true,
-    });
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : "";
-    if (msg.toLowerCase().includes("password") || msg.toLowerCase().includes("verify")) {
-      return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 });
-    }
+  const supabase = createServiceClient();
+  const { data: row } = await supabase.from("auth_user").select("password_hash").eq("id", userId).maybeSingle();
+  if (!row?.password_hash) {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Failed to update password" },
-      { status: 500 }
+      { error: "Password login is not enabled for this account" },
+      { status: 400 }
     );
   }
+  const ok = await verifyPassword(currentPassword, row.password_hash);
+  if (!ok) {
+    return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 });
+  }
+  const newHash = await hashPassword(newPassword);
+  const { error: updErr } = await supabase
+    .from("auth_user")
+    .update({ password_hash: newHash, updated_at: new Date().toISOString() })
+    .eq("id", userId);
+  if (updErr) {
+    return NextResponse.json({ error: updErr.message }, { status: 500 });
+  }
+  const s = await getSession();
+  if (s) await revokeOtherSessions(userId, s.sessionId);
+  return NextResponse.json({ ok: true });
 }

@@ -27,123 +27,117 @@ export function AccountSettingsLayout({
   const sectionCategory = isAppearance ? "Preferences" : "Account";
 
   return (
-    <div className="account-settings-page flex w-full min-w-0 gap-8">
-      {/* Left: Settings sidebar (RevisionDojo-style) */}
-      <aside className="hidden w-56 shrink-0 md:block">
-        <div className="sticky top-20 space-y-6">
+    <div className="account-settings-page mx-auto max-w-5xl space-y-6 pb-4">
+      <section className="rounded-2xl border border-[#8B5CF6]/55 bg-gradient-to-br from-primary/10 via-indigo-50/40 to-amber-50 p-6 shadow-sm dark:border-[#8B5CF6]/45 dark:from-primary/20 dark:via-indigo-950/25 dark:to-gray-900">
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Account
-            </h2>
-            <nav className="flex flex-col gap-0.5">
-              {accountNav.map(({ href, label, icon: Icon }) => {
-                const active =
-                  (label === "Profile" && isProfile) || (label === "Security" && isSecurity);
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      active
-                        ? "bg-primary/10 text-primary dark:bg-primary/20"
-                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    )}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    {label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-          <div>
-            <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              Preferences
-            </h2>
-            <nav className="flex flex-col gap-0.5">
-              {preferencesNav.map(({ href, label, icon: Icon }) => {
-                const active = label === "Appearance" && isAppearance;
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      active
-                        ? "bg-primary/10 text-primary dark:bg-primary/20"
-                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    )}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    {label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      </aside>
-
-      {/* Right: Main content */}
-      <div className="min-w-0 flex-1">
-        {/* Mobile nav (RevisionDojo-style: show section switcher on small screens) */}
-        <nav className="mb-4 flex flex-wrap gap-2 md:hidden">
-          {accountNav.map(({ href, label, icon: Icon }) => {
-            const active =
-              (label === "Profile" && isProfile) || (label === "Security" && isSecurity);
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-primary/10 text-primary dark:bg-primary/20"
-                    : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </Link>
-            );
-          })}
-          {preferencesNav.map(({ href, label, icon: Icon }) => {
-            const active = label === "Appearance" && isAppearance;
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-primary/10 text-primary dark:bg-primary/20"
-                    : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Settings header (gear + title) */}
-        <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary/20">
-            <Settings className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
-            <p className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              {isAppearance ? <Palette className="h-4 w-4" /> : <User className="h-4 w-4" />}
-              {sectionCategory} · {sectionLabel}
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Settings</p>
+            <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
+              Manage your account
+            </h1>
+            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+              Update your profile, secure your sign-in, and tune your experience.
             </p>
           </div>
+          <div className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-right dark:border-gray-700 dark:bg-gray-800">
+            <p className="text-xs text-gray-500 dark:text-gray-400">{sectionCategory}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sectionLabel}</p>
+          </div>
         </div>
+      </section>
 
-        {/* Content: Clerk UserProfile root is the only card (styled via appearance) */}
-        {children}
+      <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start">
+        <aside className="hidden lg:block">
+          <div className="sticky top-20 space-y-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900/60">
+            <div>
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Account
+              </h2>
+              <nav className="flex flex-col gap-1">
+                {accountNav.map(({ href, label, icon: Icon }) => {
+                  const active =
+                    (label === "Profile" && isProfile) || (label === "Security" && isSecurity);
+                  return (
+                    <Link
+                      key={href}
+                      href={href}
+                      className={cn(
+                        "flex min-h-11 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                        active
+                          ? "bg-primary/10 text-primary dark:bg-primary/20"
+                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                      )}
+                    >
+                      <Icon className="h-4 w-4 shrink-0" />
+                      {label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+            <div>
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Preferences
+              </h2>
+              <nav className="flex flex-col gap-1">
+                {preferencesNav.map(({ href, label, icon: Icon }) => {
+                  const active = label === "Appearance" && isAppearance;
+                  return (
+                    <Link
+                      key={href}
+                      href={href}
+                      className={cn(
+                        "flex min-h-11 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                        active
+                          ? "bg-primary/10 text-primary dark:bg-primary/20"
+                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                      )}
+                    >
+                      <Icon className="h-4 w-4 shrink-0" />
+                      {label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+          </div>
+        </aside>
+
+        <div className="min-w-0 space-y-4">
+          <nav className="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:hidden">
+            {[...accountNav, ...preferencesNav].map(({ href, label, icon: Icon }) => {
+              const active =
+                (label === "Profile" && isProfile) ||
+                (label === "Security" && isSecurity) ||
+                (label === "Appearance" && isAppearance);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    active
+                      ? "border-primary/30 bg-primary/10 text-primary dark:bg-primary/20"
+                      : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900/60 dark:text-gray-300 dark:hover:bg-gray-800"
+                  )}
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <Settings className="h-4 w-4 text-primary" aria-hidden />
+            {isAppearance ? <Palette className="h-4 w-4" aria-hidden /> : <User className="h-4 w-4" aria-hidden />}
+            <span>
+              {sectionCategory} / {sectionLabel}
+            </span>
+          </div>
+
+          {children}
+        </div>
       </div>
     </div>
   );

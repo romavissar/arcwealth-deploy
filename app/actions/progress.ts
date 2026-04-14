@@ -1,13 +1,16 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { getLevelFromXP } from "@/lib/xp";
 import { getRankForCurriculumLevel } from "@/lib/ranks";
 import { applyRegeneration } from "@/lib/hearts";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 const FIRST_ACTIVITY_OF_DAY_BONUS_XP = 5;
+const PASS_THRESHOLD_PERCENT = 76; // "more than 75%"
+const clampPercent = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
 
 /** Grants an achievement to the user and adds its xp_reward to their total XP. Idempotent (no-op if already earned). */
 async function grantAchievement(
@@ -107,7 +110,7 @@ async function checkAchievementRequirement(
 
 /** Checks all achievement requirements and grants any the user has earned but not yet collected. Call e.g. when opening the achievements page. */
 export async function syncAchievements(): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -162,28 +165,75 @@ export async function syncAchievements(): Promise<{ error?: string }> {
   return {};
 }
 
-export async function completeLesson(topicId: string, xpEarned: number, isRedo = false): Promise<{ error?: string }> {
-  const { userId } = await auth();
+export async function completeLesson(
+  topicId: string,
+  xpEarned: number,
+  score: number,
+  isRedo = false
+): Promise<{ error?: string; passed?: boolean }> {
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
+  const { data: existingProgress } = await supabase
+    .from("user_progress")
+    .select("status, attempts, xp_earned, score")
+    .eq("user_id", userId)
+    .eq("topic_id", topicId)
+    .maybeSingle();
+
+  const normalizedScore = clampPercent(score);
+  const attempts = (existingProgress?.attempts ?? 0) + 1;
+  const effectiveRedo = isRedo || existingProgress?.status === "completed";
+  const passed = normalizedScore >= PASS_THRESHOLD_PERCENT;
+
+  if (!passed) {
+    if (existingProgress?.status === "completed") {
+      await supabase.from("user_progress").upsert(
+        {
+          user_id: userId,
+          topic_id: topicId,
+          status: "completed",
+          score: Math.max(existingProgress.score ?? 0, normalizedScore),
+          attempts,
+          completed_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,topic_id" }
+      );
+      return { passed: true };
+    }
+
+    await supabase.from("user_progress").upsert(
+      {
+        user_id: userId,
+        topic_id: topicId,
+        status: "in_progress",
+        score: normalizedScore,
+        attempts,
+        completed_at: null,
+      },
+      { onConflict: "user_id,topic_id" }
+    );
+    return { passed: false };
+  }
 
   await supabase.from("user_progress").upsert(
     {
       user_id: userId,
       topic_id: topicId,
       status: "completed",
+      score: Math.max(existingProgress?.score ?? 0, normalizedScore),
       xp_earned: xpEarned,
       completed_at: new Date().toISOString(),
-      attempts: 1,
+      attempts,
     },
     { onConflict: "user_id,topic_id" }
   );
 
   await markNudgesForTopicRead(supabase, userId, topicId);
 
-  if (isRedo) {
-    return {};
+  if (effectiveRedo) {
+    return { passed: true };
   }
 
   const today = new Date().toISOString().slice(0, 10);
@@ -245,30 +295,79 @@ export async function completeLesson(topicId: string, xpEarned: number, isRedo =
   if (newStreak === 7) await grantAchievement(supabase, userId, "streak_7");
   if (newStreak === 30) await grantAchievement(supabase, userId, "streak_30");
 
-  return {};
+  return { passed: true };
 }
 
-export async function completeQuiz(topicId: string, score: number, xpEarned: number, isRedo = false): Promise<{ error?: string; rankUp?: boolean; newRankSlug?: string }> {
-  const { userId } = await auth();
+export async function completeQuiz(
+  topicId: string,
+  score: number,
+  xpEarned: number,
+  isRedo = false
+): Promise<{ error?: string; rankUp?: boolean; newRankSlug?: string; passed?: boolean }> {
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
   const { data: topic } = await supabase.from("topics").select("topic_type, level_number").eq("topic_id", topicId).single();
   const isBoss = topic?.topic_type === "boss_challenge";
-  const isCheckpoint = topic?.topic_type === "checkpoint";
-  const threshold = isCheckpoint ? 80 : isBoss ? 80 : 70;
-  if (score < threshold) return { error: "Score too low to pass" };
+  const { data: existingProgress } = await supabase
+    .from("user_progress")
+    .select("status, attempts, score")
+    .eq("user_id", userId)
+    .eq("topic_id", topicId)
+    .maybeSingle();
+  const normalizedScore = clampPercent(score);
+  const attempts = (existingProgress?.attempts ?? 0) + 1;
+  const effectiveRedo = isRedo || existingProgress?.status === "completed";
 
-  await supabase.from("user_progress").update({
-    status: "completed",
-    score,
-    xp_earned: xpEarned,
-    completed_at: new Date().toISOString(),
-  }).eq("user_id", userId).eq("topic_id", topicId);
+  if (normalizedScore < PASS_THRESHOLD_PERCENT) {
+    if (existingProgress?.status === "completed") {
+      await supabase.from("user_progress").upsert(
+        {
+          user_id: userId,
+          topic_id: topicId,
+          status: "completed",
+          score: Math.max(existingProgress.score ?? 0, normalizedScore),
+          attempts,
+          completed_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,topic_id" }
+      );
+      return { passed: true };
+    }
+
+    await supabase.from("user_progress").upsert(
+      {
+        user_id: userId,
+        topic_id: topicId,
+        status: "in_progress",
+        score: normalizedScore,
+        attempts,
+        completed_at: null,
+      },
+      { onConflict: "user_id,topic_id" }
+    );
+    return { passed: false };
+  }
+
+  await supabase
+    .from("user_progress")
+    .upsert(
+      {
+        user_id: userId,
+        topic_id: topicId,
+        status: "completed",
+        score: Math.max(existingProgress?.score ?? 0, normalizedScore),
+        xp_earned: xpEarned,
+        attempts,
+        completed_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id,topic_id" }
+    );
 
   await markNudgesForTopicRead(supabase, userId, topicId);
 
-  if (isRedo) return {};
+  if (effectiveRedo) return { passed: true };
 
   const today = new Date().toISOString().slice(0, 10);
   const { data: profile } = await supabase.from("user_profiles").select("xp, streak_days, last_activity_date, rank").eq("id", userId).single();
@@ -319,7 +418,7 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
       await grantAchievement(supabase, userId, rankAchievementSlug);
     }
   }
-  if (score === 100) await grantAchievement(supabase, userId, "perfect_quiz");
+  if (normalizedScore === 100) await grantAchievement(supabase, userId, "perfect_quiz");
   if (newStreak === 7) await grantAchievement(supabase, userId, "streak_7");
   if (newStreak === 30) await grantAchievement(supabase, userId, "streak_30");
 
@@ -336,12 +435,12 @@ export async function completeQuiz(topicId: string, score: number, xpEarned: num
     );
   }
 
-  return { rankUp: !!newRankSlug, newRankSlug };
+  return { rankUp: !!newRankSlug, newRankSlug, passed: true };
 }
 
 /** Decrements hearts by 1 (floor 0). Applies regeneration (1 heart per 5 min) before decrementing. */
 export async function decrementHeart(): Promise<{ error?: string; hearts?: number }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -369,4 +468,40 @@ export async function decrementHeart(): Promise<{ error?: string; hearts?: numbe
 
   if (updateError) return { error: updateError.message };
   return { hearts: newHearts };
+}
+
+export async function setTextbookLessonCompletion(
+  topicId: string,
+  completed: boolean
+): Promise<{ error?: string; completed?: boolean }> {
+  const userId = await getAppUserId();
+  if (!userId) return { error: "Unauthorized" };
+
+  if (!topicId || !/^\d+\.\d+\.\d+$/.test(topicId)) {
+    return { error: "Invalid topic id" };
+  }
+
+  const supabase = createServiceClient();
+  const completedAt = completed ? new Date().toISOString() : null;
+  const operation = completed
+    ? supabase.from("user_textbook_progress").upsert(
+        {
+          user_id: userId,
+          topic_id: topicId,
+          completed_at: completedAt,
+        },
+        { onConflict: "user_id,topic_id" }
+      )
+    : supabase.from("user_textbook_progress").delete().eq("user_id", userId).eq("topic_id", topicId);
+  const { error } = await operation;
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/textbook");
+  revalidatePath(`/textbook/${topicId}`);
+  return { completed };
+}
+
+export async function completeTextbookLesson(topicId: string): Promise<{ error?: string; completed?: boolean }> {
+  return setTextbookLessonCompletion(topicId, true);
 }

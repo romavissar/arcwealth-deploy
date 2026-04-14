@@ -1,1 +1,1 @@
-implement @textbook/topic-1-1-12-habits-build-wealth.md  as the textbook for Topic 1.1.12, create the necessary diagrams 
+Use this folder for markdown textbook sources when you add lessons back. Wire each file in `app/(app)/textbook/[topicId]/page.tsx` or store textbook JSON in Supabase `lesson_content`.

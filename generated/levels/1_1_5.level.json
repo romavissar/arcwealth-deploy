@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.5",
+  "moduleNumber": 1,
+  "lessonNumber": 5,
+  "lessonTitle": "Family Support, Cultural Expectations, and the Bank of Mom & Dad",
+  "concept": "Family money comes with expectations — and understanding those expectations before you leave is better than discovering them during a phone call in semester two.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Marcus assumed his parents would cover everything. His parents assumed he would cover everything. Neither had said this out loud.",
+    "question": "What happens next?"
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "Family financial support for university varies enormously by culture, family structure, and expectation. In some families, full parental funding is the default. In others, students are expected to be financially independent from age 18. Neither is right — but both"
+    },
+    {
+      "title": "Card 2",
+      "body": "The **Bank of Mom & Dad** is informal, flexible, and interest-free — but it is not unconditional. Family funding often comes with strings: choice of subject, choice of location, expected grades, expected career paths. Undiscussed strings become conflict."
+    },
+    {
+      "title": "Card 3",
+      "body": "A **family funding agreement** does not need to be a legal document. It is a clear conversation — ideally written down — covering: how much will be contributed, when, for how long, and what happens if circumstances change."
+    },
+    {
+      "title": "Card 4",
+      "body": "Students who rely on family funding without a formal agreement often discover mid-year that the agreement was different in their heads than in their parents'. The safest plan always includes a scenario where family support reduces or stops."
+    },
+    {
+      "title": "Card 5",
+      "body": "Now test this: Cultural expectations about financial independence differ significantly. In East Asian and South Asian family structures, parental funding through university is often assumed. In many Western countries, students are expected to take loans and work. Neither model is"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What is the main financial risk of relying on family support without a clear agreement?",
+        "options": [
+          "Families always reduce support mid-year",
+          "The student may discover the agreement was different in their head than",
+          "Family money has legal restrictions",
+          "Universities do not accept family-funded students"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"The risk is misalignment — student and parent may each believe a different arrangement, creating conflict when money runs short or circumstances change.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "A family funding agreement must be a formal legal contract to be useful.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"A clear conversation — written down in any format — is enough. The goal is shared understanding, not legal enforceability.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each funding scenario to its risk:",
+        "pairs": [
+          {
+            "left": "Full parental funding, no discussion",
+            "right": "Undiscussed strings may appear mid-degree"
+          },
+          {
+            "left": "Partial family support + student loans",
+            "right": "Gap between support and actual costs"
+          },
+          {
+            "left": "Complete financial independence",
+            "right": "No buffer if income drops unexpectedly"
+          },
+          {
+            "left": "Family funding with written agreement",
+            "right": "Lowest risk — expectations are shared"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"A clear conversation about how much family will contribute, when, and under what conditions is called a ___.\"",
+        "options": [
+          "family funding agreement",
+          "scholarship contract",
+          "tuition plan",
+          "student loan"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Family funding agreement",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multiple_choice",
+        "prompt": "Marcus is from a South Asian family where parental university funding is culturally assumed. He is moving to Germany. What should he do before leaving?",
+        "options": [
+          "Assume the cultural norm will continue without needing to discuss it",
+          "Have an explicit conversation about the amount, frequency, and conditions of support",
+          "Take out student loans as a backup without telling his parents",
+          "Choose a cheaper university to reduce family pressure"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Cultural norms are real, but they are not contracts. An explicit conversation protects both Marcus and his parents from misaligned expectations.\""
+      },
+      {
+        "type": "ordering",
+        "prompt": "Put these steps in the right order for establishing a family funding agreement:",
+        "items": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "correctOrder": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "A family funding agreement should cover at minimum three things: ___, ___, and ___.",
+        "options": [
+          "how much will be contributed",
+          "what grades you must achieve",
+          "when and how often payments arrive",
+          "what happens if circumstances change",
+          "which subject you must study"
+        ],
+        "correctAnswers": [
+          "how much will be contributed",
+          "when and how often payments arrive",
+          "what happens if circumstances change"
+        ],
+        "keyTerm": "Family funding agreement",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Kai's plan: \"My parents said they'd support me. I'll figure out the details when I get there.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "His parents are unlikely to support him",
+          "He has no specific agreement on amount, timing, or conditions — and",
+          "His parents should not fund his university",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Vague commitments are not plans. Without knowing the amount, frequency, and conditions, Kai cannot build a real budget — and has no contingency if support changes.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Priya",
+        "location": "US",
+        "scenario": "Priya's TCA is €26,000/year. Her parents verbally said \"we'll take care of it.\" Halfway through Year 1, her father loses his job and family support drops to €10,000 for the year.",
+        "prompt": "Without a backup plan, what is Priya's best immediate option?",
+        "explanation": "\"This is exactly why a backup plan exists. Priya needs to activate emergency savings, explore university hardship funds (most institutions have them), and find part-time income. A family funding agreement would have given her earlier warning.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "ranking",
+        "difficulty": "hard",
+        "character": "Sofia",
+        "location": "US",
+        "scenario": "Sofia's parents agree to contribute $30,000/year. Her NUS TCA is $38,000/year.",
+        "prompt": "Choose the best decision.",
+        "explanation": "\"Sofia's $8,000 annual gap is real and manageable — but only if she plans for it before arriving. Credit card debt at high interest rates is never a smart solution for a recurring funding gap.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Family funding agreement",
+    "takeaway": "Family support is valuable — but it is only reliable when both sides have discussed and agreed on the same",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Family funding agreement",
+    "definition": "Family funding agreement anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Family funding agreement include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

@@ -1,10 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
-import { clerkClient } from "@clerk/nextjs/server";
-import { createServiceClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { createServiceClient } from "@/lib/supabase/server";
+import { getAppUserId } from "@/lib/auth/server-user";
+import { SESSION_COOKIE_NAME } from "@/lib/auth/constants";
 
 export async function POST() {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const supabase = createServiceClient();
@@ -15,20 +15,23 @@ export async function POST() {
     .maybeSingle();
   if (link) {
     return NextResponse.json(
-      { error: "Account deletion is not available while you are assigned to a teacher. Contact your teacher or school admin to be removed from the class first." },
+      {
+        error:
+          "Account deletion is not available while you are assigned to a teacher. Contact your teacher or school admin to be removed from the class first.",
+      },
       { status: 403 }
     );
   }
 
-  try {
-    const client = await clerkClient();
-    await client.users.deleteUser(userId);
-    await supabase.from("user_profiles").delete().eq("id", userId);
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Failed to delete account" },
-      { status: 500 }
-    );
+  const { error: profErr } = await supabase.from("user_profiles").delete().eq("id", userId);
+  if (profErr) {
+    return NextResponse.json({ error: profErr.message }, { status: 500 });
   }
+  const { error: authErr } = await supabase.from("auth_user").delete().eq("id", userId);
+  if (authErr) {
+    return NextResponse.json({ error: authErr.message }, { status: 500 });
+  }
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set(SESSION_COOKIE_NAME, "", { httpOnly: true, path: "/", maxAge: 0 });
+  return res;
 }

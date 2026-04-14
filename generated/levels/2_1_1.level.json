@@ -1,0 +1,222 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "2.1.1",
+  "moduleNumber": 2,
+  "lessonNumber": 1,
+  "lessonTitle": "Why Budgeting Matters",
+  "concept": "A budget is not a restriction — it is a tool that makes sure your money goes where you actually want it to go.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Marcus earned €900 last month. At the end of the month he had €47 left and couldn't explain where the rest went.",
+    "question": "Sound familiar?"
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "Most people do not run out of money because they earn too little. They run out because they do not track where money goes — and small, invisible spending accumulates into large, invisible losses."
+    },
+    {
+      "title": "Card 2",
+      "body": "A **budget** is a plan for your money before you spend it. Not a record of what you already spent. Not a restriction. A decision made in advance about where your money will go."
+    },
+    {
+      "title": "Card 3",
+      "body": "**Intentional spending** means choosing where your money goes based on what actually matters to you. An unbudgeted student does not have more freedom — they have less, because money disappears into low-value spending before reaching high-value goals."
+    },
+    {
+      "title": "Card 4",
+      "body": "Budgeting does not require perfection or detailed spreadsheets. The minimum viable budget has three numbers: income this month, essential costs this month, and the gap left for everything else."
+    },
+    {
+      "title": "Card 5",
+      "body": "Now test this: Students who budget are not more restricted than those who do not. They are more likely to have money when it matters — a last-minute flight home, an unexpected textbook, a night out worth remembering."
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What is the primary purpose of a budget?",
+        "options": [
+          "To restrict your spending",
+          "To decide in advance where your money will go",
+          "To track what you already spent",
+          "To reduce your living costs"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"A budget is a plan made before spending — it is about intentional choice, not restriction.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "Budgeting is only useful for people who are struggling financially.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Budgeting is a tool for intentional control of money regardless of income level. People on high incomes with no budget often overspend just as much as low-income earners without one.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each statement to whether it reflects budgeted or unbudgeted behaviour:",
+        "pairs": [
+          {
+            "left": "\"I check my balance before booking a concert",
+            "right": "Budgeted"
+          },
+          {
+            "left": "\"I'm not sure why I'm always short before",
+            "right": "Unbudgeted"
+          },
+          {
+            "left": "\"I set aside rent money on the first",
+            "right": "Budgeted"
+          },
+          {
+            "left": "\"I'll figure it out if something unexpected comes",
+            "right": "Unbudgeted"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"Choosing deliberately where your money goes based on your real priorities, rather than letting spending happen passively, is called ___.\"",
+        "options": [
+          "intentional spending",
+          "passive budgeting",
+          "cost allocation",
+          "expense tracking"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Intentional spending",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete: \"Not being in ___ does not mean money is being used ___. A budget is useful at ___ income level because it ensures money reaches your ___ before it disappears.\"",
+        "options": [
+          "debt",
+          "savings",
+          "well",
+          "poorly",
+          "every",
+          "high"
+        ],
+        "correctAnswers": [
+          "debt",
+          "well",
+          "every",
+          "poorly"
+        ],
+        "keyTerm": "Intentional spending",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Marcus's approach: \"I check my balance before every purchase. If I have money, I buy it.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "He checks his balance too often",
+          "A positive balance does not mean a purchase is affordable — he",
+          "He should use cash instead",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"A current balance includes money earmarked for rent, food, and bills. Spending based on current balance without accounting for upcoming costs is one of the most common budgeting errors.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Sofia",
+        "location": "Amsterdam",
+        "scenario": "Sofia has €800 income this month. Her fixed costs are €600. She has €200 for everything else.",
+        "prompt": "She checks her balance: €800. Should she go?",
+        "explanation": "\"Balance ≠ available money. €800 − €600 fixed = €200 discretionary. A €150 concert leaves €50 for food, transport, and personal spending for the rest of the month. A budget would have made this trade-off visible before Sofia felt pressured to decide on the spot.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "build_plan",
+        "difficulty": "hard",
+        "character": "Marcus",
+        "location": "US",
+        "scenario": "Build Marcus's minimum viable budget for this month:",
+        "prompt": "Choose the best decision.",
+        "explanation": "Review the concept and try again.",
+        "answerMode": "typed_inputs",
+        "inputFields": [
+          {
+            "label": "Total income",
+            "correctValue": "Income = €900. Fixed = €590. Remaining = €310."
+          },
+          {
+            "label": "Total fixed costs",
+            "correctValue": "0"
+          },
+          {
+            "label": "Remaining for food, personal, and savings",
+            "correctValue": "0"
+          }
+        ]
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Intentional spending",
+    "takeaway": "A budget is not a cage. It is the tool that makes sure your money reaches what you care about",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Intentional spending",
+    "definition": "Intentional spending anchors better education money decisions.",
+    "moduleId": "module_2",
+    "quickRecallPrompt": "What does Intentional spending include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

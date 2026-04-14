@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Financial literacy for teens, one lesson at a time. Master money, earning, and habits that last." />
+  <title>ArcWealth — Learn Money</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --primary-glow: rgba(79, 70, 229, 0.45);
+      --accent: #F59E0B;
+      --accent-muted: rgba(245, 158, 11, 0.2);
+      --success: #10B981;
+      --danger: #EF4444;
+      --font-display: "Syne", system-ui, sans-serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      --radius: 1rem;
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      --shadow-soft: 0 10px 40px -15px rgba(0, 0, 0, 0.4);
+    }
+    html.dark {
+      --bg: #0B0D12;
+      --bg-elevated: #12151F;
+      --surface: #161A26;
+      --surface-hover: #1C2130;
+      --border: rgba(148, 163, 184, 0.12);
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+    }
+    html.light {
+      --bg: #FAFAFA;
+      --bg-elevated: #FFFFFF;
+      --surface: #FFFFFF;
+      --surface-hover: #F4F4F5;
+      --border: rgba(24, 24, 27, 0.08);
+      --text: #18181B;
+      --text-muted: #52525B;
+      --text-dim: #71717A;
+    }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-synthesis: none;
+      font-stretch: normal;
+      font-variation-settings: normal;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
+    }
+    .font-display {
+      font-family: var(--font-display);
+      font-synthesis: none;
+      font-stretch: normal;
+    }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 1000;
+      padding: 0.75rem 1rem;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      border-radius: 0 0 var(--radius) 0;
+    }
+    .skip-link:focus { left: 0; outline: 2px solid var(--accent); outline-offset: 2px; }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .container {
+      width: 100%;
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+    @media (min-width: 768px) { .container { padding: 0 2rem; } }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 4rem;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      font-synthesis: none;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 1.25rem;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 24px var(--primary-glow);
+    }
+    .btn-primary::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+    .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 0 32px var(--primary-glow); }
+    .btn-primary:hover::after { transform: translateX(100%); }
+    @media (prefers-reduced-motion: reduce) {
+      .btn-primary::after { display: none; }
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 35%, transparent);
+    }
+    html.light .btn-ghost { border-color: var(--primary); color: var(--primary); }
+    .btn-ghost:hover {
+      background: color-mix(in srgb, var(--primary) 12%, transparent);
+    }
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn:hover { background: var(--surface-hover); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 4rem 0 5rem;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto;
+      height: 80%;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, var(--primary-glow), transparent 70%);
+      pointer-events: none;
+      animation: hero-glow-breathe 8s ease-in-out infinite;
+    }
+    @keyframes hero-glow-breathe {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.05); }
+    }
+    .hero-mesh {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .hero-mesh::before {
+      content: "";
+      position: absolute;
+      width: 140%;
+      height: 100%;
+      left: -20%;
+      top: 0;
+      background-image:
+        linear-gradient(rgba(79, 70, 229, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 70, 229, 0.07) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);
+      animation: mesh-drift 24s linear infinite;
+    }
+    html.light .hero-mesh::before {
+      background-image:
+        linear-gradient(rgba(79, 70, 229, 0.11) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 70, 229, 0.11) 1px, transparent 1px);
+    }
+    @keyframes mesh-drift {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(48px, 24px); }
+    }
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: orb-float 14s ease-in-out infinite;
+    }
+    .hero-orb--1 {
+      width: 280px;
+      height: 280px;
+      background: var(--primary);
+      top: -5%;
+      right: 5%;
+      animation-delay: 0s;
+    }
+    .hero-orb--2 {
+      width: 220px;
+      height: 220px;
+      background: var(--accent);
+      bottom: 10%;
+      left: -5%;
+      opacity: 0.22;
+      animation-delay: -4s;
+      animation-duration: 18s;
+    }
+    @keyframes orb-float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(12px, -20px) scale(1.05); }
+      66% { transform: translate(-16px, 12px) scale(0.95); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero::before, .hero-mesh::before, .hero-orb { animation: none !important; }
+    }
+    .hero-grid {
+      display: grid;
+      gap: 3rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.25rem;
+      font-synthesis: none;
+    }
+    .hero h1 span {
+      background: linear-gradient(
+        120deg,
+        #fff 0%,
+        #E0E7FF 18%,
+        #A5B4FC 38%,
+        #818CF8 52%,
+        #F59E0B 72%,
+        #FBBF24 88%,
+        #fff 100%
+      );
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: headline-shimmer 7s ease infinite;
+    }
+    html.light .hero h1 span {
+      background: linear-gradient(
+        120deg,
+        #1E1B4B 0%,
+        var(--primary) 25%,
+        #6366F1 45%,
+        #B45309 70%,
+        #1E1B4B 100%
+      );
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: headline-shimmer 7s ease infinite;
+    }
+    @keyframes headline-shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero h1 span { animation: none; background-size: 100% auto; }
+    }
+    .hero-sub {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      max-width: 32rem;
+      margin-bottom: 2rem;
+      line-height: 1.65;
+    }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .marquee-wrap {
+      margin-top: 2.25rem;
+      overflow: hidden;
+      max-width: 36rem;
+      mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+    }
+    .marquee {
+      display: flex;
+      gap: 2.5rem;
+      width: max-content;
+      animation: marquee-x 32s linear infinite;
+    }
+    @keyframes marquee-x {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .marquee { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
+    }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      white-space: nowrap;
+      font-family: var(--font-mono);
+    }
+    .marquee-item i, .marquee-item svg {
+      color: var(--accent);
+    }
+    .site-header.is-scrolled {
+      box-shadow: 0 12px 40px -20px rgba(0, 0, 0, 0.4);
+    }
+    html.light .site-header.is-scrolled {
+      box-shadow: 0 8px 30px -16px rgba(0, 0, 0, 0.12);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px) scale(0.97);
+      filter: blur(6px);
+      transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+    }
+
+    /* Path mockup */
+    .path-mock {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent);
+      position: relative;
+      animation: card-glow-pulse 5s ease-in-out infinite;
+    }
+    @keyframes card-glow-pulse {
+      0%, 100% {
+        box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent);
+      }
+      50% {
+        box-shadow: 0 24px 56px -24px rgba(79, 70, 229, 0.45), 0 0 40px -10px color-mix(in srgb, var(--accent) 25%, transparent), 0 0 0 1px color-mix(in srgb, var(--primary) 28%, transparent);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .path-mock { animation: none; }
+    }
+    .path-mock::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(130deg, var(--primary), transparent 40%, var(--accent), transparent 75%, var(--primary));
+      background-size: 300% 300%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.45;
+      pointer-events: none;
+      animation: border-flow 8s linear infinite;
+    }
+    @keyframes border-flow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .path-mock::before { animation: none; opacity: 0.25; }
+    }
+    .path-mock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .path-mock-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+    .xp-pill {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: var(--accent-muted);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      animation: xp-pill-glow 2.5s ease-in-out infinite;
+    }
+    @keyframes xp-pill-glow {
+      0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+      50% { box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 35%, transparent); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .xp-pill { animation: none; }
+    }
+    .xp-bar-wrap {
+      margin-top: 1rem;
+    }
+    .xp-bar-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .xp-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 8%, transparent);
+      overflow: hidden;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), #818CF8, #A5B4FC, var(--primary));
+      background-size: 200% 100%;
+      box-shadow: 0 0 12px var(--primary-glow);
+      transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .xp-bar-fill.animate {
+      width: 68%;
+      animation: xp-bar-sheen 2.2s ease-in-out infinite;
+    }
+    @keyframes xp-bar-sheen {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .xp-bar-fill.animate { animation: none; }
+    }
+    .path-nodes {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.5rem 0 0.25rem;
+      min-height: 120px;
+    }
+    .path-node {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .path-node-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-dim);
+      position: relative;
+    }
+    .path-node.done .path-node-circle {
+      background: color-mix(in srgb, var(--success) 18%, transparent);
+      border-color: var(--success);
+      color: var(--success);
+    }
+    .path-node.active .path-node-circle {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 15%, transparent);
+      color: var(--accent);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 40px var(--primary-glow);
+      animation: node-pulse 2s ease-in-out infinite;
+    }
+    @keyframes node-pulse {
+      0%, 100% { box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 40px var(--primary-glow); transform: scale(1); }
+      50% { box-shadow: 0 0 28px color-mix(in srgb, var(--accent) 60%, transparent), 0 0 56px var(--primary-glow); transform: scale(1.06); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .path-node.active .path-node-circle { animation: none; }
+    }
+    .path-node.locked .path-node-circle {
+      opacity: 0.45;
+    }
+    .path-connector {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 50%;
+      height: 3px;
+      border-radius: 2px;
+      opacity: 0.55;
+      transform: translateY(-24px);
+      z-index: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--success) 0 10px,
+        var(--accent) 10px 20px,
+        transparent 20px 24px
+      );
+      background-size: 200% 100%;
+      animation: path-dash 3s linear infinite;
+    }
+    @keyframes path-dash {
+      0% { background-position: 0 0; }
+      100% { background-position: 48px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .path-connector {
+        animation: none;
+        background: linear-gradient(90deg, var(--success), var(--accent), var(--border));
+      }
+    }
+    .path-nodes-wrap { position: relative; }
+    .path-node-label { font-size: 0.65rem; color: var(--text-dim); text-align: center; max-width: 4.5rem; line-height: 1.2; }
+
+    /* Sections */
+    .section { padding: 4.5rem 0; position: relative; }
+    #features {
+      position: relative;
+      overflow: hidden;
+    }
+    #features::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      top: -120px;
+      right: -100px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--primary) 18%, transparent), transparent 65%);
+      pointer-events: none;
+      animation: blob-drift 18s ease-in-out infinite;
+    }
+    #features::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      bottom: -80px;
+      left: -80px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+      pointer-events: none;
+      animation: blob-drift 22s ease-in-out infinite reverse;
+    }
+    @keyframes blob-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+      50% { transform: translate(24px, 16px) scale(1.08); opacity: 0.85; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #features::before, #features::after { animation: none; }
+    }
+    #features .container { position: relative; z-index: 1; }
+    .section-head {
+      max-width: 40rem;
+      margin-bottom: 3rem;
+    }
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      font-synthesis: none;
+      line-height: 1.15;
+    }
+    .section-head p { color: var(--text-muted); font-size: 1.05rem; }
+
+    /* How it works */
+    .flow {
+      display: grid;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .flow { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; }
+    }
+    .flow-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+    .flow-card:hover {
+      transform: translateY(-6px);
+      border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+      box-shadow: 0 16px 40px -20px var(--primary-glow);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flow-card:hover { transform: none; }
+    }
+    .flow-card.visible .flow-icon {
+      animation: icon-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .flow-card[data-stagger="1"].visible .flow-icon { animation-delay: 0.12s; }
+    .flow-card[data-stagger="2"].visible .flow-icon { animation-delay: 0.24s; }
+    @keyframes icon-pop {
+      0% { transform: scale(0.6) rotate(-12deg); opacity: 0.5; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flow-card.visible .flow-icon { animation: none; }
+    }
+    .flow-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      border-radius: 1rem;
+      background: color-mix(in srgb, var(--primary) 15%, transparent);
+      color: #A5B4FC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+    }
+    .flow-card:hover .flow-icon {
+      transform: scale(1.08) rotate(-4deg);
+      box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 35%, transparent);
+    }
+    html.light .flow-icon { color: var(--primary); }
+    .flow-card h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+    .flow-card p { font-size: 0.9rem; color: var(--text-muted); }
+    .flow-connector-svg {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .flow-connector-svg {
+        display: block;
+        position: absolute;
+        top: 3.5rem;
+        left: 18%;
+        right: 18%;
+        height: 12px;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .flow-card { z-index: 1; }
+    }
+    .flow-line {
+      stroke: url(#flowGrad);
+      stroke-width: 3;
+      fill: none;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.5));
+    }
+    .flow-line.drawn {
+      stroke-dashoffset: 0;
+      animation: flow-pulse 2.8s ease-in-out infinite;
+    }
+    @keyframes flow-pulse {
+      0%, 100% { filter: drop-shadow(0 0 4px rgba(129, 140, 248, 0.4)); opacity: 1; }
+      50% { filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.45)); opacity: 0.92; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flow-line.drawn { animation: none; }
+    }
+
+    /* Feature grid */
+    .feature-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    }
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--primary) 14%, transparent), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 20px 48px -28px var(--primary-glow);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .feature-card:hover { transform: none; }
+    }
+    .feature-card .fi {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.75rem;
+      background: color-mix(in srgb, var(--primary) 12%, transparent);
+      color: #A5B4FC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .feature-card:hover .fi {
+      transform: rotate(-8deg) scale(1.1);
+    }
+    html.light .feature-card .fi { color: var(--primary); }
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+      font-synthesis: none;
+    }
+    .feature-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; position: relative; z-index: 1; }
+
+    /* Rank strip */
+    .rank-strip-wrap {
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin: 0 -1.25rem;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    @media (min-width: 768px) {
+      .rank-strip-wrap { margin: 0; padding: 0; overflow: visible; }
+    }
+    .rank-strip {
+      display: flex;
+      gap: 1rem;
+      min-width: min-content;
+    }
+    @media (min-width: 768px) {
+      .rank-strip { flex-wrap: wrap; justify-content: center; min-width: 0; }
+    }
+    .rank-card {
+      flex: 0 0 200px;
+      scroll-snap-align: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+    .rank-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+      box-shadow: 0 16px 40px -20px rgba(79, 70, 229, 0.25);
+    }
+    .rank-card.visible .rank-badge {
+      animation: rank-badge-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .rank-card:nth-child(2).visible .rank-badge { animation-delay: 0.06s; }
+    .rank-card:nth-child(3).visible .rank-badge { animation-delay: 0.12s; }
+    .rank-card:nth-child(4).visible .rank-badge { animation-delay: 0.18s; }
+    .rank-card:nth-child(5).visible .rank-badge { animation-delay: 0.24s; }
+    .rank-card:nth-child(6).visible .rank-badge { animation-delay: 0.3s; }
+    @keyframes rank-badge-pop {
+      0% { transform: scale(0.5); opacity: 0.4; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rank-card:hover { transform: none; }
+      .rank-card.visible .rank-badge { animation: none; }
+    }
+    @media (min-width: 768px) {
+      .rank-card { flex: 0 1 160px; }
+    }
+    .rank-badge {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 0.75rem;
+      border-radius: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .rank-card h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-synthesis: none;
+    }
+    .rank-card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
+    .rb-gray { background: rgba(148, 163, 184, 0.2); color: #94A3B8; }
+    .rb-green { background: rgba(16, 185, 129, 0.2); color: #34D399; }
+    .rb-blue { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
+    .rb-purple { background: rgba(168, 85, 247, 0.2); color: #C084FC; }
+    .rb-red { background: rgba(239, 68, 68, 0.2); color: #F87171; }
+    .rb-amber { background: rgba(245, 158, 11, 0.25); color: #FBBF24; }
+
+    /* Schools */
+    .split {
+      display: grid;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .split { grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    }
+    .split-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+    }
+    .split-panel:hover {
+      border-color: color-mix(in srgb, var(--primary) 25%, transparent);
+      box-shadow: 0 12px 40px -24px var(--primary-glow);
+      transform: translateY(-3px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .split-panel:hover { transform: none; }
+    }
+    .split-panel h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .split-panel ul { list-style: none; }
+    .split-panel li {
+      display: flex;
+      gap: 0.65rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .split-panel li svg { flex-shrink: 0; color: var(--success); margin-top: 0.2rem; }
+    .trust-strip {
+      margin-top: 2rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--primary) 6%, transparent);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      animation: trust-edge 4s ease-in-out infinite;
+    }
+    @keyframes trust-edge {
+      0%, 100% { border-color: var(--border); }
+      50% { border-color: color-mix(in srgb, var(--primary) 35%, transparent); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .trust-strip { animation: none; }
+    }
+    .trust-strip svg { flex-shrink: 0; color: var(--primary); margin-top: 0.1rem; }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 2rem;
+      margin-top: 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; }
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-synthesis: none;
+    }
+    .footer-tag { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.75rem; max-width: 16rem; }
+    .footer-nav { display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .footer-nav a:hover { color: var(--text); }
+    .social-row { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .social-row a {
+      width: 44px;
+      height: 44px;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    .social-row a:hover { color: var(--primary); border-color: color-mix(in srgb, var(--primary) 40%, transparent); }
+    .footer-copy {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    /* Rank section confetti target */
+    #ranks { position: relative; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/landing-page">ArcWealth</a>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Toggle light or dark theme">
+          <i data-lucide="sun" class="icon-sun" width="20" height="20"></i>
+          <i data-lucide="moon" class="icon-moon" width="20" height="20" style="display:none"></i>
+        </button>
+        <a class="btn btn-ghost" href="/sign-in">Sign In</a>
+        <a class="btn btn-primary" href="/sign-up">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-mesh" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div>
+          <p class="hero-eyebrow reveal" data-reveal>Teen financial literacy</p>
+          <h1 class="reveal" data-reveal style="transition-delay: 60ms">
+            <span>Learn money. Build wealth.</span>
+          </h1>
+          <p class="hero-sub reveal" data-reveal style="transition-delay: 120ms">
+            Financial literacy for teens, one lesson at a time. Master the basics of money, earning, and habits that last.
+          </p>
+          <div class="hero-ctas reveal" data-reveal style="transition-delay: 180ms">
+            <a class="btn btn-primary" href="/sign-up">Get Started</a>
+            <a class="btn btn-ghost" href="/sign-in">Sign In</a>
+          </div>
+          <div class="marquee-wrap reveal" data-reveal style="transition-delay: 220ms">
+            <div class="marquee" aria-hidden="true">
+              <span class="marquee-item">XP · streaks · hearts</span>
+              <span class="marquee-item">180 lessons · 4 levels</span>
+              <span class="marquee-item">Checkpoints · boss challenges</span>
+              <span class="marquee-item">Daily &amp; weekly boards</span>
+              <span class="marquee-item">Glossary unlocks</span>
+              <span class="marquee-item">Classroom ready</span>
+              <span class="marquee-item">XP · streaks · hearts</span>
+              <span class="marquee-item">180 lessons · 4 levels</span>
+              <span class="marquee-item">Checkpoints · boss challenges</span>
+              <span class="marquee-item">Daily &amp; weekly boards</span>
+              <span class="marquee-item">Glossary unlocks</span>
+              <span class="marquee-item">Classroom ready</span>
+            </div>
+          </div>
+        </div>
+        <div class="path-mock reveal" data-reveal style="transition-delay: 100ms" aria-label="Example lesson path">
+          <div class="path-mock-header">
+            <span class="path-mock-title">Your path</span>
+            <span class="xp-pill"><span id="xp-val">0</span> XP</span>
+          </div>
+          <div class="path-nodes-wrap">
+            <div class="path-connector" aria-hidden="true"></div>
+            <div class="path-nodes">
+              <div class="path-node done">
+                <div class="path-node-circle"><i data-lucide="check" width="20" height="20"></i></div>
+                <span class="path-node-label">Budget basics</span>
+              </div>
+              <div class="path-node done">
+                <div class="path-node-circle"><i data-lucide="check" width="20" height="20"></i></div>
+                <span class="path-node-label">Saving</span>
+              </div>
+              <div class="path-node active">
+                <div class="path-node-circle"><i data-lucide="play" width="20" height="20"></i></div>
+                <span class="path-node-label">Investing intro</span>
+              </div>
+              <div class="path-node locked">
+                <div class="path-node-circle"><i data-lucide="lock" width="18" height="18"></i></div>
+                <span class="path-node-label">Locked</span>
+              </div>
+            </div>
+          </div>
+          <div class="xp-bar-wrap">
+            <div class="xp-bar-label">
+              <span>Level 7</span>
+              <span class="xp-sub"><span id="xp-ratio">0</span> / 500</span>
+            </div>
+            <div class="xp-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="500" id="xp-bar-aria">
+              <div class="xp-bar-fill" id="xp-bar-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="how">
+      <div class="section-head reveal" data-reveal>
+        <h2>How it works</h2>
+        <p>Three steps from curious to confident — bite-sized, game-clear, real-world useful.</p>
+      </div>
+      <div class="flow" style="position:relative">
+        <svg class="flow-connector-svg" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#4F46E5"/>
+              <stop offset="50%" style="stop-color:#818CF8"/>
+              <stop offset="100%" style="stop-color:#F59E0B"/>
+            </linearGradient>
+          </defs>
+          <path class="flow-line" id="flow-line" d="M 0 6 L 400 6" />
+        </svg>
+        <div class="flow-card reveal" data-reveal data-stagger="0">
+          <div class="flow-icon"><i data-lucide="map" width="26" height="26"></i></div>
+          <h3>Pick your path</h3>
+          <p>Follow a structured curriculum that unlocks as you go — no guesswork on what to learn next.</p>
+        </div>
+        <div class="flow-card reveal" data-reveal data-stagger="1">
+          <div class="flow-icon"><i data-lucide="zap" width="26" height="26"></i></div>
+          <h3>Complete lessons</h3>
+          <p>Quick interactions: multiple choice, scenarios, fill-ins — built for short attention spans.</p>
+        </div>
+        <div class="flow-card reveal" data-reveal data-stagger="2">
+          <div class="flow-icon"><i data-lucide="trophy" width="26" height="26"></i></div>
+          <h3>Level up your rank</h3>
+          <p>Earn XP, keep streaks alive, and climb from Novice to Financial Hero.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features" style="background: color-mix(in srgb, var(--surface) 50%, transparent);">
+      <div class="container">
+        <div class="section-head reveal" data-reveal>
+          <h2>Everything in one flow</h2>
+          <p>Premium edtech polish with the energy of a game — not a lecture hall.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card reveal" data-reveal data-stagger="0">
+            <div class="fi"><i data-lucide="route" width="22" height="22"></i></div>
+            <h3>Sequential lesson path</h3>
+            <p>180 lessons across 4 levels with checkpoints and boss challenges — mastery before you move on.</p>
+          </article>
+          <article class="feature-card reveal" data-reveal data-stagger="1">
+            <div class="fi"><i data-lucide="puzzle" width="22" height="22"></i></div>
+            <h3>Interactive formats</h3>
+            <p>Multiple choice, true/false, scenarios, fill-in-the-blank, and matching — variety keeps you sharp.</p>
+          </article>
+          <article class="feature-card reveal" data-reveal data-stagger="2">
+            <div class="fi"><i data-lucide="flame" width="22" height="22"></i></div>
+            <h3>XP, streaks &amp; hearts</h3>
+            <p>Duolingo-style momentum: earn XP, protect your streak, and manage hearts like a pro.</p>
+          </article>
+          <article class="feature-card reveal" data-reveal data-stagger="3">
+            <div class="fi"><i data-lucide="award" width="22" height="22"></i></div>
+            <h3>Rank system</h3>
+            <p>Progress from Novice to Financial Hero — visible prestige that matches your skill.</p>
+          </article>
+          <article class="feature-card reveal" data-reveal data-stagger="4">
+            <div class="fi"><i data-lucide="book-open" width="22" height="22"></i></div>
+            <h3>Glossary</h3>
+            <p>Terms unlock as you learn — search and deep-dive without leaving the journey.</p>
+          </article>
+          <article class="feature-card reveal" data-reveal data-stagger="5">
+            <div class="fi"><i data-lucide="bar-chart-2" width="22" height="22"></i></div>
+            <h3>Leaderboards</h3>
+            <p>Compete on daily and weekly XP — friendly rivalry, serious growth.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="ranks">
+      <div class="section-head reveal" data-reveal>
+        <h2>Rank progression</h2>
+        <p>Every milestone feels earned — from first lesson to full financial fluency.</p>
+      </div>
+      <div class="rank-strip-wrap">
+        <div class="rank-strip" id="rank-strip">
+          <div class="rank-card reveal" data-reveal>
+            <div class="rank-badge rb-gray"><i data-lucide="sprout" width="24" height="24"></i></div>
+            <h4>Novice</h4>
+            <p>Everyone starts somewhere. Your journey begins.</p>
+          </div>
+          <div class="rank-card reveal" data-reveal>
+            <div class="rank-badge rb-green"><i data-lucide="book-marked" width="24" height="24"></i></div>
+            <h4>Apprentice</h4>
+            <p>You grasp money basics — the real learning starts.</p>
+          </div>
+          <div class="rank-card reveal" data-reveal>
+            <div class="rank-badge rb-blue"><i data-lucide="landmark" width="24" height="24"></i></div>
+            <h4>Practitioner</h4>
+            <p>Banks, budgets, and debt — no longer mysterious.</p>
+          </div>
+          <div class="rank-card reveal" data-reveal>
+            <div class="rank-badge rb-purple"><i data-lucide="trending-up" width="24" height="24"></i></div>
+            <h4>Strategist</h4>
+            <p>You think in assets and long-term moves.</p>
+          </div>
+          <div class="rank-card reveal" data-reveal>
+            <div class="rank-badge rb-red"><i data-lucide="brain" width="24" height="24"></i></div>
+            <h4>Expert</h4>
+            <p>See through traps; risk and systems make sense.</p>
+          </div>
+          <div class="rank-card reveal" data-reveal>
+            <div class="rank-badge rb-amber"><i data-lucide="crown" width="24" height="24"></i></div>
+            <h4>Financial Hero</h4>
+            <p>Mastery unlocked — the ArcWealth summit.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="schools">
+      <div class="section-head reveal" data-reveal>
+        <h2>For schools &amp; teachers</h2>
+        <p>Classroom tools that nudge students forward without turning finance into homework dread.</p>
+      </div>
+      <div class="split">
+        <div class="split-panel reveal" data-reveal>
+          <h3><i data-lucide="presentation" width="22" height="22"></i> Teachers</h3>
+          <ul>
+            <li><i data-lucide="check" width="18" height="18"></i> Rosters and classroom organization</li>
+            <li><i data-lucide="check" width="18" height="18"></i> Assign lessons and track who’s moving</li>
+            <li><i data-lucide="check" width="18" height="18"></i> Nudges to the next best lesson</li>
+            <li><i data-lucide="check" width="18" height="18"></i> Messages to keep momentum</li>
+          </ul>
+        </div>
+        <div class="split-panel reveal" data-reveal>
+          <h3><i data-lucide="users" width="22" height="22"></i> Students</h3>
+          <ul>
+            <li><i data-lucide="check" width="18" height="18"></i> Join your class in a few taps</li>
+            <li><i data-lucide="check" width="18" height="18"></i> Same gamified path — teacher-aligned</li>
+            <li><i data-lucide="check" width="18" height="18"></i> Stay on track with streaks and goals</li>
+            <li><i data-lucide="check" width="18" height="18"></i> Learn at your pace inside structure</li>
+          </ul>
+        </div>
+      </div>
+      <div class="trust-strip reveal" data-reveal>
+        <i data-lucide="shield-check" width="20" height="20"></i>
+        <div>
+          <strong style="color: var(--text); display: block; margin-bottom: 0.25rem;">Privacy-first for schools</strong>
+          Built with GDPR-aligned practices in mind — data minimization, clear roles, and DPA-friendly workflows for institutional use.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="footer-logo" href="/landing-page">ArcWealth</a>
+        <p class="footer-tag">Learn money. Build wealth. — Duolingo energy, real finance skills.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="GitHub"><i data-lucide="github" width="18" height="18"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="18" height="18"></i></a>
+        </div>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/landing-page">Home</a>
+        <a href="#how">About</a>
+        <a href="#schools">Schools</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </nav>
+      <div class="footer-nav">
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; color: var(--text); margin-bottom: 0.25rem;">Product</span>
+        <a href="#features">Features</a>
+        <a href="#ranks">Ranks</a>
+        <a href="/sign-up">Get started</a>
+      </div>
+    </div>
+    <div class="container footer-copy">© <span id="y"></span> ArcWealth. All rights reserved.</div>
+  </footer>
+
+  <script>
+    (function () {
+      document.getElementById("y").textContent = new Date().getFullYear();
+
+      var html = document.documentElement;
+      var themeToggle = document.getElementById("theme-toggle");
+      var sun = themeToggle.querySelector(".icon-sun");
+      var moon = themeToggle.querySelector(".icon-moon");
+
+      function applyTheme(dark) {
+        html.classList.toggle("dark", dark);
+        html.classList.toggle("light", !dark);
+        if (sun && moon) {
+          sun.style.display = dark ? "block" : "none";
+          moon.style.display = dark ? "none" : "block";
+        }
+      }
+
+      try {
+        var stored = localStorage.getItem("arcwealth-landing-theme");
+        if (stored === "light" || stored === "dark") {
+          applyTheme(stored === "dark");
+        } else {
+          applyTheme(true);
+        }
+      } catch (e) {
+        applyTheme(true);
+      }
+
+      themeToggle.addEventListener("click", function () {
+        var nextDark = !html.classList.contains("dark");
+        applyTheme(nextDark);
+        try { localStorage.setItem("arcwealth-landing-theme", nextDark ? "dark" : "light"); } catch (e) {}
+      });
+
+      function initLucide() {
+        if (typeof lucide !== "undefined" && lucide.createIcons) lucide.createIcons();
+      }
+
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* Scroll reveals */
+      var revealEls = document.querySelectorAll("[data-reveal]");
+      var obs = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            var stagger = el.getAttribute("data-stagger");
+            if (stagger !== null && stagger !== "") {
+              var n = parseInt(stagger, 10);
+              if (!isNaN(n)) el.style.transitionDelay = n * 85 + "ms";
+            }
+            el.classList.add("visible");
+            obs.unobserve(el);
+          });
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      );
+      revealEls.forEach(function (el) {
+        if (!reduceMotion) obs.observe(el);
+        else el.classList.add("visible");
+      });
+
+      /* Flow line draw */
+      var howSection = document.getElementById("how");
+      var flowLine = document.getElementById("flow-line");
+      if (howSection && flowLine && !reduceMotion) {
+        var flowObs = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                flowLine.classList.add("drawn");
+                flowObs.disconnect();
+              }
+            });
+          },
+          { threshold: 0.25 }
+        );
+        flowObs.observe(howSection);
+      } else if (flowLine) flowLine.classList.add("drawn");
+
+      /* XP counter + bar */
+      var xpVal = document.getElementById("xp-val");
+      var xpRatio = document.getElementById("xp-ratio");
+      var xpFill = document.getElementById("xp-bar-fill");
+      var xpBarAria = document.getElementById("xp-bar-aria");
+      var targetXP = 1240;
+      var targetRatio = 340;
+      var maxRatio = 500;
+
+      function runXPAnim() {
+        if (reduceMotion) {
+          xpVal.textContent = String(targetXP);
+          xpRatio.textContent = String(targetRatio);
+          if (xpFill) { xpFill.classList.add("animate"); }
+          if (xpBarAria) xpBarAria.setAttribute("aria-valuenow", String(targetRatio));
+          return;
+        }
+        var start = null;
+        var duration = 1200;
+        function tick(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          xpVal.textContent = String(Math.round(targetXP * eased));
+          xpRatio.textContent = String(Math.round(targetRatio * eased));
+          if (xpBarAria) xpBarAria.setAttribute("aria-valuenow", String(Math.round(targetRatio * eased)));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        setTimeout(function () {
+          if (xpFill) xpFill.classList.add("animate");
+        }, 200);
+      }
+
+      var heroMock = document.querySelector(".path-mock");
+      if (heroMock) {
+        var xpObs = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                runXPAnim();
+                xpObs.disconnect();
+              }
+            });
+          },
+          { threshold: 0.35 }
+        );
+        xpObs.observe(heroMock);
+      }
+
+      /* Confetti once for ranks */
+      var ranksSection = document.getElementById("ranks");
+      var confettiFired = false;
+      if (ranksSection && typeof confetti !== "undefined" && !reduceMotion) {
+        var cObs = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting || confettiFired) return;
+              confettiFired = true;
+              confetti({
+                particleCount: 90,
+                spread: 70,
+                origin: { y: 0.55 },
+                colors: ["#4F46E5", "#818CF8", "#F59E0B", "#10B981", "#A78BFA"],
+              });
+              setTimeout(function () {
+                confetti({
+                  particleCount: 40,
+                  angle: 60,
+                  spread: 55,
+                  origin: { x: 0 },
+                  colors: ["#4F46E5", "#F59E0B"],
+                });
+              }, 180);
+              setTimeout(function () {
+                confetti({
+                  particleCount: 40,
+                  angle: 120,
+                  spread: 55,
+                  origin: { x: 1 },
+                  colors: ["#818CF8", "#F59E0B"],
+                });
+              }, 320);
+              cObs.disconnect();
+            });
+          },
+          { threshold: 0.3 }
+        );
+        cObs.observe(ranksSection);
+      }
+
+      window.addEventListener("load", function () {
+        initLucide();
+      });
+
+      var headerEl = document.getElementById("site-header");
+      if (headerEl) {
+        window.addEventListener(
+          "scroll",
+          function () {
+            headerEl.classList.toggle("is-scrolled", window.scrollY > 10);
+          },
+          { passive: true }
+        );
+      }
+
+      document.querySelectorAll(".feature-card").forEach(function (card) {
+        card.addEventListener("mousemove", function (e) {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", e.clientX - r.left + "px");
+          card.style.setProperty("--my", e.clientY - r.top + "px");
+        });
+        card.addEventListener("mouseleave", function () {
+          card.style.removeProperty("--mx");
+          card.style.removeProperty("--my");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

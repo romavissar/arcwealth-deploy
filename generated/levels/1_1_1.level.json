@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.1",
+  "moduleNumber": 1,
+  "lessonNumber": 1,
+  "lessonTitle": "What University Really Costs",
+  "concept": "University costs six things, not one — and only one of them is on the website.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Two students. Same university. Same tuition. One pays $10,000 more per year.",
+    "question": "Why?"
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "Tuition is the price on the website. It is not the cost of going. The real figure — called **Total Cost of Attendance (TCA)** — includes everything that leaves your account while you are a student."
+    },
+    {
+      "title": "Card 2",
+      "body": "Students who plan only for tuition regularly run out of money by their second semester. TCA exists so that does not happen to you."
+    },
+    {
+      "title": "Card 3",
+      "body": "TCA has six categories: tuition, accommodation, food, transport, course materials, and personal spending. Together, these are your real annual cost."
+    },
+    {
+      "title": "Card 4",
+      "body": "Your behaviour controls some of these categories. Tuition is fixed. Rent can be negotiated. Food can be managed. Personal spending is almost entirely up to you."
+    },
+    {
+      "title": "Card 5",
+      "body": "Now test this: A three-year degree that takes four years does not cost 33% more — it costs 40–50% more once you add a full extra year of living costs. Always plan for this possibility."
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What does TCA stand for?",
+        "options": [
+          "Total Costs of Attendance",
+          "Total Cost of Attendance",
+          "Tuition and Cost Allocation",
+          "Total College Amount"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"TCA stands for Total Cost of Attendance — the full annual cost, not just tuition.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "Tuition is the only cost you need to plan for at university.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Tuition is one of six categories — accommodation, food, transport, materials, and personal spending all add to the real total.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each TCA category to its example:",
+        "pairs": [
+          {
+            "left": "Tuition",
+            "right": "Fee paid to the university each term"
+          },
+          {
+            "left": "Accommodation",
+            "right": "Monthly rent for your student flat"
+          },
+          {
+            "left": "Course materials",
+            "right": "Textbooks and software licences"
+          },
+          {
+            "left": "Personal spending",
+            "right": "Phone bill and gym membership"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"The real annual cost of university — covering all six spending categories — is called ___.\"",
+        "options": [
+          "Total Cost of Attendance",
+          "Annual Tuition Fee",
+          "Student Budget",
+          "University Allowance"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Total Cost of Attendance (TCA)",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete the sentence: \"A student who saves only for tuition will run short because ___ and ___ are not included — and together they can ___ the real annual cost.\"",
+        "options": [
+          "accommodation",
+          "transport",
+          "double",
+          "halve",
+          "food",
+          "reduce"
+        ],
+        "correctAnswers": [
+          "accommodation",
+          "food",
+          "accommodation"
+        ],
+        "keyTerm": "Total Cost of Attendance (TCA)",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Marcus wrote in his university plan: \"I need £12,000 saved. That covers my tuition and I'm set.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "He saved the wrong amount for tuition",
+          "He forgot that accommodation, food, and other living costs will add another",
+          "Tuition is not his biggest cost",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Tuition only covers one of six TCA categories — Marcus has left out a full year of living costs.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Sofia",
+        "location": "UK",
+        "scenario": "Sofia is heading to university next year. She has saved exactly the amount her university lists as tuition: £14,000.",
+        "prompt": "Which outcome is most likely?",
+        "explanation": "\"UK living costs typically add £10,000–£15,000 per year on top of tuition. Sofia's savings cover less than half her real TCA.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "budget_calculator",
+        "difficulty": "hard",
+        "character": "Priya",
+        "location": "Amsterdam",
+        "scenario": "Priya's university charges €10,000 tuition. Her rent is €600/month, food costs €300/month, and transport is €100/month.",
+        "prompt": "What is her annual TCA (tuition + accommodation + food + transport only)?",
+        "explanation": "\"€10,000 tuition + €7,200 rent + €3,600 food + €1,200 transport = €22,000. And that's before materials and personal spending.\"",
+        "answerMode": "numeric",
+        "min": 10000,
+        "max": 30000,
+        "correctValue": 22000,
+        "tolerance": 1000,
+        "unitLabel": "€"
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Total Cost of Attendance (TCA)",
+    "takeaway": "TCA is what university actually costs — and it is always higher than the tuition figure alone.",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Total Cost of Attendance (TCA)",
+    "definition": "Total Cost of Attendance (TCA) anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Total Cost of Attendance (TCA) include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

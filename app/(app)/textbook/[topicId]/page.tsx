@@ -1,37 +1,24 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { readFileSync } from "fs";
-import { join } from "path";
 import { Button } from "@/components/ui/button";
 import { TextbookLayout } from "@/components/textbook/TextbookLayout";
-import { TextbookMarkdown } from "@/components/textbook/TextbookMarkdown";
-import { getAllLessonTopics, getLessonTitle, getSectionName, LEVEL_NAMES } from "@/lib/curriculum";
+import { SimpleTextbookMarkdown } from "@/components/textbook/SimpleTextbookMarkdown";
+import { getLessonDescription, getLessonTitle, getSectionName, LEVEL_GOALS, LEVEL_NAMES } from "@/lib/curriculum";
 import type { TextbookContent } from "@/types/curriculum";
+import { loadMarkdownTextbookLessons } from "@/lib/textbook-markdown";
+import { TextbookLessonActions } from "@/components/textbook/TextbookLessonActions";
 
-const MARKDOWN_BY_TOPIC: Record<string, string> = {
-  "1.1.1": "topic-1-1-1-what-is-money.md",
-  "1.1.2": "topic-1-1-2-needs-vs-wants.md",
-  "1.1.3": "topic-1-1-3-impulse-spending.md",
-  "1.1.4": "topic-1-1-4-dopamine-rewards-spending.md",
-  "1.1.5": "topic-1-1-5-delayed-gratification.md",
-  "1.1.6": "topic-1-1-6-money-scripts-beliefs.md",
-  "1.1.7": "topic-1-1-7-emotions-spending.md",
-  "1.1.8": "topic-1-1-8-anchoring-pricing-psychology.md",
-  "1.1.9": "topic-1-1-9-scarcity-abundance-mindset.md",
-  "1.1.10": "topic-1-1-10-values-money.md",
-  "1.1.11": "topic-1-1-11-financial-goals.md",
-  "1.1.12": "topic-1-1-12-habits-build-wealth.md",
-  "1.2.1": "topic-1-2-1-what-is-income.md",
-  "1.2.2": "topic-1-2-2-salary-wages-paychecks.md",
-  "1.2.3": "topic-1-2-3-net-vs-gross.md",
-  "1.2.4": "topic-1-2-4-how-to-read-payslip.md",
-};
+const DEFAULT_READING_TIME_MINUTES = 5;
 
-const ALL_TOPICS = getAllLessonTopics();
-const ALL_TOPIC_IDS = new Set(ALL_TOPICS.map((t) => t.topic_id));
-const TOPIC_IDS_ORDERED = ALL_TOPICS.map((t) => t.topic_id);
+function getEstimatedReadingMinutes(markdown: string | null | undefined): number {
+  if (!markdown) return DEFAULT_READING_TIME_MINUTES;
+  const explicitMinutes = markdown.match(/Reading time:\s*~?\s*(\d+)\s*minute/i)?.[1];
+  const parsed = explicitMinutes ? Number(explicitMinutes) : NaN;
+  if (!Number.isFinite(parsed) || parsed <= 0) return DEFAULT_READING_TIME_MINUTES;
+  return parsed;
+}
 
 export default async function TextbookTopicPage({
   params,
@@ -39,10 +26,19 @@ export default async function TextbookTopicPage({
   params: Promise<{ topicId: string }>;
 }) {
   const { topicId } = await params;
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) redirect("/sign-in");
 
-  if (!ALL_TOPIC_IDS.has(topicId)) notFound();
+  const supabase = createServiceClient();
+  const [{ data: allTopics }, markdownLessons] = await Promise.all([
+    supabase.from("topics").select("topic_id").order("order_index"),
+    loadMarkdownTextbookLessons(),
+  ]);
+  const markdownByTopicId = new Map(markdownLessons.map((lesson) => [lesson.topicId, lesson]));
+  const TOPIC_IDS_ORDERED = Array.from(
+    new Set([...(allTopics ?? []).map((t) => t.topic_id), ...markdownLessons.map((lesson) => lesson.topicId)])
+  );
+  if (!TOPIC_IDS_ORDERED.includes(topicId)) notFound();
 
   const currentIndex = TOPIC_IDS_ORDERED.indexOf(topicId);
   const prevTopicId = currentIndex > 0 ? TOPIC_IDS_ORDERED[currentIndex - 1] : null;
@@ -52,121 +48,140 @@ export default async function TextbookTopicPage({
   const levelName = LEVEL_NAMES[levelNum] ?? `Topic ${levelNum}`;
   const sectionName = getSectionName(levelNum, sectionNum);
 
-  const supabase = createServiceClient();
-  const [topicRes, contentRes] = await Promise.all([
+  const [topicRes, contentRes, textbookProgressRes] = await Promise.all([
     supabase.from("topics").select("title, level_number, section_number").eq("topic_id", topicId).single(),
-    topicId in MARKDOWN_BY_TOPIC
-      ? Promise.resolve({ data: null })
-      : supabase.from("lesson_content").select("content").eq("topic_id", topicId).eq("content_type", "textbook").single(),
+    supabase.from("lesson_content").select("content").eq("topic_id", topicId).eq("content_type", "textbook").single(),
+    supabase.from("user_textbook_progress").select("topic_id").eq("user_id", userId).eq("topic_id", topicId),
   ]);
+  const markdownLesson = markdownByTopicId.get(topicId);
 
+  // Keep textbook titles aligned with curriculum naming from the draft PDF.
   const topicTitle = getLessonTitle(topicId);
+  const topicMeta = `Topic ${levelNum} — ${levelName}`;
+  const sectionMeta = `Section ${sectionNum} — ${sectionName}`;
+  const curriculumDescription = getLessonDescription(topicId);
+  const levelGoal = LEVEL_GOALS[levelNum];
+  const textbookProgressRows = textbookProgressRes.data ?? [];
+  const isTextbookCompleted = textbookProgressRows.length > 0;
+  const estimatedReadingMinutes = getEstimatedReadingMinutes(markdownLesson?.markdown);
 
-  if (topicId in MARKDOWN_BY_TOPIC) {
-    const filename = MARKDOWN_BY_TOPIC[topicId as keyof typeof MARKDOWN_BY_TOPIC];
-    let markdown: string;
-    try {
-      markdown = readFileSync(join(process.cwd(), "textbook", filename), "utf-8");
-    } catch {
-      notFound();
-    }
-    const firstLine = markdown.split("\n")[0] ?? "";
-    const titleMatch = firstLine.match(/^#\s*(?:Topic\s+[\d.]+\s*—\s*)?(.+)$/);
-    const displayTitle = titleMatch ? titleMatch[1].trim() : topicTitle;
-    const markdownBody = markdown.replace(/^#\s*[^\n]+\n+/, "").trim();
+  if (contentRes.data?.content) {
+    const content = (contentRes.data as { content: TextbookContent }).content;
     return (
-      <div className="max-w-3xl mx-auto pb-12 relative text-gray-900 dark:text-gray-100">
-        <div className="absolute top-0 right-0">
-          <Button asChild variant="ghost" size="lg">
-            <Link href="/textbook">← All lessons</Link>
-          </Button>
+      <div className="mx-auto max-w-4xl pb-12 text-gray-900 dark:text-gray-100">
+        <header className="mb-6 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-5 shadow-sm dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-cyan-300">
+                {topicMeta}
+              </span>
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                {sectionMeta}
+              </span>
+            </div>
+            <Button asChild variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100">
+              <Link href="/textbook">← All lessons</Link>
+            </Button>
+          </div>
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100">{topicTitle}</h1>
+        </header>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <TextbookLayout content={content} topicId={topicId} topicTitle={topicTitle} />
         </div>
-        <TextbookMarkdown
-          markdown={markdownBody}
+        <TextbookLessonActions
           topicId={topicId}
-          topicTitle={displayTitle}
-          levelName={`Topic ${levelNum} — ${levelName}`}
-          sectionName={`Section ${sectionNum} — ${sectionName}`}
+          prevTopicId={prevTopicId}
+          nextTopicId={nextTopicId}
+          showStartLesson
+          estimatedReadingMinutes={estimatedReadingMinutes}
+          initiallyCompleted={isTextbookCompleted}
         />
-        <div className="mt-8 flex gap-4 justify-center flex-wrap items-center">
-          {prevTopicId && (
-            <Button asChild variant="outline" size="lg">
-              <Link href={`/textbook/${prevTopicId}`}>← Previous Lesson</Link>
-            </Button>
-          )}
-          <Button asChild size="lg">
-            <Link href={`/learn/${topicId}/lesson`}>Start lesson</Link>
-          </Button>
-          {nextTopicId && (
-            <Button asChild variant="outline" size="lg">
-              <Link href={`/textbook/${nextTopicId}`}>Next Lesson →</Link>
-            </Button>
-          )}
-        </div>
       </div>
     );
   }
 
-  if (contentRes.data) {
-    const content = (contentRes.data as { content: TextbookContent }).content;
+  if (markdownLesson) {
     return (
-      <div className="max-w-3xl mx-auto pb-12 relative text-gray-900 dark:text-gray-100">
-        <div className="absolute top-0 right-0">
-          <Button asChild variant="ghost" size="lg">
-            <Link href="/textbook">← All lessons</Link>
-          </Button>
-        </div>
-        <TextbookLayout content={content} topicId={topicId} topicTitle={topicTitle} />
-        <div className="mt-8 flex gap-4 justify-center flex-wrap items-center">
-          {prevTopicId && (
-            <Button asChild variant="outline" size="lg">
-              <Link href={`/textbook/${prevTopicId}`}>← Previous Lesson</Link>
+      <div className="mx-auto max-w-4xl pb-12 text-gray-900 dark:text-gray-100">
+        <header className="mb-6 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-5 shadow-sm dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-cyan-300">
+                {topicMeta}
+              </span>
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                {sectionMeta}
+              </span>
+            </div>
+            <Button asChild variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100">
+              <Link href="/textbook">← All lessons</Link>
             </Button>
-          )}
-          <Button asChild size="lg">
-            <Link href={`/learn/${topicId}/lesson`}>Start lesson</Link>
-          </Button>
-          {nextTopicId && (
-            <Button asChild variant="outline" size="lg">
-              <Link href={`/textbook/${nextTopicId}`}>Next Lesson →</Link>
-            </Button>
-          )}
+          </div>
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100">{topicTitle}</h1>
+        </header>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <SimpleTextbookMarkdown markdown={markdownLesson.markdown} />
         </div>
+        <TextbookLessonActions
+          topicId={topicId}
+          prevTopicId={prevTopicId}
+          nextTopicId={nextTopicId}
+          showStartLesson={Boolean(topicRes.data)}
+          estimatedReadingMinutes={estimatedReadingMinutes}
+          initiallyCompleted={isTextbookCompleted}
+        />
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto pb-12 relative text-gray-900 dark:text-gray-100">
-      <div className="absolute top-0 right-0">
-        <Button asChild variant="ghost" size="lg">
-          <Link href="/textbook">← All lessons</Link>
-        </Button>
-      </div>
-      <article className="prose prose-gray dark:prose-invert max-w-none">
-        <header className="mb-8">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Topic {levelNum} — {levelName} · Section {sectionNum} — {sectionName}
-          </p>
-          <h1 className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">{topicTitle}</h1>
-        </header>
-        <div className="rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 p-8 text-center text-gray-500 dark:text-gray-400">
-          <p className="font-medium">Textbook content coming soon</p>
-          <p className="text-sm mt-2">This lesson&apos;s reading material is not yet available.</p>
+    <div className="mx-auto max-w-4xl pb-12 text-gray-900 dark:text-gray-100">
+      <header className="mb-6 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-5 shadow-sm dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-cyan-300">
+              {topicMeta}
+            </span>
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+              {sectionMeta}
+            </span>
+          </div>
+          <Button asChild variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100">
+            <Link href="/textbook">← All lessons</Link>
+          </Button>
         </div>
-      </article>
-      <div className="mt-8 flex gap-4 justify-center flex-wrap items-center">
-        {prevTopicId && (
-          <Button asChild variant="outline" size="lg">
-            <Link href={`/textbook/${prevTopicId}`}>← Previous Lesson</Link>
-          </Button>
+        <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100">{topicTitle}</h1>
+      </header>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Curriculum-aligned lesson brief</p>
+        <p className="mt-2 text-[1.05rem] leading-7 text-slate-700 dark:text-slate-300">
+          {curriculumDescription ??
+            "This lesson slot is in the curriculum and is awaiting a full textbook article. The learning pathway and sequencing are already aligned."}
+        </p>
+        {levelGoal && (
+          <div className="mt-4 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 dark:border-indigo-800/80 dark:bg-indigo-950/40">
+            <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700 dark:text-indigo-300">Module goal</p>
+            <p className="mt-1 text-sm text-indigo-900 dark:text-indigo-100">{levelGoal}</p>
+          </div>
         )}
-        {nextTopicId && (
-          <Button asChild variant="outline" size="lg">
-            <Link href={`/textbook/${nextTopicId}`}>Next Lesson →</Link>
-          </Button>
-        )}
-      </div>
+        <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800 dark:bg-amber-950/30">
+          <p className="text-sm text-amber-900 dark:text-amber-100">
+            This brief is sourced from the ArcWealth draft curriculum so lesson intent stays consistent while full reading content is being expanded.
+          </p>
+        </div>
+      </section>
+
+      <TextbookLessonActions
+        topicId={topicId}
+        prevTopicId={prevTopicId}
+        nextTopicId={nextTopicId}
+        showStartLesson={Boolean(topicRes.data)}
+        estimatedReadingMinutes={estimatedReadingMinutes}
+        initiallyCompleted={isTextbookCompleted}
+      />
     </div>
   );
 }

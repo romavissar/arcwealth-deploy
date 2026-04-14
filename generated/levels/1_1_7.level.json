@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.7",
+  "moduleNumber": 1,
+  "lessonNumber": 7,
+  "lessonTitle": "Student Loans — How They Work Across Different Regions",
+  "concept": "Not all student loans work the same way — where you study determines whether your loan is a manageable tool or a lifelong burden.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Two graduates. Both borrowed $30,000. One repaid it in 5 years. One is still repaying 20 years later.",
+    "question": "Same amount. Very different loan systems."
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "A **student loan** lets you attend university now and repay later. The cost of borrowing is interest — a percentage charged annually on your outstanding balance. Different loan systems charge very different rates and have very different repayment rules."
+    },
+    {
+      "title": "Card 2",
+      "body": "In the **US**, federal student loans (available via FAFSA, US citizens only) charge fixed interest rates of 5–8% and offer income-driven repayment plans. Private loans (from banks) carry higher rates and fewer protections. International students in the US typically cannot"
+    },
+    {
+      "title": "Card 3",
+      "body": "In the **UK**, Student Finance England charges a Plan 5 interest rate (RPI + up to 3%, currently around 7.1%) but uses **income-contingent repayment**: you only repay 9% of income above £25,000/year. If you never earn enough, unpaid loans are"
+    },
+    {
+      "title": "Card 4",
+      "body": "**Income-contingent repayment** means your monthly payment is tied to what you earn, not what you borrowed. A UK graduate earning £28,000 repays just £270/year — regardless of their total loan balance. This protects low earners from unmanageable debt."
+    },
+    {
+      "title": "Card 5",
+      "body": "In the **EU**, student loan availability varies dramatically by country. Germany, France, and the Nordics have low or no tuition, so most students do not need large loans. Some EU countries offer state-backed student loans; many do not. Family funding"
+    },
+    {
+      "title": "Card 6",
+      "body": "In **East Asia**, formal public student loan systems are limited. Japan's JASSO loan programme is the main exception, with interest-free options for eligible students. In Singapore, China, South Korea, and Hong Kong, family funding is typically the primary model —"
+    },
+    {
+      "title": "Card 7",
+      "body": "Now test this: The most dangerous borrowing is **private student loans** (especially in the US) and consumer credit used as a substitute for a proper student loan. These carry high interest rates, no income-contingent protections, and can create debt that"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What does income-contingent repayment mean?",
+        "options": [
+          "You repay based on your total loan balance",
+          "Your monthly repayment is a fixed percentage of income above a threshold",
+          "You only repay if you earn above the median salary",
+          "The government repays part of your loan for you"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Income-contingent means your repayment scales with your earnings — if you earn less, you pay less. The UK system uses this model.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "A UK graduate who earns £22,000/year after graduation would make significant monthly repayments on their student loan.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"UK income-contingent repayment only kicks in above £25,000. At £22,000, the graduate repays nothing — regardless of their loan balance.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each loan system to its region:",
+        "pairs": [
+          {
+            "left": "FAFSA federal loans",
+            "right": "US (citizens only)"
+          },
+          {
+            "left": "Student Finance England Plan 5",
+            "right": "UK (income-contingent, 40-year write-off)"
+          },
+          {
+            "left": "JASSO interest-free loans",
+            "right": "Japan"
+          },
+          {
+            "left": "Limited public loan infrastructure, family-funded",
+            "right": "Much of East Asia and parts of EU"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"In the UK, if a graduate never earns enough to repay their full student loan, the remaining balance is written off after ___.\"",
+        "options": [
+          "40 years",
+          "10 years",
+          "25 years",
+          "30 years"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Income-contingent repayment",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "A UK graduate earns £32,000. They repay 9% of income above £25,000.",
+        "min": 0,
+        "max": 2000,
+        "correctValue": 630,
+        "tolerance": 63,
+        "unitLabel": "£",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"£32,000 − £25,000 = £7,000 above threshold. 9% × £7,000 = £630/year (~£52.50/month).\""
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete: \"In the UK, a graduate earning below £25,000 repays ___ on their student loan. A graduate earning £35,000 repays 9% of ___, which equals ___ per year.\"",
+        "options": [
+          "£0",
+          "£35,000",
+          "£10,000",
+          "£900",
+          "£3,150",
+          "£25,000"
+        ],
+        "correctAnswers": [
+          "£0",
+          "£35,000",
+          "£10,000"
+        ],
+        "keyTerm": "Income-contingent repayment",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Marcus is planning to study in the US as an international student. His plan: \"I'll just take out federal student loans to cover my costs.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "Federal loans have high interest rates",
+          "International students are ineligible for US federal student loans",
+          "Federal loans require repayment while studying",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"FAFSA federal loans are available to US citizens and eligible non-citizens only. International students must use private loans (higher rates, fewer protections) or other funding sources.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Kai",
+        "location": "UK",
+        "scenario": "Kai is choosing between studying in the UK (borrowing £40,000 in student loans) and the US (borrowing $60,000 in private loans at 9% APR). He expects to earn £35,000/$45,000 in his first job.",
+        "prompt": "Which loan is more manageable given his expected income?",
+        "explanation": "\"UK: 9% × (£35,000 − £25,000) = £900/year. US: $60,000 at 9% APR accrues $5,400 in interest in Year 1 alone — on a $45,000 salary, this is immediately painful. The income-contingent system makes the UK loan far more manageable.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "budget_calculator",
+        "difficulty": "hard",
+        "character": "Sofia",
+        "location": "US",
+        "scenario": "Sofia borrows $50,000 in US private loans at 8% APR. She does not make payments during her 4-year degree (interest capitalises annually).",
+        "prompt": "What is the approximate balance at graduation?",
+        "explanation": "\"$50,000 × (1.08)^4 = $68,024. Four years of 8% compounding adds $18,024 to her balance before she earns a dollar. This is why private loans require very careful evaluation.\"",
+        "answerMode": "numeric",
+        "min": 50000,
+        "max": 90000,
+        "correctValue": 68024,
+        "tolerance": 2000,
+        "unitLabel": "$"
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Income-contingent repayment",
+    "takeaway": "The region you study in determines how your loan works — income-contingent systems protect low earners; private loans do not.",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Income-contingent repayment",
+    "definition": "Income-contingent repayment anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Income-contingent repayment include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

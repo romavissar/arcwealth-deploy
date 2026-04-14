@@ -1,8 +1,8 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
-import { LESSON_TITLES } from "@/lib/curriculum";
+import { getLessonTitle } from "@/lib/curriculum";
 
 export type NudgeItem = {
   id: string;
@@ -48,7 +48,7 @@ export async function getLatestNudge(): Promise<{
 
 /** List of nudges for the current user (student). Last 7 days, most recent first. onlyUnread: true = only nudges not yet read (e.g. for dashboard popup). */
 export async function getMyNudges(opts?: { onlyUnread?: boolean }): Promise<NudgeItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const supabase = createServiceClient();
   const sevenDaysAgo = new Date();
@@ -76,7 +76,7 @@ export async function getMyNudges(opts?: { onlyUnread?: boolean }): Promise<Nudg
     teacherUsername: usernameById.get(r.teacher_user_id) ?? "Your teacher",
     nextTopicId: r.next_topic_id ?? null,
     lessonLabel: r.next_topic_id
-      ? `Lesson ${r.next_topic_id} – ${LESSON_TITLES[r.next_topic_id] ?? r.next_topic_id}`
+      ? `Lesson ${r.next_topic_id} – ${getLessonTitle(r.next_topic_id)}`
       : "your next lesson",
     createdAt: r.created_at,
     readAt: r.read_at ?? null,
@@ -85,7 +85,7 @@ export async function getMyNudges(opts?: { onlyUnread?: boolean }): Promise<Nudg
 
 /** List of congratulations for the current user (student). Last 7 days, most recent first. */
 export async function getMyCongratulations(): Promise<CongratsItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const supabase = createServiceClient();
   const sevenDaysAgo = new Date();
@@ -117,7 +117,7 @@ export async function markNotificationDone(
   type: "nudge" | "congrats",
   id: string
 ): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const supabase = createServiceClient();
   const table = type === "nudge" ? "teacher_nudges" : "teacher_congratulations";
@@ -139,7 +139,7 @@ export async function markNotificationAsRead(
   type: NotificationType,
   refId: string
 ): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const supabase = createServiceClient();
   const now = new Date().toISOString();
@@ -156,7 +156,7 @@ export async function markNotificationAsRead(
 
 /** Dismiss (hide) a notification. Only affects display; read_at is set if not already. */
 export async function dismissNotification(type: NotificationType, refId: string): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const supabase = createServiceClient();
   const now = new Date().toISOString();
@@ -169,7 +169,7 @@ export async function dismissNotification(type: NotificationType, refId: string)
 
 /** Friend requests (incoming pending) for notification list. */
 async function getMyFriendRequestNotifications(): Promise<NotificationItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const supabase = createServiceClient();
   const sevenDaysAgo = new Date();
@@ -197,7 +197,7 @@ async function getMyFriendRequestNotifications(): Promise<NotificationItem[]> {
 
 /** Recent friendships (accepted in last 7 days) for "X accepted your request". */
 async function getMyFriendAcceptedNotifications(): Promise<NotificationItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const supabase = createServiceClient();
   const sevenDaysAgo = new Date();
@@ -227,7 +227,7 @@ async function getMyFriendAcceptedNotifications(): Promise<NotificationItem[]> {
 
 /** Recent classroom assignments (from my teacher) for notification list. */
 async function getMyAssignmentNotifications(): Promise<NotificationItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const supabase = createServiceClient();
   const { data: link } = await supabase
@@ -266,7 +266,7 @@ async function getMyAssignmentNotifications(): Promise<NotificationItem[]> {
 
 /** Recent classroom announcements (from my teacher) for notification list. */
 async function getMyAnnouncementNotifications(): Promise<NotificationItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
   const supabase = createServiceClient();
   const { data: link } = await supabase
@@ -302,7 +302,7 @@ async function getMyAnnouncementNotifications(): Promise<NotificationItem[]> {
 
 /** Unified list of nudges and congratulations for the current user, sorted by date (newest first). */
 export async function getMyNotifications(): Promise<NotificationItem[]> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return [];
 
   const [nudges, congrats, friendReqs, friendAccepted, assignments, announcements] = await Promise.all([

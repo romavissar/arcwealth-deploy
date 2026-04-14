@@ -205,15 +205,17 @@ export function NotificationsButton({ notifications }: { notifications: Notifica
         <button
           type="button"
           className={cn(
-            "relative rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-            "dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100",
+            "relative inline-flex h-9 items-center gap-2 rounded-xl border border-sky-300/80 bg-sky-50 px-2.5 py-1.5 text-sm font-semibold text-sky-800 transition-colors",
+            "hover:bg-sky-100 dark:border-sky-700/70 dark:bg-sky-900/30 dark:text-sky-200 dark:hover:bg-sky-900/50",
             "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           )}
           aria-label={unreadCount > 0 ? `${unreadCount} notifications` : "Notifications"}
         >
-          <Bell className="h-5 w-5" />
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/15 dark:bg-sky-400/20">
+            <Bell className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" aria-hidden="true" />
+          </span>
           {unreadCount > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}

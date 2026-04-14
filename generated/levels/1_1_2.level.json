@@ -1,0 +1,266 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.2",
+  "moduleNumber": 1,
+  "lessonNumber": 2,
+  "lessonTitle": "Tuition, Living Costs, and Total Cost of Attendance",
+  "concept": "Each of the six TCA categories behaves differently — knowing which ones you can control is the first step to managing them.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "€600 rent. €300 food. €100 transport. €600 materials. €200 personal. Add tuition: €12,000.",
+    "question": "Which number is actually within your control?"
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "Tuition is set by your university and your programme. Engineering typically costs more than humanities at the same institution. International students almost always pay more than domestic students."
+    },
+    {
+      "title": "Card 2",
+      "body": "Accommodation is usually your second-biggest cost. On-campus dormitories are convenient. Off-campus shared flats are often cheaper but require deposits, utility bills, and more planning."
+    },
+    {
+      "title": "Card 3",
+      "body": "Food costs vary enormously by approach. University meal plans are predictable but expensive per meal. Self-catering is cheaper but requires time. Most students end up doing both — and overspend on the unplanned bits."
+    },
+    {
+      "title": "Card 4",
+      "body": "Transport has three layers: daily commuting, holiday travel home, and spontaneous local movement. If you are studying abroad, factor in at least one or two international flights per year."
+    },
+    {
+      "title": "Card 5",
+      "body": "Course materials are easy to underestimate. New textbooks can cost $50–$200 each. Always check whether your university provides free software licences before buying anything. Secondhand copies are often available at a fraction of the cost."
+    },
+    {
+      "title": "Card 6",
+      "body": "Now test this: Personal spending is the most underestimated category because no single purchase feels significant. Phone, clothing, toiletries, gym, subscriptions, socialising — budget $100–$300/month as a floor, more in expensive cities."
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "Which TCA category is almost entirely outside your control?",
+        "options": [
+          "Food",
+          "Transport",
+          "Tuition",
+          "Personal spending"
+        ],
+        "correctIndex": 2,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Tuition is set by the institution — unlike food, transport, and personal spending which all involve choices you control.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "On-campus housing is always cheaper than renting off-campus.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Off-campus shared housing is often cheaper per room — though it adds complexity like utility bills, deposits, and a longer commute.\""
+      },
+      {
+        "type": "ordering",
+        "prompt": "Rank these TCA categories from typically most to least expensive for an international student:",
+        "items": [
+          "Tuition",
+          "Accommodation",
+          "Food",
+          "Personal spending",
+          "Transport"
+        ],
+        "correctOrder": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each cost type to its controllability:",
+        "pairs": [
+          {
+            "left": "Tuition",
+            "right": "Fixed — set by institution"
+          },
+          {
+            "left": "Accommodation",
+            "right": "Partially controllable — choice of on/off campus"
+          },
+          {
+            "left": "Food",
+            "right": "Highly controllable — meal plan vs self-catering vs mixed"
+          },
+          {
+            "left": "Personal spending",
+            "right": "Almost entirely controllable — lifestyle choices"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"International students almost always pay ___ tuition than domestic students at the same university.\"",
+        "options": [
+          "higher",
+          "lower",
+          "the same",
+          "less predictable"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Cost categories",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "Kai buys textbooks new for 4 courses at an average of $80 each. He could buy secondhand at 40% of the price.",
+        "min": 0,
+        "max": 400,
+        "correctValue": 192,
+        "tolerance": 19,
+        "unitLabel": "$",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"4 × $80 = $320 new. 4 × $32 = $128 secondhand. Saving = $192.\""
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete the sentence: \"Choosing between a meal plan and self-catering is not only about ___ — it also depends on how much ___ you have and how reliably you can ___.\"",
+        "options": [
+          "cost",
+          "time",
+          "plan meals",
+          "study",
+          "sleep",
+          "borrow money"
+        ],
+        "correctAnswers": [
+          "cost",
+          "time",
+          "plan meals"
+        ],
+        "keyTerm": "Cost categories",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Kai's monthly budget breakdown: Tuition (monthly): €1,000 | Accommodation: €700 | Food: €150 | Transport: €20 | Materials: €20 | Personal: €50 | Total: €1,940",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "Tuition is too high",
+          "Accommodation is underestimated",
+          "Food and personal spending are almost certainly underestimated for any major city",
+          "The total calculation is wrong"
+        ],
+        "correctIndex": 2,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"€150/month for food is extremely tight — most students spend €250–€400. €50 personal spending in a city is unrealistic. These two categories will almost certainly overshoot.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "build_plan",
+        "difficulty": "moderate",
+        "character": "Priya",
+        "location": "US",
+        "scenario": "Build Priya's annual TCA for a Dutch university.",
+        "prompt": "Choose the best decision.",
+        "explanation": "\"Priya's real annual cost is more than double her tuition figure. This is typical — non-tuition costs often match or exceed tuition at mid-fee EU universities.\"",
+        "answerMode": "typed_inputs",
+        "inputFields": [
+          {
+            "label": "Accommodation: €600/month × 12",
+            "correctValue": "€7"
+          },
+          {
+            "label": "Food: €300/month × 12",
+            "correctValue": "200"
+          },
+          {
+            "label": "Transport: €80/month × 12",
+            "correctValue": "€3"
+          },
+          {
+            "label": "Personal: €200/month × 12",
+            "correctValue": "600"
+          },
+          {
+            "label": "**Total TCA",
+            "correctValue": "€960"
+          }
+        ]
+      },
+      {
+        "taskType": "decision_branch",
+        "difficulty": "hard",
+        "character": "Marcus",
+        "location": "US",
+        "scenario": "Marcus is choosing between:",
+        "prompt": "Which option makes more financial and practical sense for Marcus?",
+        "explanation": "\"At 15 hours/week work plus full-time study, Marcus has limited spare time. The €1,600 saving is real, but the 45-minute daily cooking commitment adds up to over 270 hours/year — worth calculating against his hourly earnings.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Cost categories",
+    "takeaway": "Tuition is fixed. Almost every other TCA category has real choices attached — and those choices compound across four years.",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Cost categories",
+    "definition": "Cost categories anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Cost categories include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

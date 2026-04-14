@@ -54,3 +54,6 @@ Thumbs.db
 # Misc
 *.log
 .cache/
+
+# clerk configuration (can include secrets)
+/.clerk/

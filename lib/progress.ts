@@ -1,24 +1,12 @@
 import type { ProgressStatus } from "@/types/user";
+import { getFirstTopicId } from "@/lib/curriculum";
 
-/** Section-relative lesson counts and checkpoint/boss placement (matches seed & curriculum). 200 lessons. */
-const FLOW: { level: number; section: number; count: number; after: "checkpoint" | "boss" | "next_section" | "next_level" | "end" }[] = [
-  { level: 1, section: 1, count: 12, after: "checkpoint" },
-  { level: 1, section: 2, count: 12, after: "checkpoint" },
-  { level: 1, section: 3, count: 12, after: "boss" },
-  { level: 2, section: 1, count: 16, after: "checkpoint" },
-  { level: 2, section: 2, count: 25, after: "boss" },
-  { level: 2, section: 3, count: 10, after: "next_section" },
-  { level: 2, section: 4, count: 5, after: "next_level" },
-  { level: 3, section: 1, count: 20, after: "checkpoint" },
-  { level: 3, section: 2, count: 10, after: "next_section" },
-  { level: 3, section: 3, count: 23, after: "boss" },
-  { level: 4, section: 1, count: 13, after: "checkpoint" },
-  { level: 4, section: 2, count: 17, after: "next_section" },
-  { level: 4, section: 3, count: 10, after: "next_level" },
-  { level: 5, section: 1, count: 15, after: "end" },
-];
+/** Section flow: lesson counts and checkpoint/boss placement (match seed when you add curriculum). */
+const FLOW: { level: number; section: number; count: number; after: "checkpoint" | "boss" | "next_section" | "next_level" | "end" }[] = [];
 
 export function getNextTopicToUnlock(completedTopicId: string): string | null {
+  if (FLOW.length === 0) return null;
+
   const parts = completedTopicId.split(".");
   if (parts[0] === "hero") return null;
 
@@ -68,31 +56,31 @@ export function getNextTopicToUnlock(completedTopicId: string): string | null {
     const next = FLOW.find((f) => f.level === level + 1 && f.section === 1);
     return next ? `${next.level}.${next.section}.1` : null;
   }
-  return null; // end
+  return null;
 }
 
 export function topicIdToOrderKey(topicId: string): number {
   const parts = topicId.split(".");
   if (parts[0] === "hero") return 1000;
   const level = parseInt(parts[0], 10) || 0;
-  if (parts[1] === "boss") return level * 1000 + 99; // e.g. 2.boss => 2099
+  if (parts[1] === "boss") return level * 1000 + 99;
   const section = parseInt(parts[1], 10) || 0;
   const lesson = parts[2] === "checkpoint" ? 999 : parseInt(parts[2], 10) || 0;
   return level * 1000 + section * 100 + lesson;
 }
 
-export function canAccessTopic(
-  topicId: string,
-  progressByTopic: Map<string, ProgressStatus>
-): boolean {
-  if (topicId === "1.1.1") return true;
+export function canAccessTopic(topicId: string, progressByTopic: Map<string, ProgressStatus>): boolean {
+  const first = getFirstTopicId();
+  if (!first) return false;
+  if (topicId === first) return true;
   const prev = getPreviousTopicId(topicId);
   if (!prev) return false;
   return progressByTopic.get(prev) === "completed";
 }
 
 function getPreviousTopicId(topicId: string): string | null {
-  if (topicId === "1.1.1") return null;
+  const first = getFirstTopicId();
+  if (first && topicId === first) return null;
 
   const parts = topicId.split(".");
   if (parts[1] === "boss") {
@@ -121,7 +109,6 @@ function getPreviousTopicId(topicId: string): string | null {
 
   if (lesson > 1) return `${level}.${section}.${lesson - 1}`;
 
-  // lesson === 1: previous is end of previous section or checkpoint or boss
   const idx = FLOW.findIndex((f) => f.level === level && f.section === section);
   if (idx <= 0) return null;
   const prev = FLOW[idx - 1];

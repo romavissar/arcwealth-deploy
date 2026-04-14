@@ -14,6 +14,19 @@ export interface Topic {
   created_at?: string;
 }
 
+export interface CurriculumLessonDefinition {
+  lesson_number: number;
+  title: string;
+  description: string;
+}
+
+export interface CurriculumModuleDefinition {
+  level_number: number;
+  title: string;
+  goal: string;
+  lessons: CurriculumLessonDefinition[];
+}
+
 export interface TextbookContent {
   type: "textbook";
   sections: Array<{
@@ -54,8 +67,55 @@ export type LessonExercise =
       explanation: string;
     }
   | {
+      kind: "multi_blank";
+      sentence: string;
+      options: string[];
+      correct_answers: string[];
+      explanation: string;
+    }
+  | {
       kind: "match_pairs";
+      prompt?: string;
       pairs: Array<{ left: string; right: string }>;
+      explanation?: string;
+    }
+  | {
+      kind: "ordering";
+      prompt: string;
+      items: string[];
+      correct_order: number[];
+      explanation: string;
+    }
+  | {
+      kind: "numeric_slider";
+      prompt: string;
+      min: number;
+      max: number;
+      correct_value: number;
+      tolerance: number;
+      unit_label?: string;
+      explanation: string;
+    }
+  | {
+      kind: "short_answer_ai";
+      prompt: string;
+      rubric: string;
+      model_answer: string;
+      fallback_mcq: {
+        question: string;
+        options: string[];
+        correct_index: number;
+        explanation: string;
+      };
+      explanation: string;
+    }
+  | {
+      kind: "spot_mistake";
+      scenario: string;
+      question: string;
+      options: string[];
+      correct_index: number;
+      explanation: string;
     }
   | {
       kind: "scenario";
@@ -64,11 +124,52 @@ export type LessonExercise =
       options: string[];
       correct_index: number;
       explanation: string;
+      character?: string;
+      location?: string;
+    }
+  | {
+      kind: "apply_numeric";
+      scenario: string;
+      prompt: string;
+      min: number;
+      max: number;
+      correct_value: number;
+      tolerance: number;
+      unit_label?: string;
+      explanation: string;
+      character?: string;
+      location?: string;
+    }
+  | {
+      kind: "apply_typed_inputs";
+      scenario: string;
+      prompt: string;
+      fields: Array<{ label: string; correct_value: string }>;
+      explanation: string;
+      character?: string;
+      location?: string;
     };
 
 export interface LessonContent {
   type: "duolingo_lesson";
   exercises: LessonExercise[];
+  level?: {
+    hook: { fact: string; question: string };
+    conceptCards: Array<{ title: string; body: string }>;
+    check: {
+      questions: LessonExercise[];
+    };
+    apply: {
+      tasks: LessonExercise[];
+    };
+    lockIn: { keyTerm: string; takeaway: string; continueLabel: string };
+    reviewQueueEntry: { keyTerm: string; definition: string; moduleId: string; quickRecallPrompt: string };
+    xp: { base: number; perCheckFirstTryCorrect: number; perApplyFirstTryCorrect: number; perfectRunBonus: number };
+    ui?: {
+      colorTokens: { keyTerm: string; correct: string; wrong: string; cta: string };
+      animations: { maxDurationMs: number; xpCounterDurationMs: number; usesReducedMotionFallback: boolean };
+    };
+  };
 }
 
 /** A lesson step is either content (text from textbook) or an exercise. Used for textbook-based lessons. */

@@ -1,0 +1,61 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Stacked bar chart showing annual Total Cost of Attendance broken down by tuition and living costs across six university destination scenarios</h2>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px">
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:#534AB7"></span>Tuition</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:#9FE1CB"></span>Living costs (est. midpoint)</span>
+</div>
+<div style="position:relative;width:100%;height:320px">
+  <canvas id="tcaChart" role="img" aria-label="Stacked bar chart: US private university total ~$90k/yr, US state ~$52k, UK ~$40k, EU high-fee ~$26k, Singapore ~$42k, EU low-fee/Japan ~$14k">Estimated annual costs range from under $15,000 for EU low-fee and Japan to over $80,000 for US private universities.</canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+new Chart(document.getElementById('tcaChart'), {
+  type: 'bar',
+  data: {
+    labels: ['US private','US state','UK','Singapore / HK','EU (NL/IE)','EU (DE/FR) / Japan'],
+    datasets: [
+      {
+        label: 'Tuition',
+        data: [55000, 35000, 28000, 27000, 14000, 1500],
+        backgroundColor: '#534AB7',
+        borderWidth: 0
+      },
+      {
+        label: 'Living costs',
+        data: [22000, 17000, 14000, 15000, 12000, 12000],
+        backgroundColor: '#9FE1CB',
+        borderWidth: 0
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ' ' + ctx.dataset.label + ': $' + ctx.raw.toLocaleString(),
+          footer: items => ' Total: $' + items.reduce((s,i) => s + i.raw, 0).toLocaleString() + '/yr'
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        ticks: { color: 'rgba(100,100,100,0.85)', font: { size: 11 } },
+        grid: { display: false }
+      },
+      y: {
+        stacked: true,
+        ticks: {
+          callback: v => '$' + (v >= 1000 ? (v/1000) + 'k' : v),
+          color: 'rgba(100,100,100,0.85)',
+          font: { size: 11 }
+        },
+        grid: { color: 'rgba(150,150,150,0.1)' }
+      }
+    }
+  }
+});
+</script>

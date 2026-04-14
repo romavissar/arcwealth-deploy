@@ -1,7 +1,8 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
+import { getXPProgressToNextLevel } from "@/lib/xp";
 
 export type FriendStatus = "friends" | "pending_sent" | "pending_received" | "none";
 
@@ -15,6 +16,12 @@ export type PublicProfile = {
   streakDays: number;
   completedTopicCount: number;
   achievementCount: number;
+  lessonsCompletedThisWeek: number;
+  weeklyXp: number;
+  xpInLevel: number;
+  xpToNextLevel: number;
+  xpProgressPercent: number;
+  allTimeRank: number | null;
 };
 
 export type FriendRow = {
@@ -50,7 +57,7 @@ async function isStudent(supabase: ReturnType<typeof createServiceClient>, userI
 export async function getFriendStatusForUsers(
   otherUserIds: string[]
 ): Promise<{ error?: string; statusByUserId?: Record<string, FriendStatus> }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   const supabase = createServiceClient();
   const statusByUserId: Record<string, FriendStatus> = {};
@@ -81,7 +88,7 @@ export async function getFriendStatusForUsers(
 
 /** Send a friend request. Only students; cannot send to self or duplicate. */
 export async function sendFriendRequest(toUserId: string): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
   if (toUserId === userId) return { error: "Cannot send request to yourself" };
 
@@ -125,7 +132,7 @@ export async function sendFriendRequest(toUserId: string): Promise<{ error?: str
 
 /** Accept a friend request. Only the recipient can accept. */
 export async function acceptFriendRequest(requestId: string): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -148,7 +155,7 @@ export async function acceptFriendRequest(requestId: string): Promise<{ error?: 
 
 /** Decline a friend request. Only the recipient can decline. */
 export async function declineFriendRequest(requestId: string): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -167,7 +174,7 @@ export async function declineFriendRequest(requestId: string): Promise<{ error?:
 
 /** Cancel an outgoing friend request. Only the sender can cancel. */
 export async function cancelFriendRequest(requestId: string): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -186,7 +193,7 @@ export async function cancelFriendRequest(requestId: string): Promise<{ error?: 
 
 /** Remove a friend. Either friend can remove. */
 export async function removeFriend(otherUserId: string): Promise<{ error?: string }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -224,7 +231,7 @@ export async function getPublicFriends(targetUserId: string): Promise<{ error?: 
 
 /** List current user's friends with profile info. Only the signed-in user's data. */
 export async function getFriends(): Promise<{ error?: string; friends?: FriendRow[] }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -254,7 +261,7 @@ export async function getFriendRequests(): Promise<{
   incoming?: FriendRequestRow[];
   outgoing?: FriendRequestRow[];
 }> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return { error: "Unauthorized" };
 
   const supabase = createServiceClient();
@@ -312,7 +319,7 @@ export async function getFriendRequests(): Promise<{
 
 /** Can the current user view targetUserId's profile? Students can view students; teachers/admins can view students. */
 export async function canViewProfile(targetUserId: string): Promise<boolean> {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return false;
   if (userId === targetUserId) return true;
 
@@ -359,15 +366,53 @@ export async function getPublicProfile(targetUserId: string): Promise<{
     .single();
   if (error || !p) return { error: error?.message ?? "Profile not found" };
 
-  const { count: completedCount } = await supabase
-    .from("user_progress")
-    .select("topic_id", { count: "exact", head: true })
-    .eq("user_id", targetUserId)
-    .eq("status", "completed");
-  const { count: achCount } = await supabase
-    .from("user_achievements")
-    .select("achievement_slug", { count: "exact", head: true })
-    .eq("user_id", targetUserId);
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  const weekAgoIso = weekAgo.toISOString();
+
+  const [
+    { count: completedCount },
+    { count: achCount },
+    { count: completedThisWeekCount },
+    { data: weeklyXpEvents },
+    { data: teacherRows },
+  ] = await Promise.all([
+    supabase
+      .from("user_progress")
+      .select("topic_id", { count: "exact", head: true })
+      .eq("user_id", targetUserId)
+      .eq("status", "completed"),
+    supabase
+      .from("user_achievements")
+      .select("achievement_slug", { count: "exact", head: true })
+      .eq("user_id", targetUserId),
+    supabase
+      .from("user_progress")
+      .select("topic_id", { count: "exact", head: true })
+      .eq("user_id", targetUserId)
+      .eq("status", "completed")
+      .gte("completed_at", weekAgoIso),
+    supabase
+      .from("xp_events")
+      .select("amount")
+      .eq("user_id", targetUserId)
+      .gte("created_at", weekAgoIso),
+    supabase.from("teacher_list").select("user_id"),
+  ]);
+
+  const teacherIds = (teacherRows ?? []).map((row) => row.user_id);
+  const rankQuery = supabase
+    .from("user_profiles")
+    .select("id", { count: "exact", head: true })
+    .gt("xp", p.xp ?? 0);
+  if (teacherIds.length > 0) {
+    const teacherIdList = teacherIds.map((id) => `"${id}"`).join(",");
+    rankQuery.not("id", "in", `(${teacherIdList})`);
+  }
+  const { count: higherXpCount } = await rankQuery;
+
+  const weeklyXp = (weeklyXpEvents ?? []).reduce((total, row) => total + (row.amount ?? 0), 0);
+  const { percentage, current: xpInLevel, required: xpToNextLevel } = getXPProgressToNextLevel(p.xp ?? 0);
 
   return {
     profile: {
@@ -380,6 +425,12 @@ export async function getPublicProfile(targetUserId: string): Promise<{
       streakDays: p.streak_days ?? 0,
       completedTopicCount: completedCount ?? 0,
       achievementCount: achCount ?? 0,
+      lessonsCompletedThisWeek: completedThisWeekCount ?? 0,
+      weeklyXp,
+      xpInLevel,
+      xpToNextLevel,
+      xpProgressPercent: percentage,
+      allTimeRank: typeof higherXpCount === "number" ? higherXpCount + 1 : null,
     },
   };
 }

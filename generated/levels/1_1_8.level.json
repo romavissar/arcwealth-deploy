@@ -1,0 +1,228 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.8",
+  "moduleNumber": 1,
+  "lessonNumber": 8,
+  "lessonTitle": "Part-Time Work, Work-Study, Side Hustles, and Entrepreneurship",
+  "concept": "Earning money at university is possible — but the rules, limits, and trade-offs depend heavily on your visa status and how much your studies actually demand.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Marcus earns €500/month from a campus job. Kai earns €0 because he assumed his visa didn't allow it.",
+    "question": "Kai assumed wrong."
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "Most student visas permit some paid work — but with limits. UK Tier 4 students can work up to 20 hours/week during term. US F-1 students can work on-campus up to 20 hours/week during term; off-campus work requires special authorisation."
+    },
+    {
+      "title": "Card 2",
+      "body": "**Work-study programmes** (common in the US) are government-funded arrangements where eligible students work part-time on campus. The jobs are designed around academic schedules and often pay above minimum wage. Availability depends on financial need and is allocated through the FAFSA"
+    },
+    {
+      "title": "Card 3",
+      "body": "Campus jobs — library assistants, lab support, sports coaching, tutoring — are worth prioritising over off-campus work. They are shorter commutes, more flexible around exam periods, and employers understand academic commitments better."
+    },
+    {
+      "title": "Card 4",
+      "body": "Freelancing and gig economy work (tutoring, translation, design, copywriting, delivery) offer flexible income but less predictability. Tax obligations on freelance income vary by country — in the UK, earnings above £1,000/year from self-employment must be declared via Self Assessment. In"
+    },
+    {
+      "title": "Card 5",
+      "body": "The real cost of part-time work is time. 10 hours/week = 400+ hours/year. Research consistently shows that more than 15–20 hours/week of paid work correlates with lower grades. The financial return must be worth the academic cost."
+    },
+    {
+      "title": "Card 6",
+      "body": "Now test this: Student entrepreneurship — building a small product, service, or online business — can generate income while building skills. However, it carries zero guarantee of income and high time demands. For funding reliability, it is a supplement, not"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "How many hours per week can a UK Tier 4 student typically work during term time?",
+        "options": [
+          "10 hours",
+          "20 hours",
+          "30 hours",
+          "Unlimited"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"UK Tier 4 (now called Student visa) permits up to 20 hours/week during term time. Exceeding this is a visa violation.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "US F-1 students are free to work off-campus at any job during their studies.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"F-1 students can work on-campus up to 20 hours/week during term without special permission. Off-campus employment requires specific authorisation (CPT or OPT) and is not freely available.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each income type to its primary advantage:",
+        "pairs": [
+          {
+            "left": "Campus job",
+            "right": "Flexible around exams, no commute"
+          },
+          {
+            "left": "Work-study programme",
+            "right": "Government-subsidised, designed for students (US only)"
+          },
+          {
+            "left": "Freelancing",
+            "right": "Flexible hours, remote work possible"
+          },
+          {
+            "left": "Entrepreneurship",
+            "right": "Skill-building alongside income potential"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"Research consistently shows that working more than ___ hours/week correlates with lower academic grades.\"",
+        "options": [
+          "15–20",
+          "5–10",
+          "25–30",
+          "10–15"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Visa work restrictions",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "Marcus works 12 hours/week at €12/hour during a 30-week academic year.",
+        "min": 0,
+        "max": 6000,
+        "correctValue": 4320,
+        "tolerance": 432,
+        "unitLabel": "€",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"12 × €12 = €144/week. €144 × 30 weeks = €4,320/year — a meaningful contribution to his €8,000 annual funding gap.\""
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete: \"Before accepting 25 hours/week of paid work, a student should check whether their ___ permits it, whether it exceeds the ___ hour threshold linked to grade decline, and whether the financial gain is worth the ___ cost.\"",
+        "options": [
+          "visa",
+          "passport",
+          "15–20",
+          "25–30",
+          "academic",
+          "social"
+        ],
+        "correctAnswers": [
+          "visa",
+          "passport",
+          "academic"
+        ],
+        "keyTerm": "Visa work restrictions",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Kai's plan: \"I'll start an e-commerce business during my first year and use the profits to fund my studies.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "E-commerce is illegal for students",
+          "Entrepreneurial income is unpredictable — using it as a primary funding source",
+          "Kai would need a separate business visa",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Entrepreneurship is a supplement, not a substitute. Most first-year student businesses generate little or no income in Year 1. Treating unpredictable income as a funding plan is how students end up in financial crisis.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Priya",
+        "location": "US",
+        "scenario": "Priya has a €6,000 annual funding gap. She is considering:",
+        "prompt": "Which is more appropriate?",
+        "explanation": "\"Option B pays more but risks visa violations (20 hours is the maximum, any overage is a breach), takes time away from studies year-round, and delivery work may fall outside approved categories. Option A is safer and still covers most of the gap.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "budget_calculator",
+        "difficulty": "hard",
+        "character": "Sofia",
+        "location": "Berlin",
+        "scenario": "Sofia works 15 hours/week during 30 weeks of term at S$14/hour.",
+        "prompt": "What percentage does her income represent?",
+        "explanation": "\"15 × S$14 × 30 = S$6,300/year. S$6,300 ÷ S$12,000 = 52.5%. Part-time work can cover a majority of living costs — but not all. Sofia still needs a plan for the other 47.5%.\"",
+        "answerMode": "numeric",
+        "min": 0,
+        "max": 100,
+        "correctValue": 52.5,
+        "tolerance": 5,
+        "unitLabel": "value"
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Visa work restrictions",
+    "takeaway": "Earning while studying is feasible and worthwhile — but always verify your visa's specific work limits before accepting any job.",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Visa work restrictions",
+    "definition": "Visa work restrictions anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Visa work restrictions include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

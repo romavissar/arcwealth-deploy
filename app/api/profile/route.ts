@@ -1,10 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { applyRegeneration } from "@/lib/hearts";
+import { getAppUserId } from "@/lib/auth/server-user";
 
 export async function GET() {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -12,7 +12,7 @@ export async function GET() {
   const supabase = createServiceClient();
   const { data, error } = await supabase
     .from("user_profiles")
-    .select("xp, streak_days, hearts, last_hearts_at, max_hearts, level, rank")
+    .select("xp, streak_days, hearts, last_hearts_at, max_hearts, level, rank, username, email, avatar_url")
     .eq("id", userId)
     .single();
 
@@ -44,5 +44,8 @@ export async function GET() {
     last_hearts_at: effectiveLastHeartsAt,
     level: row.level ?? fallback.level,
     rank: row.rank ?? fallback.rank,
+    username: (row as { username?: string | null }).username ?? null,
+    email: (row as { email?: string | null }).email ?? null,
+    avatar_url: (row as { avatar_url?: string | null }).avatar_url ?? null,
   });
 }

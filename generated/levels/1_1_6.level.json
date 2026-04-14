@@ -1,0 +1,251 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.6",
+  "moduleNumber": 1,
+  "lessonNumber": 6,
+  "lessonTitle": "Scholarships, Grants, and Financial Aid",
+  "concept": "Free money for university exists — but it goes to the students who find it, apply early, and stack multiple sources together.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Two students. Identical qualifications. One pays full price. One pays 40% less.",
+    "question": "The difference? One applied for scholarships. The other assumed they would not qualify."
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "**Scholarships** are awarded based on merit — academic performance, talent, leadership, or community contribution. They do not need to be repaid. A student who does not apply does not receive one."
+    },
+    {
+      "title": "Card 2",
+      "body": "**Grants** and **financial aid** are awarded based on financial need. Universities, governments, and NGOs all offer them. US universities in particular use need-based aid to bring their headline price down significantly for eligible families."
+    },
+    {
+      "title": "Card 3",
+      "body": "Most scholarships have application deadlines 6–12 months before your programme starts. Applying late is the single most common reason qualified students miss funding. Build a scholarship calendar before you apply to universities."
+    },
+    {
+      "title": "Card 4",
+      "body": "Stacking means applying for multiple small scholarships simultaneously. Three awards of $2,000 each are worth the same as one $6,000 scholarship — and the smaller ones attract fewer applicants. Most students stop at one application. The students who fund their"
+    },
+    {
+      "title": "Card 5",
+      "body": "External scholarships — from companies, foundations, charities, and governments — exist separately from university aid. They are less well-known, which makes them less competitive. Your own government may offer study-abroad scholarships you have never heard of. Research your home country's"
+    },
+    {
+      "title": "Card 6",
+      "body": "Now test this: For US universities, the **FAFSA** (Free Application for Federal Student Aid) is the gateway to most need-based aid. International students are ineligible for FAFSA, but many US universities have their own institutional aid for international students —"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "What is the key difference between a scholarship and a grant?",
+        "options": [
+          "Scholarships are larger",
+          "Scholarships are merit-based; grants are need-based",
+          "Grants do not need to be repaid but scholarships do",
+          "Scholarships are only for domestic students"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Scholarships reward achievement — grades, talent, or contribution. Grants and financial aid respond to financial circumstances.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "International students cannot receive any financial aid at US universities.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"While international students cannot access FAFSA federal aid, many US universities offer institutional aid packages specifically for international students — eligibility varies and must be checked per institution.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each funding type to its source:",
+        "pairs": [
+          {
+            "left": "Merit scholarship",
+            "right": "Awarded for academic or extracurricular achievement"
+          },
+          {
+            "left": "Need-based grant",
+            "right": "Awarded based on family financial circumstances"
+          },
+          {
+            "left": "Government study-abroad funding",
+            "right": "Provided by your home country for overseas study"
+          },
+          {
+            "left": "Institutional aid (US)",
+            "right": "Offered by the university itself, separate from FAFSA"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"Applying for multiple scholarships simultaneously to combine smaller awards into a significant total is called ___.\"",
+        "options": [
+          "stacking",
+          "arbitraging",
+          "merit pooling",
+          "grant stacking"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Merit vs need-based funding",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "ordering",
+        "prompt": "Put these scholarship application steps in the correct order:",
+        "items": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "correctOrder": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "Sofia applies for 8 scholarships averaging $1,800 each, with a 30% success rate per application.",
+        "min": 0,
+        "max": 8,
+        "correctValue": 2,
+        "tolerance": 1,
+        "unitLabel": "value",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"8 × 30% = 2.4 expected scholarships. At $1,800 each, that is approximately $4,320 in expected funding — a meaningful contribution to her annual gap.\""
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete the sentence: \"A smaller scholarship with ___ applicants often has a better expected return than a larger scholarship with ___ applicants, because the ___ of winning is higher.\"",
+        "options": [
+          "50",
+          "5,000",
+          "probability",
+          "prize amount",
+          "deadline",
+          "500"
+        ],
+        "correctAnswers": [
+          "50",
+          "50",
+          "probability"
+        ],
+        "keyTerm": "Merit vs need-based funding",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Kai found a £5,000 scholarship for UK engineering students. He plans to apply in July — three months before his September start date.",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "The scholarship is too small to be worth applying for",
+          "Kai missed the deadline by approximately 6 months",
+          "UK scholarships are only for domestic students",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Most scholarships close 6–12 months before a programme starts. July is far too late for a September intake. Kai needed to be researching scholarships in October–November of the previous year.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Marcus",
+        "location": "US",
+        "scenario": "Marcus needs to reduce his €8,000 annual funding gap. Build his scholarship strategy:",
+        "prompt": "Choose the best decision.",
+        "explanation": "\"With a 20–30% success rate per application, Marcus needs 10+ applications to reliably close his funding gap. Three strong applications may yield nothing. Ten gives him statistical coverage.\"",
+        "answerMode": "choice",
+        "options": [
+          "BUILD",
+          "1–2",
+          "3–5",
+          "10+"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "ranking",
+        "difficulty": "hard",
+        "character": "Priya",
+        "location": "US",
+        "scenario": "Priya discovers two scholarship opportunities:",
+        "prompt": "Which gives her the better expected return?",
+        "explanation": "\"Scholarship A: €10,000 × (1/500) ≈ €20 expected value. Scholarship B: €2,500 × (1/40) ≈ €62 expected value. Scholarship B returns 3× more per application — better odds are often worth more than bigger prizes.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Merit vs need-based funding",
+    "takeaway": "Scholarships go to students who apply early, apply often, and look beyond the obvious — not just those with the",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Merit vs need-based funding",
+    "definition": "Merit vs need-based funding anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Merit vs need-based funding include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

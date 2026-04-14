@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { redirect } from "next/navigation";
 import { ProfileSubnav } from "@/components/profile/ProfileSubnav";
 
@@ -7,11 +7,11 @@ export default async function ProfileLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) redirect("/sign-in");
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="mx-auto max-w-5xl space-y-6 pb-4">
       <ProfileSubnav />
       {children}
     </div>

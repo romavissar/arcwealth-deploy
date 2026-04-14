@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { RemoveFriendButton } from "./RemoveFriendButton";
 
 export default async function ProfileFriendsPage() {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) redirect("/sign-in");
 
   const { error, friends } = await getFriends();

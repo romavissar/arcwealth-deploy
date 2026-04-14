@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.3",
+  "moduleNumber": 1,
+  "lessonNumber": 3,
+  "lessonTitle": "Comparing University Costs — EU, UK, US, and East Asia",
+  "concept": "The same student studying the same subject can pay five times more or less depending entirely on which country they choose.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Same degree. Same subject. One student pays $13,000 total per year. Another pays $77,000.",
+    "question": "What is the only difference between them?"
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "The answer is destination. US private universities charge $35,000–$65,000 tuition per year for international students. German public universities charge approximately €0–€500 per semester. Same education. Radically different cost."
+    },
+    {
+      "title": "Card 2",
+      "body": "The US is the most expensive destination because most top universities are privately funded — they earn their revenue almost entirely from tuition. There is no government cap on what they can charge international students."
+    },
+    {
+      "title": "Card 3",
+      "body": "The UK charges international students market-rate fees (£15,000–£38,000/year) rather than the domestic cap of £9,250. The upside: most UK undergraduate degrees are three years, not four, which cuts total costs by 25%."
+    },
+    {
+      "title": "Card 4",
+      "body": "EU countries vary widely. Germany, France, and Norway charge near-zero tuition even to international students — their universities are government-funded. The Netherlands and Ireland charge moderate market rates (€8,000–€20,000). Always check by country, not just \"EU\"."
+    },
+    {
+      "title": "Card 5",
+      "body": "In East Asia: Japan's national universities charge ~¥536,000/year (~$3,500) — among the cheapest quality universities globally. Singapore's NUS and NTU are internationally competitive and priced accordingly at S$17,000–S$37,000. Hong Kong sits between the two."
+    },
+    {
+      "title": "Card 6",
+      "body": "Now test this: The four-year cumulative gap between a US private university (~$308,000) and a low-fee EU destination (~$52,000) is over $250,000. Two students, same subject, same ambitions — one graduates with a quarter-million dollars more in financial freedom."
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "Why do US private universities charge so much more than EU public universities?",
+        "options": [
+          "US degrees take longer",
+          "US universities are privately funded and earn revenue primarily through tuition",
+          "US professors are paid more",
+          "US degrees are internationally more respected"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"US private universities receive little government funding — tuition is how they fund themselves, with no government-imposed cap.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "A UK degree typically costs more in total than a US degree because UK tuition is expensive.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"UK degrees are usually 3 years vs 4 years in the US. Even at higher annual fees, the shorter duration means total UK costs are often significantly lower than a US equivalent.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each destination to its tuition model:",
+        "pairs": [
+          {
+            "left": "Germany",
+            "right": "Near-zero tuition, government-funded"
+          },
+          {
+            "left": "UK",
+            "right": "Market-rate fees for international students, 3-year degrees"
+          },
+          {
+            "left": "US private",
+            "right": "High tuition, privately funded, no government cap"
+          },
+          {
+            "left": "Japan (national)",
+            "right": "Low fixed fee (~$3,500/year)"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"The cumulative four-year cost gap between a US private university and a low-fee EU destination can exceed ___.\"",
+        "options": [
+          "$250,000",
+          "$50,000",
+          "$100,000",
+          "$500,000"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Destination cost gap",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multiple_choice",
+        "prompt": "Which EU country offers near-zero tuition even to non-EU international students?",
+        "options": [
+          "Netherlands",
+          "Ireland",
+          "Germany",
+          "Denmark"
+        ],
+        "correctIndex": 2,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"German public universities charge only a nominal semester contribution (~€350), not full tuition — regardless of nationality.\""
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete: \"NYU total cost ≈ $___. King's total cost ≈ $___. King's is approximately $___ cheaper.\"",
+        "options": [
+          "$288,000",
+          "$144,000",
+          "$143,000",
+          "$72,000",
+          "$96,000",
+          "$192,000"
+        ],
+        "correctAnswers": [
+          "$288,000",
+          "$144,000",
+          "$143,000"
+        ],
+        "keyTerm": "Destination cost gap",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Sofia's university comparison table shows: \"EU universities are all cheap. I'll pick the one in the Netherlands since it teaches in English.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "English-language programmes don't exist in the Netherlands",
+          "She assumed all EU universities are near-zero tuition — the Netherlands charges",
+          "Her living cost estimate is too high",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Not all EU countries are the same. Germany and France charge near zero; the Netherlands charges €8,000–€20,000. Sofia's 'cheap EU' assumption could cost her €40,000+ over three years.\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "ranking",
+        "difficulty": "moderate",
+        "character": "Kai",
+        "location": "UK",
+        "scenario": "Kai has been accepted to four universities. Rank them by total degree cost (cheapest to most expensive):",
+        "prompt": "Choose the best decision.",
+        "explanation": "\"Germany's near-zero tuition makes it the cheapest despite reasonable living costs. Michigan's high annual fees compound dramatically over four years.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "decision_branch",
+        "difficulty": "hard",
+        "character": "Sofia",
+        "location": "Amsterdam",
+        "scenario": "Sofia's parents will fund her degree but have told her: \"We can contribute $80,000 total.\"",
+        "prompt": "Which can she fund within her parents' contribution (plus her own savings of $20,000)?",
+        "explanation": "\"NUS requires $140,000 — $40,000 more than Sofia and her parents can cover. Amsterdam at ~€72,000 (~$90,000) fits within their combined $100,000. Destination is not just a preference — it is a financial constraint.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Destination cost gap",
+    "takeaway": "Where you study can matter more to your total cost than any other single decision — the gap between destinations",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Destination cost gap",
+    "definition": "Destination cost gap anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Destination cost gap include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

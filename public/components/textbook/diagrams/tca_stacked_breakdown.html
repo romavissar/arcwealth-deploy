@@ -1,0 +1,181 @@
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f8fbff;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #dbeafe;
+    --grid: rgba(148, 163, 184, 0.22);
+    --tooltipBg: #0f172a;
+    --tooltipText: #f8fafc;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1220;
+    --card: #0f172a;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #334155;
+    --grid: rgba(148, 163, 184, 0.16);
+    --tooltipBg: #e2e8f0;
+    --tooltipText: #0f172a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 14px;
+    font-family: Inter, "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--card);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .chart-wrap { position: relative; width: 100%; height: 320px; }
+  .hint {
+    margin: 12px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+</style>
+
+<h2 class="sr-only">Stacked bar chart showing annual Total Cost of Attendance broken down by tuition and living costs across six university destination scenarios</h2>
+
+<div class="legend" aria-hidden="true">
+  <span class="chip"><span class="dot" style="background:#7c3aed"></span>Tuition</span>
+  <span class="chip"><span class="dot" style="background:#14b8a6"></span>Living costs</span>
+</div>
+
+<div class="chart-wrap">
+  <canvas id="tcaChart" role="img" aria-label="Stacked bar chart: US private university total ~$90k/yr, US state ~$52k, UK ~$40k, EU high-fee ~$26k, Singapore ~$42k, EU low-fee/Japan ~$14k">Estimated annual costs range from under $15,000 for EU low-fee and Japan to over $80,000 for US private universities.</canvas>
+</div>
+
+<p class="hint">Compare how tuition and living expenses combine. High-fee destinations usually have both larger tuition and larger compounding totals.</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  function detectTheme() {
+    try {
+      if (window.parent && window.parent.document?.documentElement.classList.contains("dark")) return "dark";
+    } catch {}
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function applyTheme() {
+    document.documentElement.setAttribute("data-theme", detectTheme());
+  }
+
+  function palette() {
+    const s = getComputedStyle(document.documentElement);
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    return {
+      tuition: isDark ? "#a78bfa" : "#7c3aed",
+      living: isDark ? "#2dd4bf" : "#14b8a6",
+      tick: s.getPropertyValue("--muted").trim(),
+      grid: s.getPropertyValue("--grid").trim(),
+      tooltipBg: s.getPropertyValue("--tooltipBg").trim(),
+      tooltipText: s.getPropertyValue("--tooltipText").trim(),
+    };
+  }
+
+  let chart;
+  function buildChart() {
+    const c = palette();
+    if (chart) chart.destroy();
+    chart = new Chart(document.getElementById("tcaChart"), {
+      type: "bar",
+      data: {
+        labels: ["US private", "US state", "UK", "Singapore / HK", "EU (NL/IE)", "EU (DE/FR) / Japan"],
+        datasets: [
+          { label: "Tuition", data: [55000, 35000, 28000, 27000, 14000, 1500], backgroundColor: c.tuition, borderRadius: 6, borderSkipped: false },
+          { label: "Living costs", data: [22000, 17000, 14000, 15000, 12000, 12000], backgroundColor: c.living, borderRadius: 6, borderSkipped: false },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: c.tooltipBg,
+            titleColor: c.tooltipText,
+            bodyColor: c.tooltipText,
+            footerColor: c.tooltipText,
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: $${ctx.raw.toLocaleString()}`,
+              footer: (items) => `Total: $${items.reduce((sum, i) => sum + i.raw, 0).toLocaleString()}/yr`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+            ticks: { color: c.tick, font: { size: 11, weight: "600" } },
+            grid: { display: false },
+          },
+          y: {
+            stacked: true,
+            ticks: { callback: (v) => `$${v >= 1000 ? v / 1000 + "k" : v}`, color: c.tick, font: { size: 11 } },
+            grid: { color: c.grid },
+          },
+        },
+      },
+    });
+  }
+
+  function bindThemeSync() {
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    mql.addEventListener?.("change", () => { applyTheme(); buildChart(); });
+    try {
+      const root = window.parent.document.documentElement;
+      new MutationObserver(() => { applyTheme(); buildChart(); }).observe(root, { attributes: true, attributeFilter: ["class"] });
+    } catch {}
+  }
+
+  applyTheme();
+  buildChart();
+  bindThemeSync();
+
+  function postEmbedHeight() {
+    try {
+      const height = Math.ceil(document.documentElement.scrollHeight);
+      window.parent.postMessage({ type: "arcwealth-embed-height", src: window.location.pathname, height }, window.location.origin);
+    } catch {}
+  }
+
+  const resizeObserver = new ResizeObserver(postEmbedHeight);
+  resizeObserver.observe(document.body);
+  window.addEventListener("load", postEmbedHeight);
+  setTimeout(postEmbedHeight, 50);
+  setTimeout(postEmbedHeight, 250);
+</script>

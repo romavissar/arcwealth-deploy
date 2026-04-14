@@ -1,0 +1,242 @@
+{
+  "schemaVersion": "2.0",
+  "sourceLessonFile": "arcwealth_level_content_part_1.md",
+  "topicId": "1.1.9",
+  "moduleNumber": 1,
+  "lessonNumber": 9,
+  "lessonTitle": "Evaluating the Financial Return on Your Degree",
+  "concept": "A degree is a financial investment — and like any investment, the return depends on what you paid and what you earn.",
+  "estimatedDurationSeconds": 290,
+  "sectionOrder": [
+    "hook",
+    "concept",
+    "check",
+    "apply",
+    "lock_in"
+  ],
+  "hook": {
+    "fact": "Two graduates. Both studied for four years. One earns $85,000 in year one. One earns $28,000.",
+    "question": "Both degrees cost the same. Was that the right price for both?"
+  },
+  "conceptCards": [
+    {
+      "title": "Card 1",
+      "body": "**Return on investment (ROI)** applied to education compares what you paid (total TCA over the degree) against what you earn (starting salary and career earnings trajectory). A higher cost degree is not necessarily a worse investment — but it requires"
+    },
+    {
+      "title": "Card 2",
+      "body": "The simplest ROI measure: divide your total degree cost by your expected first-year salary. A $150,000 degree that leads to a $75,000 starting salary has a debt-to-income ratio of 2:1 — generally considered manageable. A $200,000 degree with a $35,000"
+    },
+    {
+      "title": "Card 3",
+      "body": "Programme choice matters as much as institution. Medicine, law, engineering, and computer science consistently produce higher starting salaries than many humanities or arts programmes at the same institution. This is not a reason to avoid any subject — it is"
+    },
+    {
+      "title": "Card 4",
+      "body": "Starting salary is not the whole story. Career trajectory, job satisfaction, professional flexibility, and earning potential at age 35–45 often diverge significantly from age-22 starting points. A teacher starting at $35,000 may earn $75,000 by career peak. A finance graduate"
+    },
+    {
+      "title": "Card 5",
+      "body": "Location significantly affects both sides of the ROI equation. A $300,000 US private university degree in computer science, placed in San Francisco, may generate a 20-year career worth $5,000,000+. The same student, same degree, placed in a smaller market, earns"
+    },
+    {
+      "title": "Card 6",
+      "body": "Now test this: ROI is one lens, not the only one. Quality of life, intellectual fulfilment, personal values, and where you want to live are real factors that no salary table captures. The goal is not to optimise purely for"
+    }
+  ],
+  "check": {
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "prompt": "A student pays $120,000 for their degree and earns $40,000 in their first job. What is their debt-to-income ratio?",
+        "options": [
+          "2:1",
+          "3:1",
+          "4:1",
+          "1.5:1"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"$120,000 ÷ $40,000 = 3.0. A 3:1 ratio is at the upper edge of manageable — higher than this starts to create real repayment pressure.\""
+      },
+      {
+        "type": "true_false_why",
+        "statement": "A more expensive degree always provides a better financial return than a cheaper one.",
+        "correct": false,
+        "whyPrompt": "Why is that true or false?",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"ROI depends on both cost and earnings outcome — a $50,000 degree that leads to a $70,000 salary may deliver a far better return than a $200,000 degree leading to the same salary.\""
+      },
+      {
+        "type": "match_pairs",
+        "prompt": "Match each degree/career scenario to its ROI assessment:",
+        "pairs": [
+          {
+            "left": "Medicine ($200,000 TCA, $120,000+ starting salary)",
+            "right": "Strong ROI despite high cost"
+          },
+          {
+            "left": "Arts ($180,000 TCA, $32,000 starting salary)",
+            "right": "Very challenging ROI — cost requires careful justification"
+          },
+          {
+            "left": "Computer science at low-cost EU university ($25,000 TCA,",
+            "right": "Excellent ROI"
+          },
+          {
+            "left": "Teaching ($60,000 TCA, $38,000 starting salary)",
+            "right": "Moderate ROI, consider long-term career earnings"
+          }
+        ],
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "numeric_slider",
+        "prompt": "Kai borrows $140,000 for his degree. He expects a starting salary of $70,000.",
+        "min": 0.5,
+        "max": 8,
+        "correctValue": 2,
+        "tolerance": 1,
+        "unitLabel": "value",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"$140,000 ÷ $70,000 = 2.0. This is generally considered manageable — the guideline threshold is roughly 1.5–2× for comfortable repayment. Above 3× becomes significantly harder.\""
+      },
+      {
+        "type": "fill_blank",
+        "sentence": "\"Comparing the total cost of a degree against career earnings to assess whether it was worth the price is called calculating the degree's ___.\"",
+        "options": [
+          "return on investment",
+          "net present value",
+          "scholarship multiplier",
+          "tuition equivalent"
+        ],
+        "correctIndex": 0,
+        "keyTerm": "Return on investment (ROI)",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "multiple_choice",
+        "prompt": "Which factor most commonly makes a high-cost degree financially worthwhile despite its price?",
+        "options": [
+          "The prestige of the institution alone",
+          "Strong starting salaries combined with high career earnings trajectory in the specific",
+          "Longer degree duration",
+          "The student's personal enjoyment of the subject"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"Prestige alone does not guarantee salary outcomes. The financial case for a high-cost degree depends on the actual earnings it enables — particularly over the first 10 years of a career.\""
+      },
+      {
+        "type": "multi_blank",
+        "sentence": "Complete: \"The US degree debt-to-income ratio = ___. The Dutch degree ratio = ___. The cheaper option saves approximately $___.\"",
+        "options": [
+          "2.8:1",
+          "0.6:1",
+          "143,000",
+          "150,000",
+          "3.5:1",
+          "0.46:1"
+        ],
+        "correctAnswers": [
+          "2.8:1",
+          "0.6:1",
+          "143,000"
+        ],
+        "keyTerm": "Return on investment (ROI)",
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "Review the concept and try again."
+      },
+      {
+        "type": "spot_mistake",
+        "scenario": "Marcus's thinking: \"Computer science graduates earn good money, so I should study CS at the most expensive university I can get into.\"",
+        "prompt": "What is the main mistake?",
+        "options": [
+          "CS graduates do not earn good salaries",
+          "He is choosing the most expensive option without considering whether the cost",
+          "Expensive universities are never worth it",
+          "Nothing is wrong"
+        ],
+        "correctIndex": 1,
+        "feedbackCorrect": "Nice work.",
+        "feedbackWrong": "Not quite. Try again.",
+        "explanation": "\"CS graduates do earn well — but a top CS programme at a low-cost EU university often leads to similar career outcomes as a $70,000/year US alternative. The question is not 'does CS pay?' but 'does this specific cost premium pay?'\""
+      }
+    ]
+  },
+  "apply": {
+    "tasks": [
+      {
+        "taskType": "decision_branch",
+        "difficulty": "moderate",
+        "character": "Priya",
+        "location": "US",
+        "scenario": "Priya is choosing between:",
+        "prompt": "What does the ROI analysis suggest?",
+        "explanation": "\"Option A has a 1.2:1 debt-to-income ratio (manageable). Option B has a 4.3:1 ratio (very difficult to service at entry-level salaries). The ROI strongly favours Option A — though this does not mean Option B is wrong, it means the financial burden requires very careful thought.\"",
+        "answerMode": "choice",
+        "options": [
+          "Best supported answer",
+          "Too optimistic plan",
+          "Too risky assumption",
+          "Missing key constraints"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "taskType": "budget_calculator",
+        "difficulty": "hard",
+        "character": "Kai",
+        "location": "US",
+        "scenario": "Kai is considering a $200,000 US finance degree. Expected starting salary: $85,000.",
+        "prompt": "What is Kai's ratio and what zone does it fall in?",
+        "explanation": "\"$200,000 ÷ $85,000 = 2.35. This sits in the 'manageable' zone — tight but workable at a $85,000 salary. It would become difficult at a lower salary, which is the risk Kai needs to plan for.\"",
+        "answerMode": "numeric",
+        "min": 1,
+        "max": 5,
+        "correctValue": 2.35,
+        "tolerance": 0,
+        "unitLabel": "value"
+      }
+    ]
+  },
+  "lockIn": {
+    "keyTerm": "Return on investment (ROI)",
+    "takeaway": "Divide your total degree cost by your expected starting salary — a ratio above 3:1 requires serious justification; below 1.5:1",
+    "continueLabel": "Continue"
+  },
+  "xp": {
+    "base": 10,
+    "perCheckFirstTryCorrect": 2,
+    "perApplyFirstTryCorrect": 3,
+    "perfectRunBonus": 5
+  },
+  "reviewQueueEntry": {
+    "keyTerm": "Return on investment (ROI)",
+    "definition": "Return on investment (ROI) anchors better education money decisions.",
+    "moduleId": "module_1",
+    "quickRecallPrompt": "What does Return on investment (ROI) include beyond tuition?"
+  },
+  "ui": {
+    "colorTokens": {
+      "keyTerm": "var(--amber-fill)",
+      "correct": "var(--emerald-fill)",
+      "wrong": "var(--red-fill)",
+      "cta": "var(--indigo-fill)"
+    },
+    "animations": {
+      "maxDurationMs": 400,
+      "xpCounterDurationMs": 600,
+      "usesReducedMotionFallback": true
+    }
+  }
+}

@@ -1,0 +1,57 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Line chart showing cumulative four-year university costs for different destinations, ranging from under $60,000 for EU low-cost to over $300,000 for US private universities</h2>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px">
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:24px;height:2px;background:#534AB7;display:inline-block"></span>US private</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:24px;height:2px;background:#85B7EB;display:inline-block"></span>US state</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:24px;height:2px;background:#1D9E75;display:inline-block"></span>UK / Singapore</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:24px;height:2px;background:#EF9F27;display:inline-block"></span>EU mid-fee</span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)"><span style="width:24px;height:2px;background:#9FE1CB;display:inline-block"></span>EU low-fee / Japan</span>
+</div>
+<div style="position:relative;width:100%;height:300px">
+  <canvas id="cumChart" role="img" aria-label="Line chart of cumulative four-year costs: US private reaches ~$308k, US state ~$208k, UK/Singapore ~$168k, EU mid-fee ~$104k, EU low-fee/Japan ~$54k">By year four, US private costs total roughly $308,000 versus $54,000 for EU low-fee destinations.</canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const annuals = { usp: 77000, uss: 52000, uk: 42000, eumid: 26000, eulow: 13500 };
+const yrs = [1,2,3,4];
+const cum = (annual, yrs) => yrs.map(y => annual * y);
+new Chart(document.getElementById('cumChart'), {
+  type: 'line',
+  data: {
+    labels: ['Year 1','Year 2','Year 3','Year 4'],
+    datasets: [
+      { label: 'US private',      data: cum(annuals.usp,  yrs), borderColor: '#534AB7', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#534AB7', tension: 0.3 },
+      { label: 'US state',        data: cum(annuals.uss,  yrs), borderColor: '#85B7EB', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#85B7EB', borderDash: [5,3], tension: 0.3 },
+      { label: 'UK / Singapore',  data: cum(annuals.uk,   yrs), borderColor: '#1D9E75', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#1D9E75', tension: 0.3 },
+      { label: 'EU mid-fee',      data: cum(annuals.eumid,yrs), borderColor: '#EF9F27', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#EF9F27', borderDash: [5,3], tension: 0.3 },
+      { label: 'EU low-fee/Japan',data: cum(annuals.eulow,yrs), borderColor: '#1D9E75', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#5DCAA5', borderDash: [2,3], tension: 0.3 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ' ' + ctx.dataset.label + ': $' + ctx.raw.toLocaleString()
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: 'rgba(100,100,100,0.85)', font: { size: 12 } },
+        grid: { color: 'rgba(150,150,150,0.08)' }
+      },
+      y: {
+        ticks: {
+          callback: v => '$' + Math.round(v/1000) + 'k',
+          color: 'rgba(100,100,100,0.85)',
+          font: { size: 11 }
+        },
+        grid: { color: 'rgba(150,150,150,0.1)' }
+      }
+    }
+  }
+});
+</script>

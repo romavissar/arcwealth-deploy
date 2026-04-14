@@ -23,9 +23,6 @@ export async function completePasswordLoginOrTwoFactor(
   } catch {
     return redirect("/sign-in");
   }
-  if (process.env.USE_LEGACY_CLERK !== "false") {
-    return redirect("/sign-in?custom_session=1");
-  }
   const dest = safeInternalPath(redirectAfterLogin) ?? "/dashboard";
   return redirect(dest);
 }

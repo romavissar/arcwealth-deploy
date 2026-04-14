@@ -1,8 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
+import { buildGlossaryFromCurrentTextbook } from "@/lib/glossary-from-textbook";
 
 export default async function GlossaryTermPage({
   params,
@@ -11,10 +12,11 @@ export default async function GlossaryTermPage({
 }) {
   const { term } = await params;
   const decoded = decodeURIComponent(term);
-  const { userId } = await auth();
+  const userId = await getAppUserId();
 
   const supabase = createServiceClient();
-  const { data: row } = await supabase.from("glossary").select("term, definition, example, related_topic_ids").eq("term", decoded).single();
+  const glossaryTerms = await buildGlossaryFromCurrentTextbook(supabase);
+  const row = glossaryTerms.find((item) => item.term.toLowerCase() === decoded.toLowerCase());
   if (!row) notFound();
 
   let unlocked = true;

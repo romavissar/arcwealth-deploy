@@ -1,0 +1,10 @@
+ALTER TABLE user_profiles
+  ADD COLUMN IF NOT EXISTS school TEXT,
+  ADD COLUMN IF NOT EXISTS country TEXT,
+  ADD COLUMN IF NOT EXISTS city TEXT,
+  ADD COLUMN IF NOT EXISTS grade_level TEXT,
+  ADD COLUMN IF NOT EXISTS learning_goal TEXT,
+  ADD COLUMN IF NOT EXISTS guardian_email TEXT;
+
+-- Ensure PostgREST picks up schema changes immediately.
+NOTIFY pgrst, 'reload schema';

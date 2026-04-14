@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { VerifyEmailCodeForm } from "./verify-email-form";
 
 export default function VerifyEmailResultPage({
   searchParams,
@@ -8,6 +9,8 @@ export default function VerifyEmailResultPage({
 }) {
   const success = searchParams.success === "1" || searchParams.success === "true";
   const err = typeof searchParams.error === "string" ? searchParams.error : undefined;
+  const email = typeof searchParams.email === "string" ? searchParams.email : "";
+  const sent = searchParams.sent === "1";
 
   let title = "Email verification";
   let body: ReactNode = null;
@@ -24,24 +27,27 @@ export default function VerifyEmailResultPage({
       </p>
     );
   } else if (err === "expired") {
-    body = <p className="text-gray-600 dark:text-gray-300">This link has expired. Register again or request a new verification email (coming in a later update).</p>;
+    body = <p className="text-gray-600 dark:text-gray-300">This link has expired. Enter your code below or resend a fresh code.</p>;
   } else if (err === "invalid" || err === "missing") {
-    body = <p className="text-gray-600 dark:text-gray-300">This verification link is invalid or was already used.</p>;
+    body = <p className="text-gray-600 dark:text-gray-300">This verification link is invalid or was already used. Enter your verification code below.</p>;
   } else {
-    body = <p className="text-gray-600 dark:text-gray-300">Check your email for a verification link after registering.</p>;
+    body = (
+      <p className="text-gray-600 dark:text-gray-300">
+        {sent
+          ? "We sent a 6-digit verification code to your email. Enter it below to complete signup."
+          : "Enter your verification code to confirm your email."}
+      </p>
+    );
   }
 
   return (
-    <div className="space-y-4 text-center">
+    <div className="space-y-4">
       <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">{title}</h1>
       {body}
+      {!success ? <VerifyEmailCodeForm initialEmail={email} /> : null}
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        <Link href="/sign-in" className="text-primary">
+        <Link href="/sign-in" className="text-primary font-medium">
           Sign in
-        </Link>{" "}
-        ·{" "}
-        <Link href="/sign-in" className="underline">
-          Clerk sign in
         </Link>
       </p>
     </div>

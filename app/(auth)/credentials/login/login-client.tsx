@@ -37,7 +37,6 @@ export function LoginMessages() {
   const sp = useSearchParams();
   const registered = sp.get("registered");
   const verified = sp.get("verified");
-  const custom = sp.get("custom_session");
   const oauthError = sp.get("oauth_error");
   const oauthDetail = sp.get("msg");
   const twofaDisabled = sp.get("twofa_disabled");
@@ -56,23 +55,12 @@ export function LoginMessages() {
       )}
       {registered === "1" && (
         <div className="rounded-lg border border-green-200 bg-green-50 dark:bg-green-950/40 dark:border-green-800 px-3 py-2 text-sm text-green-800 dark:text-green-200">
-          Account created. Check your email for the verification link before signing in.
+          Account created. Check your email for the verification code before signing in.
         </div>
       )}
       {verified === "1" && (
         <div className="rounded-lg border border-green-200 bg-green-50 dark:bg-green-950/40 dark:border-green-800 px-3 py-2 text-sm text-green-800 dark:text-green-200">
           Email verified. You can sign in below.
-        </div>
-      )}
-      {custom === "1" && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 px-3 py-2 text-sm text-amber-900 dark:text-amber-100">
-          Password session is active. To use app routes with this session only, set{" "}
-          <code className="text-xs">USE_LEGACY_CLERK=false</code> and <code className="text-xs">AUTH_SECRET</code> in{" "}
-          <code className="text-xs">.env.local</code>. Otherwise continue with Clerk from{" "}
-          <Link href="/sign-in" className="underline">
-            Sign in
-          </Link>
-          .
         </div>
       )}
     </>

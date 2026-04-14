@@ -1,10 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { createServiceClient } from "@/lib/supabase/server";
 import { CurriculumMap } from "@/components/learn/CurriculumMap";
-import { VALID_LEARN_TOPIC_IDS } from "@/lib/curriculum";
+import { isKnownCurriculumTopic } from "@/lib/curriculum";
 
 export default async function LearnPage() {
-  const { userId } = await auth();
+  const userId = await getAppUserId();
   if (!userId) return null;
 
   const supabase = createServiceClient();
@@ -14,13 +14,22 @@ export default async function LearnPage() {
     .order("order_index");
   const { data: progress } = await supabase
     .from("user_progress")
-    .select("topic_id, status")
+    .select("topic_id, status, score")
     .eq("user_id", userId);
 
-  const progressMap = new Map((progress ?? []).map((p) => [p.topic_id, p.status as "locked" | "available" | "in_progress" | "completed"]));
+  const progressMap = new Map(
+    (progress ?? []).map((p) => [p.topic_id, p.status as "locked" | "available" | "in_progress" | "completed"])
+  );
+  const clampPercent = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
+  const scoreMap = new Map(
+    (progress ?? []).map((p) => [
+      p.topic_id,
+      typeof p.score === "number" ? clampPercent(p.score) : (p.score as null),
+    ])
+  );
 
   // Only show topics that exist in the curriculum (hides stale DB rows like "Lesson 13")
-  const filteredTopics = (topics ?? []).filter((t) => VALID_LEARN_TOPIC_IDS.has(t.topic_id));
+  const filteredTopics = (topics ?? []).filter((t) => isKnownCurriculumTopic(t.topic_id));
 
   // If the previous topic is completed, treat the next as available (fixes users who completed checkpoint before unlock logic)
   const effectiveMap = new Map(progressMap);
@@ -36,7 +45,7 @@ export default async function LearnPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Your learning path</h1>
-      <CurriculumMap topics={filteredTopics} progressMap={effectiveMap} />
+      <CurriculumMap topics={filteredTopics} progressMap={effectiveMap} scoreMap={scoreMap} />
     </div>
   );
 }

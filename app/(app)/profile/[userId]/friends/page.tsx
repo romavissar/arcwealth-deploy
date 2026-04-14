@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAppUserId } from "@/lib/auth/server-user";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,7 +9,7 @@ export default async function ProfileUserFriendsPage({
 }: {
   params: { userId: string };
 }) {
-  const { userId: currentUserId } = await auth();
+  const currentUserId = await getAppUserId();
   if (!currentUserId) redirect("/sign-in");
 
   const { userId } = params;

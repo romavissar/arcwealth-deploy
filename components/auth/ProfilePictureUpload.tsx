@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 interface ProfilePictureUploadProps {
@@ -9,6 +10,7 @@ interface ProfilePictureUploadProps {
 }
 
 export function ProfilePictureUpload({ onUploaded, onClose }: ProfilePictureUploadProps) {
+  const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,6 +30,7 @@ export function ProfilePictureUpload({ onUploaded, onClose }: ProfilePictureUplo
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Upload failed");
       onUploaded?.(data.url);
+      router.refresh();
       onClose?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");

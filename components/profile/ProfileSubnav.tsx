@@ -39,7 +39,11 @@ export function ProfileSubnav() {
     : profileNav;
 
   return (
-    <nav className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+    <nav
+      aria-label="Profile navigation"
+      className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm dark:border-gray-700 dark:bg-gray-900/60"
+    >
+      <div className="flex flex-wrap gap-2">
       {navItems.map((item) => {
         const href = item.href;
         const label = item.label;
@@ -55,10 +59,10 @@ export function ProfileSubnav() {
             key={href}
             href={href}
             className={cn(
-              "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+              "flex min-h-11 items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
               isActive
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
             )}
           >
             <Icon className="h-4 w-4" />
@@ -66,6 +70,7 @@ export function ProfileSubnav() {
           </Link>
         );
       })}
+      </div>
     </nav>
   );
 }
