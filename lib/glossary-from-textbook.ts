@@ -6,6 +6,8 @@ import type { Database } from "@/types/database";
 import type { TextbookContent } from "@/types/curriculum";
 
 type GlossaryRow = Database["public"]["Tables"]["glossary"]["Row"];
+type LessonContentRow = Database["public"]["Tables"]["lesson_content"]["Row"];
+type LessonContentGlossarySlice = Pick<LessonContentRow, "topic_id" | "content">;
 
 type SourcePriority = "curriculum" | "markdown" | "database";
 
@@ -174,7 +176,7 @@ export async function buildGlossaryFromCurrentTextbook(
   const topicIds = lessonTopics.map((topic) => topic.topic_id);
   const topicIdSet = new Set(topicIds);
 
-  const [{ data: textbookRows }, markdownLessons] = await Promise.all([
+  const [{ data: textbookRowsRaw }, markdownLessons] = await Promise.all([
     client
       .from("lesson_content")
       .select("topic_id, content")
@@ -182,11 +184,12 @@ export async function buildGlossaryFromCurrentTextbook(
       .in("topic_id", topicIds),
     loadMarkdownTextbookLessons(),
   ]);
+  const textbookRows: LessonContentGlossarySlice[] = (textbookRowsRaw ?? []) as LessonContentGlossarySlice[];
 
   const candidates: TermCandidate[] = [];
   const topicsWithDatabaseDefinitions = new Set<string>();
 
-  for (const row of textbookRows ?? []) {
+  for (const row of textbookRows) {
     const topicId = row.topic_id;
     if (!topicId || !topicIdSet.has(topicId)) continue;
     if (!isTextbookContent(row.content)) continue;

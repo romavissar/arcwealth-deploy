@@ -5,6 +5,22 @@ import { createClient } from "@supabase/supabase-js";
 
 import { buildGlossaryFromCurrentTextbook } from "../lib/glossary-from-textbook";
 import type { Database } from "../types/database";
+type GlossaryTermRow = Pick<Database["public"]["Tables"]["glossary"]["Row"], "term">;
+type GlossaryUpsertRow = Pick<
+  Database["public"]["Tables"]["glossary"]["Row"],
+  "term" | "definition" | "example" | "related_topic_ids"
+>;
+
+type GlossaryTableClient = {
+  select(columns: string): Promise<{ data: GlossaryTermRow[] | null; error: { message: string } | null }>;
+  upsert(
+    values: GlossaryUpsertRow[],
+    options: { onConflict: string }
+  ): Promise<{ error: { message: string } | null }>;
+  delete(options: { count: "exact" }): {
+    in(column: "term", values: string[]): Promise<{ error: { message: string } | null; count: number | null }>;
+  };
+};
 
 interface CliFlags {
   dryRun: boolean;
@@ -31,15 +47,17 @@ function createAdminClient() {
 async function run() {
   const flags = parseArgs(process.argv);
   const supabase = createAdminClient();
+  const glossaryTable = supabase.from("glossary") as unknown as GlossaryTableClient;
   const extracted = await buildGlossaryFromCurrentTextbook(supabase);
 
-  const { data: existingRows, error: existingError } = await supabase.from("glossary").select("term");
+  const { data: existingRowsRaw, error: existingError } = await glossaryTable.select("term");
   if (existingError) {
     throw new Error(`Failed reading existing glossary terms: ${existingError.message}`);
   }
+  const existingRows: GlossaryTermRow[] = (existingRowsRaw ?? []) as GlossaryTermRow[];
 
   const extractedTermSet = new Set(extracted.map((entry) => entry.term.toLowerCase()));
-  const staleTerms = (existingRows ?? [])
+  const staleTerms = existingRows
     .map((row) => row.term)
     .filter((term) => !extractedTermSet.has(term.toLowerCase()))
     .sort((a, b) => a.localeCompare(b));
@@ -60,17 +78,14 @@ async function run() {
     return;
   }
 
-  const { error: upsertError } = await supabase.from("glossary").upsert(extracted, { onConflict: "term" });
+  const { error: upsertError } = await glossaryTable.upsert(extracted, { onConflict: "term" });
   if (upsertError) {
     throw new Error(`Failed upserting extracted glossary terms: ${upsertError.message}`);
   }
 
   let deletedCount = 0;
   if (flags.pruneStale && staleTerms.length > 0) {
-    const { error: deleteError, count } = await supabase
-      .from("glossary")
-      .delete({ count: "exact" })
-      .in("term", staleTerms);
+    const { error: deleteError, count } = await glossaryTable.delete({ count: "exact" }).in("term", staleTerms);
     if (deleteError) {
       throw new Error(`Failed deleting stale glossary terms: ${deleteError.message}`);
     }
