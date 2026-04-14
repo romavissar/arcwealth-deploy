@@ -28,7 +28,7 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.10",
     "arctic": "^2.3.4",
-    "argon2": "^0.44.0",
+    "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
