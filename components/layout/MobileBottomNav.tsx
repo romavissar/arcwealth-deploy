@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import {
   BookOpen,
   BookText,
-  GraduationCap,
   LayoutDashboard,
   ListOrdered,
+  Route,
   Trophy,
   type LucideIcon,
 } from "lucide-react";
@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 
 const primaryTabs: Array<{ href: string; label: string; icon: LucideIcon }> = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/learn", label: "Learn", icon: GraduationCap },
+  { href: "/learn", label: "Journey", icon: Route },
   { href: "/textbook", label: "Textbook", icon: BookText },
   { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { href: "/profile", label: "Profile", icon: ListOrdered },

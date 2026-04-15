@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, LayoutDashboard, Trophy, GraduationCap, ListOrdered, BookText, Settings, Shield, School, type LucideIcon } from "lucide-react";
+import { BookOpen, LayoutDashboard, Trophy, Route, ListOrdered, BookText, Settings, Shield, School, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/learn", label: "Learn", icon: GraduationCap },
+  { href: "/learn", label: "Journey", icon: Route },
   { href: "/textbook", label: "Textbook", icon: BookText },
   { href: "/glossary", label: "Glossary", icon: BookOpen },
   { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
