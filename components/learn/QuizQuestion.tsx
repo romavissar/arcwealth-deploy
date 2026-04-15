@@ -365,12 +365,13 @@ export function QuizQuestion({ exercise, onScored, answered, onNext }: QuizQuest
             <div key={itemIdx} className="flex items-center justify-between rounded-xl border border-[var(--border)] px-3 py-2 bg-white/60 dark:bg-gray-900/40">
               <span>{displayExercise.items[itemIdx]}</span>
               <div className="flex gap-1">
-                <Button size="sm" variant="outline" disabled={answered || index === 0} onClick={() => move(index, -1)}>
+                <Button size="sm" variant="outline" className="min-h-11 px-3" disabled={answered || index === 0} onClick={() => move(index, -1)}>
                   Up
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
+                  className="min-h-11 px-3"
                   disabled={answered || index === currentOrder.length - 1}
                   onClick={() => move(index, 1)}
                 >
@@ -453,7 +454,7 @@ export function QuizQuestion({ exercise, onScored, answered, onNext }: QuizQuest
           Selected: {currentValue} {displayExercise.unit_label ?? ""}
         </p>
         {!canSubmit && (
-          <p className="text-xs mt-1 text-amber-500">Enter an amount between 0 and 3000 to submit.</p>
+          <p className="mt-1 text-sm text-amber-500">Enter an amount between 0 and 3000 to submit.</p>
         )}
         {!feedback && (
           <Button className="mt-4" onClick={submitSlider} disabled={!canSubmit}>

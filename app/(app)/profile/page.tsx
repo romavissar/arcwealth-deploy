@@ -37,7 +37,7 @@ export default async function ProfilePage() {
           weeklyXp={profile.weeklyXp}
           lessonsCompletedThisWeek={profile.lessonsCompletedThisWeek}
           actionSlot={
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
               <Button asChild>
                 <Link href="/learn">Continue learning</Link>
               </Button>
@@ -82,7 +82,7 @@ export default async function ProfilePage() {
               You have earned {profile.achievementCount} achievement{profile.achievementCount === 1 ? "" : "s"} so far.
             </p>
           </div>
-          <Button asChild variant="secondary">
+          <Button asChild variant="secondary" className="w-full sm:w-auto">
             <Link href="/profile/achievements">View all achievements</Link>
           </Button>
         </div>

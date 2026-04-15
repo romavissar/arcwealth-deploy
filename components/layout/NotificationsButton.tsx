@@ -31,7 +31,13 @@ function isUnread(item: NotificationItem): boolean {
   return !readAt;
 }
 
-export function NotificationsButton({ notifications }: { notifications: NotificationItem[] }) {
+export function NotificationsButton({
+  notifications,
+  compact = false,
+}: {
+  notifications: NotificationItem[];
+  compact?: boolean;
+}) {
   const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const [actionKey, setActionKey] = useState<string | null>(null);
@@ -73,12 +79,12 @@ export function NotificationsButton({ notifications }: { notifications: Notifica
     const actionButtons = (
       <div className="flex shrink-0 gap-1">
         {unread && (
-          <Button size="sm" variant="ghost" className="h-8 px-2 text-xs gap-1" onClick={(e) => handleMarkRead(e, item)} disabled={!!actionKey}>
+          <Button size="sm" variant="ghost" className="min-h-11 px-2 text-xs gap-1" onClick={(e) => handleMarkRead(e, item)} disabled={!!actionKey}>
             {busy ? "…" : <><Check className="h-3 w-3" /> Mark read</>}
           </Button>
         )}
         {read && (
-          <Button size="sm" variant="ghost" className="h-8 px-2 text-xs gap-1 text-red-600 hover:text-red-700 dark:text-red-400" onClick={(e) => handleDismiss(e, item)} disabled={!!actionKey}>
+          <Button size="sm" variant="ghost" className="min-h-11 px-2 text-xs gap-1 text-red-600 hover:text-red-700 dark:text-red-400" onClick={(e) => handleDismiss(e, item)} disabled={!!actionKey}>
             {busy ? "…" : <><Trash2 className="h-3 w-3" /> Delete</>}
           </Button>
         )}
@@ -205,17 +211,18 @@ export function NotificationsButton({ notifications }: { notifications: Notifica
         <button
           type="button"
           className={cn(
-            "relative inline-flex h-9 items-center gap-2 rounded-xl border border-sky-300/80 bg-sky-50 px-2.5 py-1.5 text-sm font-semibold text-sky-800 transition-colors",
+            "relative inline-flex items-center rounded-xl border border-sky-300/80 bg-sky-50 font-semibold text-sky-800 transition-colors",
+            compact ? "gap-1.5 px-2 py-1 text-xs" : "gap-2 px-2.5 py-1.5 text-sm",
             "hover:bg-sky-100 dark:border-sky-700/70 dark:bg-sky-900/30 dark:text-sky-200 dark:hover:bg-sky-900/50",
             "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           )}
           aria-label={unreadCount > 0 ? `${unreadCount} notifications` : "Notifications"}
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/15 dark:bg-sky-400/20">
-            <Bell className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" aria-hidden="true" />
+            <span className={cn("flex items-center justify-center rounded-md bg-sky-500/15 dark:bg-sky-400/20", compact ? "h-5 w-5" : "h-7 w-7")}>
+            <Bell className={cn(compact ? "h-3 w-3" : "h-3.5 w-3.5", "text-sky-600 dark:text-sky-300")} aria-hidden="true" />
           </span>
           {unreadCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
+            <span className={cn("absolute flex min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white", compact ? "-right-1 -top-1 h-4" : "-right-1 -top-1 h-4")}>
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
@@ -223,7 +230,7 @@ export function NotificationsButton({ notifications }: { notifications: Notifica
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="min-w-[280px] rounded-xl border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+          className="w-[min(92vw,24rem)] rounded-xl border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
           sideOffset={8}
           align="end"
         >

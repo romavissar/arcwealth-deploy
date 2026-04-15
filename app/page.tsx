@@ -180,7 +180,7 @@ export default async function HomePage() {
       <div className="aw-landing-aurora aw-landing-aurora--two" aria-hidden />
 
       <header className="sticky top-0 z-40 border-b border-aw-border/60 bg-aw-bg-page/85 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto hidden w-full max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6 sm:py-4 md:flex lg:px-8">
           <Link href="/" className="text-xl font-bold tracking-tight text-primary">
             ArcWealth
           </Link>
@@ -195,12 +195,34 @@ export default async function HomePage() {
               Security
             </a>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <ThemeToggle />
-            <Button asChild variant="outline" size="sm" className="aw-header-cta aw-header-cta--secondary">
+            <Button asChild variant="outline" size="sm" className="aw-header-cta aw-header-cta--secondary hidden sm:inline-flex">
               <Link href="/credentials/register?track=school">Request School Demo</Link>
             </Button>
             <Button asChild size="sm" className="aw-header-cta aw-header-cta--primary">
+              <Link href={primaryHref}>{userId ? "Open App" : "Sign In"}</Link>
+            </Button>
+          </div>
+        </div>
+        <div className="aw-mobile-landing-nav mx-auto flex w-full max-w-7xl items-center gap-1 px-2 py-2 md:hidden">
+          <Link href="/" className="aw-mobile-landing-brand shrink-0 font-bold tracking-tight text-primary">
+            ArcWealth
+          </Link>
+          <nav className="aw-mobile-landing-links flex min-w-0 flex-1 items-center gap-1 text-aw-muted">
+            <a href="#features" className="aw-nav-pill aw-nav-pill--mobile whitespace-nowrap">
+              Features
+            </a>
+            <a href="#schools" className="aw-nav-pill aw-nav-pill--mobile whitespace-nowrap">
+              Schools
+            </a>
+            <a href="#security" className="aw-nav-pill aw-nav-pill--mobile whitespace-nowrap">
+              Security
+            </a>
+          </nav>
+          <div className="flex shrink-0 items-center gap-1">
+            <ThemeToggle compact />
+            <Button asChild size="sm" className="aw-header-cta aw-header-cta--primary aw-header-cta--mobile whitespace-nowrap">
               <Link href={primaryHref}>{userId ? "Open App" : "Sign In"}</Link>
             </Button>
           </div>
@@ -472,6 +494,9 @@ export default async function HomePage() {
             <a href="#security" className="aw-nav-pill aw-nav-pill--footer">
               Security
             </a>
+            <Link href="/privacy-policy" className="aw-nav-pill aw-nav-pill--footer">
+              Privacy Policy
+            </Link>
           </div>
         </div>
       </footer>

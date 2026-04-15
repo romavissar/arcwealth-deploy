@@ -87,9 +87,12 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
       });
     };
 
-    measureSpine();
+    const frameId = window.requestAnimationFrame(measureSpine);
     window.addEventListener("resize", measureSpine);
-    return () => window.removeEventListener("resize", measureSpine);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener("resize", measureSpine);
+    };
   }, [lessonNodes]);
 
   useEffect(() => {
@@ -128,21 +131,29 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
     locked: "border-gray-300 bg-gray-100 text-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400",
   };
 
+  const connectorStyles: Record<ProgressStatus, string> = {
+    completed: "bg-emerald-400 dark:bg-emerald-500",
+    in_progress: "bg-primary/50 dark:bg-primary/60",
+    available: "bg-primary/40 dark:bg-primary/50",
+    locked: "bg-gray-300 dark:bg-gray-700",
+  };
+
   return (
     <div ref={mapRef} className="relative pb-16">
       <p className="mb-6 text-sm text-gray-600 dark:text-gray-300">
         Follow the path. Select a level to preview it, then hit play.
       </p>
 
-      <div ref={pathRef} className="relative space-y-6">
+      <div ref={pathRef} className="relative space-y-8 sm:space-y-7 md:space-y-6">
         {lessonNodes.length > 0 && (
           <div
-            className="pointer-events-none absolute left-1/2 w-1 -translate-x-1/2"
+            className="pointer-events-none absolute left-1/2 z-0 w-px -translate-x-1/2"
             style={{ top: spineMetrics.top, bottom: spineMetrics.bottom }}
+            aria-hidden="true"
           >
-            <div className="absolute inset-0 rounded-full bg-gray-200 dark:bg-gray-700" />
+            <div className="absolute inset-0 rounded-full bg-gray-300 dark:bg-gray-700" />
             <div
-              className="absolute left-0 top-0 w-full rounded-full bg-emerald-400 dark:bg-emerald-500 motion-safe:transition-[height] motion-safe:duration-300"
+              className="absolute inset-x-0 top-0 rounded-full bg-emerald-400 dark:bg-emerald-500 motion-safe:transition-[height] motion-safe:duration-300"
               style={{ height: `${spineMetrics.progress}px` }}
             />
           </div>
@@ -169,22 +180,27 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
               ref={(el) => {
                 rowRefs.current[node.topicId] = el;
               }}
-              className={cn("relative flex", isLeft ? "justify-start" : "justify-end")}
+              className={cn(
+                "relative flex min-h-[10rem] items-center",
+                isSelected ? "z-30" : isActive ? "z-20" : "z-0"
+              )}
             >
+              <div className="pointer-events-none absolute inset-0 z-0">
+                <div
+                  className={cn(
+                    "absolute left-1/2 top-[calc(50%-0.5px)] h-px w-4",
+                    connectorStyles[node.status],
+                    isLeft ? "-translate-x-full" : "translate-x-0",
+                    isActive && "motion-safe:animate-pulse"
+                  )}
+                />
+              </div>
               <div
                 className={cn(
-                  "absolute left-1/2 top-1/2 h-0.5 w-[24%] -translate-y-1/2",
-                  node.status === "completed"
-                    ? "bg-emerald-400 dark:bg-emerald-500"
-                    : node.status === "locked"
-                      ? "bg-gray-200 dark:bg-gray-700"
-                      : "bg-primary/40 dark:bg-primary/50",
-                  isLeft ? "translate-x-0" : "-translate-x-[100%]",
-                  isActive && "motion-safe:animate-pulse"
+                  "relative z-10 w-[calc(50%-0.75rem)] md:w-40 lg:w-44",
+                  isLeft ? "mr-auto pr-4" : "ml-auto pl-4"
                 )}
-              />
-
-              <div className="relative w-[168px] md:w-[196px]">
+              >
                 <button
                   type="button"
                   aria-expanded={isSelected}
@@ -192,7 +208,9 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
                   aria-label={`Level ${node.pathIndex}: ${node.title}. ${statusLabel[node.status]}.`}
                   onClick={() => setSelectedLevel((prev) => (prev === node.topicId ? null : node.topicId))}
                   className={cn(
-                    "group relative w-full rounded-2xl border bg-white px-4 py-4 text-left shadow-sm transition-all duration-200",
+                    "group relative w-full rounded-xl border bg-white px-3.5 py-3 text-left shadow-sm transition-all duration-200",
+                    "md:aspect-square md:px-4 md:py-4",
+                    "md:flex md:flex-col md:justify-center",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900",
                     "hover:-translate-y-0.5 hover:shadow-md",
                     isSelected && "shadow-md ring-2 ring-primary/40 dark:ring-primary/50",
@@ -205,7 +223,7 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
                 >
                   <span
                     className={cn(
-                      "mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full border text-base font-semibold",
+                      "mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold",
                       node.status === "locked" && "border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-800",
                       node.status === "available" &&
                         "border-indigo-300 bg-indigo-100 dark:border-indigo-400/70 dark:bg-indigo-500/35",
@@ -219,7 +237,7 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
                     {node.status === "completed" ? <Check className="h-5 w-5" /> : node.status === "locked" ? <Lock className="h-5 w-5" /> : node.pathIndex}
                   </span>
                   <p className="text-xs font-semibold uppercase tracking-wide opacity-80">Level {node.pathIndex}</p>
-                  <p className="mt-1 line-clamp-2 text-sm font-semibold">{node.title}</p>
+                  <p className="mt-1 line-clamp-3 text-sm font-semibold">{node.title}</p>
                 </button>
 
                 {isSelected && (
@@ -228,8 +246,9 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
                     role="dialog"
                     aria-label={`Level ${node.pathIndex} details`}
                     className={cn(
-                      "absolute z-20 mt-3 w-[240px] rounded-xl border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-900",
-                      "left-1/2 top-full -translate-x-1/2 md:top-1/2 md:mt-0 md:-translate-y-1/2",
+                      "absolute z-20 mt-3 w-[min(calc(100vw-2rem),240px)] rounded-xl border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-900",
+                      "top-full md:top-1/2 md:mt-0 md:-translate-y-1/2",
+                      isLeft ? "left-0 translate-x-0" : "right-0 left-auto translate-x-0",
                       isLeft ? "md:left-full md:ml-4 md:translate-x-0" : "md:right-full md:left-auto md:mr-4 md:translate-x-0"
                     )}
                   >
@@ -244,11 +263,11 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
                     )}
                     <div className="mt-3 flex items-center gap-2">
                       {isLocked ? (
-                        <Button size="sm" variant="secondary" disabled className="w-full">
+                        <Button size="sm" variant="secondary" disabled className="min-h-11 w-full">
                           Locked
                         </Button>
                       ) : (
-                        <Button size="sm" className="w-full" asChild>
+                        <Button size="sm" className="min-h-11 w-full" asChild>
                           <Link href={actionHref} onClick={() => setSelectedLevel(null)}>
                             <Play className="mr-1.5 h-3.5 w-3.5" />
                             {actionLabel}
@@ -258,7 +277,7 @@ export function CurriculumMap({ topics, progressMap, scoreMap }: CurriculumMapPr
                       <button
                         type="button"
                         onClick={() => setSelectedLevel(null)}
-                        className="rounded-md px-2 py-1 text-xs text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                        className="min-h-11 rounded-md px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       >
                         Close
                       </button>

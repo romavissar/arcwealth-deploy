@@ -13,7 +13,8 @@
     "generate_levels:module1_m2l1": "npx tsx scripts/generate-level.ts --module1-and-module2-intro",
     "delete_level": "npx tsx scripts/delete-level.ts",
     "delete_clerk_users": "npx tsx scripts/delete-clerk-users.ts",
-    "sync_glossary": "npx tsx scripts/sync-glossary-from-textbook.ts"
+    "sync_glossary": "npx tsx scripts/sync-glossary-from-textbook.ts",
+    "validate:tour": "npx tsx scripts/validate-tour-selectors.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

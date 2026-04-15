@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 function Submit() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="w-full" disabled={pending}>
+    <Button type="submit" className="min-h-11 w-full" disabled={pending}>
       {pending ? "Signing in…" : "Sign in"}
     </Button>
   );
@@ -80,11 +80,11 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
       )}
       <div className="space-y-1.5">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" required autoComplete="email" />
+        <Input id="email" name="email" type="email" required autoComplete="email" className="h-11" />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="password">Password</Label>
-        <Input id="password" name="password" type="password" required autoComplete="current-password" />
+        <Input id="password" name="password" type="password" required autoComplete="current-password" className="h-11" />
       </div>
       <Submit />
     </form>
@@ -104,6 +104,11 @@ export function LoginFooter({ variant = "credentials" }: { variant?: "credential
             Sign up
           </Link>
         </p>
+        <p className="text-xs">
+          <Link href="/privacy-policy" className="text-primary underline underline-offset-2">
+            Privacy Policy
+          </Link>
+        </p>
       </div>
     );
   }
@@ -121,6 +126,11 @@ export function LoginFooter({ variant = "credentials" }: { variant?: "credential
         ·{" "}
         <Link href="/sign-in" className="font-medium text-primary underline">
           Main sign in
+        </Link>
+      </p>
+      <p className="text-xs">
+        <Link href="/privacy-policy" className="text-primary underline underline-offset-2">
+          Privacy Policy
         </Link>
       </p>
     </div>

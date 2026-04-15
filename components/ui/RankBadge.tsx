@@ -49,7 +49,7 @@ function getRankVisual(slug: string) {
   return rankVisuals[slug as keyof typeof rankVisuals] ?? rankVisuals.novice;
 }
 
-export function RankBadge() {
+export function RankBadge({ compact = false }: { compact?: boolean }) {
   const [rankSlug, setRankSlug] = useState<string>("novice");
 
   useEffect(() => {
@@ -69,16 +69,17 @@ export function RankBadge() {
         <button
           type="button"
           className={cn(
-            "inline-flex items-center gap-2 rounded-xl border px-2.5 py-1.5 text-sm font-semibold transition-colors",
+            "inline-flex items-center rounded-xl border font-semibold transition-colors",
+            compact ? "gap-1.5 px-2 py-1 text-xs" : "gap-2 px-2.5 py-1.5 text-sm",
             "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900",
             currentVisual.chip
           )}
           aria-label={`Current rank: ${rank?.title ?? "Novice"}`}
         >
-          <span className={cn("flex h-6 w-6 items-center justify-center rounded-md", currentVisual.iconWrap)}>
-            <CurrentIcon className={cn("h-3.5 w-3.5", currentVisual.icon)} />
+          <span className={cn("flex items-center justify-center rounded-md", compact ? "h-5 w-5" : "h-7 w-7", currentVisual.iconWrap)}>
+            <CurrentIcon className={cn(compact ? "h-3 w-3" : "h-3.5 w-3.5", currentVisual.icon)} />
           </span>
-          <span>{rank?.title ?? "Novice"}</span>
+          <span className="max-w-16 truncate sm:max-w-none">{rank?.title ?? "Novice"}</span>
           <ChevronDown className="h-3.5 w-3.5 opacity-70" />
         </button>
       </DropdownMenu.Trigger>
@@ -86,7 +87,7 @@ export function RankBadge() {
         <DropdownMenu.Content
           align="start"
           sideOffset={10}
-          className="w-[340px] rounded-2xl border border-gray-200 bg-white p-2 shadow-xl dark:border-gray-700 dark:bg-gray-900"
+          className="w-[min(92vw,22rem)] rounded-2xl border border-gray-200 bg-white p-2 shadow-xl dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="px-2 pb-2 pt-1">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">Rank Journey</p>

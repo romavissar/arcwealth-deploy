@@ -31,6 +31,8 @@ const requiredText = (max: number) =>
   );
 
 const genderOptions = ["Male", "Female", "Other", "Prefer not to say"] as const;
+const PARENTAL_AGREEMENT_VERSION = "2026-04-15";
+const PARENTAL_APPROVAL_LINK_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 function getAgeFromBirthDate(isoDate: string): number | null {
   const birth = new Date(`${isoDate}T00:00:00`);
@@ -47,6 +49,11 @@ function getAgeFromBirthDate(isoDate: string): number | null {
 const registerSchema = z.object({
   email: z.string().email().max(320),
   password: z.string().min(8).max(128),
+  acceptTerms: z.preprocess((value) => value === "true", z.literal(true, { errorMap: () => ({ message: "You must accept the User Agreement." }) })),
+  acceptPrivacy: z.preprocess(
+    (value) => value === "true",
+    z.literal(true, { errorMap: () => ({ message: "You must acknowledge the Privacy Policy." }) })
+  ),
   firstName: z.string().min(1).max(100).trim(),
   lastName: z.string().min(1).max(100).trim(),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -110,7 +117,7 @@ async function sendVerificationEmailWithTimeout(
 
 async function sendGuardianNoticeWithTimeout(
   guardianEmail: string,
-  input: { studentName: string; studentEmail: string; school?: string }
+  input: { studentName: string; studentEmail: string; school?: string; approvalUrl?: string; expiresAt?: string }
 ): Promise<{ error?: string }> {
   const sendPromise = sendGuardianRegistrationNotice(guardianEmail, input);
   const timeoutPromise = new Promise<{ error: string }>((resolve) => {
@@ -132,6 +139,8 @@ export async function registerAction(_prev: AuthFormState, formData: FormData): 
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    acceptTerms: formData.get("acceptTerms"),
+    acceptPrivacy: formData.get("acceptPrivacy"),
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
     birthDate: formData.get("birthDate"),
@@ -150,6 +159,8 @@ export async function registerAction(_prev: AuthFormState, formData: FormData): 
 
   const { email, password, firstName, lastName, birthDate, guardianEmail, school, country, city, gender, gradeLevel, learningGoal } =
     parsed.data;
+  const age = getAgeFromBirthDate(birthDate);
+  const requiresParentalApproval = age !== null && age < 18;
   const emailNorm = email.toLowerCase();
   const supabase = createServiceClient();
 
@@ -170,6 +181,11 @@ export async function registerAction(_prev: AuthFormState, formData: FormData): 
     first_name: firstName,
     last_name: lastName,
     birth_date: birthDate,
+    parental_approval_required: requiresParentalApproval,
+    parental_approval_requested_at: requiresParentalApproval ? new Date().toISOString() : null,
+    parental_approved_at: null,
+    parental_approver_name: null,
+    parental_agreement_version: requiresParentalApproval ? PARENTAL_AGREEMENT_VERSION : null,
     email_verified_at: null,
   });
   if (e1) {
@@ -238,10 +254,31 @@ export async function registerAction(_prev: AuthFormState, formData: FormData): 
   }
 
   if (guardianEmail) {
+    let parentalApprovalUrl: string | undefined;
+    let parentalApprovalExpiresAt: string | undefined;
+    if (requiresParentalApproval) {
+      await supabase.from("auth_token").delete().eq("user_id", userId).eq("purpose", "parental_approval");
+      const rawParentalToken = generateOpaqueToken();
+      parentalApprovalExpiresAt = new Date(Date.now() + PARENTAL_APPROVAL_LINK_TTL_MS).toISOString();
+      const { error: parentalTokenError } = await supabase.from("auth_token").insert({
+        user_id: userId,
+        token_hash: hashToken(rawParentalToken),
+        purpose: "parental_approval",
+        expires_at: parentalApprovalExpiresAt,
+      });
+      if (parentalTokenError) {
+        return { error: "Account created but parental approval link could not be generated. Contact support." };
+      }
+      const base = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      parentalApprovalUrl = `${base}/parental-agreement/authorize?token=${encodeURIComponent(rawParentalToken)}`;
+    }
+
     const guardianSend = await sendGuardianNoticeWithTimeout(guardianEmail, {
       studentName: `${firstName} ${lastName}`.trim() || "A student",
       studentEmail: emailNorm,
       school,
+      approvalUrl: parentalApprovalUrl,
+      expiresAt: parentalApprovalExpiresAt,
     });
     if (guardianSend.error && process.env.NODE_ENV === "development") {
       console.warn("[auth-email] Guardian notification failed:", guardianSend.error);
@@ -368,7 +405,7 @@ export async function loginAction(_prev: AuthFormState, formData: FormData): Pro
   const supabase = createServiceClient();
   const { data: user, error } = await supabase
     .from("auth_user")
-    .select("id, password_hash, email_verified_at")
+    .select("id, password_hash, email_verified_at, parental_approval_required, parental_approved_at")
     .eq("email", emailNorm)
     .maybeSingle();
 
@@ -383,6 +420,13 @@ export async function loginAction(_prev: AuthFormState, formData: FormData): Pro
 
   if (!user.email_verified_at) {
     return { error: "Please verify your email before signing in. Check your inbox for the link." };
+  }
+
+  if (user.parental_approval_required && !user.parental_approved_at) {
+    return {
+      error:
+        "Parent/guardian authorization is required before this account can sign in. Ask your parent to use the authorization link sent to their email.",
+    };
   }
 
   const nextPath = safeInternalPath(formData.get("redirect_url"));

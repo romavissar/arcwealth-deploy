@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getFriendRequests } from "@/app/actions/friends";
 import { FriendRequestActions } from "./FriendRequestActions";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 
 export default async function ProfileRequestsPage() {
   const userId = await getAppUserId();
@@ -25,7 +26,7 @@ export default async function ProfileRequestsPage() {
             {incoming.map((r) => (
               <li
                 key={r.id}
-                className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4"
+                className="flex flex-col items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 sm:flex-row sm:items-center sm:gap-4"
               >
                 <Link href={`/profile/${r.otherUserId}`} className="flex items-center gap-3 min-w-0 flex-1">
                   {r.otherAvatarUrl ? (
@@ -37,13 +38,17 @@ export default async function ProfileRequestsPage() {
                       className="rounded-full object-cover h-10 w-10 shrink-0"
                     />
                   ) : (
-                    <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0">
+                    <div
+                      className={`h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0 ${subtleFallbackAvatarBorderClass}`}
+                    >
                       {r.otherUsername.slice(0, 1).toUpperCase()}
                     </div>
                   )}
                   <span className="font-medium text-gray-900 dark:text-gray-100 truncate">{r.otherUsername}</span>
                 </Link>
-                <FriendRequestActions requestId={r.id} direction="incoming" />
+                <div className="w-full sm:w-auto">
+                  <FriendRequestActions requestId={r.id} direction="incoming" />
+                </div>
               </li>
             ))}
           </ul>
@@ -59,7 +64,7 @@ export default async function ProfileRequestsPage() {
             {outgoing.map((r) => (
               <li
                 key={r.id}
-                className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4"
+                className="flex flex-col items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 sm:flex-row sm:items-center sm:gap-4"
               >
                 <Link href={`/profile/${r.otherUserId}`} className="flex items-center gap-3 min-w-0 flex-1">
                   {r.otherAvatarUrl ? (
@@ -71,13 +76,17 @@ export default async function ProfileRequestsPage() {
                       className="rounded-full object-cover h-10 w-10 shrink-0"
                     />
                   ) : (
-                    <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0">
+                    <div
+                      className={`h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm shrink-0 ${subtleFallbackAvatarBorderClass}`}
+                    >
                       {r.otherUsername.slice(0, 1).toUpperCase()}
                     </div>
                   )}
                   <span className="font-medium text-gray-900 dark:text-gray-100 truncate">{r.otherUsername}</span>
                 </Link>
-                <FriendRequestActions requestId={r.id} direction="outgoing" />
+                <div className="w-full sm:w-auto">
+                  <FriendRequestActions requestId={r.id} direction="outgoing" />
+                </div>
               </li>
             ))}
           </ul>

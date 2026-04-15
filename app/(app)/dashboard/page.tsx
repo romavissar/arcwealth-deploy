@@ -102,7 +102,7 @@ export default async function DashboardPage() {
         data-tour-id="dashboard-momentum"
         className="rounded-2xl border border-[#8B5CF6]/55 bg-white p-5 shadow-sm dark:border-[#8B5CF6]/45 dark:bg-gray-900/60"
       >
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Momentum</h2>
           <p className="text-sm text-gray-600 dark:text-gray-300">{momentumMessage}</p>
         </div>
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
             <div className="rounded-xl border border-gray-200 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-800">
               <p className="text-xs text-gray-500 dark:text-gray-400">Level</p>
               <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{currentLevel}</p>

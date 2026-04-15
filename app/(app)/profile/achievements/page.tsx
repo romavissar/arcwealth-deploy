@@ -64,7 +64,7 @@ export default async function AchievementsPage() {
       </section>
 
       <section className="rounded-2xl border border-[#8B5CF6]/55 bg-white p-5 shadow-sm dark:border-[#8B5CF6]/45 dark:bg-gray-900/60">
-        <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:justify-between">
           <div>
             <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Achievement library</h2>
             <p className="text-sm text-gray-600 dark:text-gray-300">

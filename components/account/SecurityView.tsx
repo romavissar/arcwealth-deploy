@@ -225,7 +225,7 @@ export function SecurityView({
                   {passwordMessage.text}
                 </p>
               )}
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <Button type="submit" disabled={passwordUpdating}>
                   {passwordUpdating ? "Updating..." : "Update password"}
                 </Button>
@@ -264,7 +264,7 @@ export function SecurityView({
             {sessions.map((session) => (
               <li
                 key={session.id}
-                className="flex items-center justify-between gap-4 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
+                className="flex flex-col items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
@@ -274,7 +274,7 @@ export function SecurityView({
                 </div>
                 {session.isCurrent ? (
                   <form action={signOutFromAppAction}>
-                    <Button type="submit" variant="outline" size="sm">
+                    <Button type="submit" variant="outline" size="sm" className="min-h-11">
                       Sign out
                     </Button>
                   </form>
@@ -282,6 +282,7 @@ export function SecurityView({
                   <Button
                     variant="outline"
                     size="sm"
+                    className="min-h-11"
                     onClick={() => handleRevoke(session.id)}
                     disabled={revokingId === session.id}
                   >

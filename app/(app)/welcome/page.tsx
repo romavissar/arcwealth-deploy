@@ -64,12 +64,12 @@ export default async function WelcomePage() {
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <form action={skipTutorialAndGoAction}>
-              <Button type="submit" variant="secondary" className="w-full sm:w-auto">
+              <Button type="submit" variant="secondary" className="min-h-11 w-full sm:w-auto">
                 Skip for now
               </Button>
             </form>
             <form action={startTutorialAndGoAction}>
-              <Button type="submit" className="w-full sm:w-auto">
+              <Button type="submit" className="min-h-11 w-full sm:w-auto">
                 Start tour
               </Button>
             </form>

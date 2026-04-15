@@ -29,7 +29,7 @@ export function AccountSettingsLayout({
   return (
     <div className="account-settings-page mx-auto max-w-5xl space-y-6 pb-4">
       <section className="rounded-2xl border border-[#8B5CF6]/55 bg-gradient-to-br from-primary/10 via-indigo-50/40 to-amber-50 p-6 shadow-sm dark:border-[#8B5CF6]/45 dark:from-primary/20 dark:via-indigo-950/25 dark:to-gray-900">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Settings</p>
             <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
@@ -39,7 +39,7 @@ export function AccountSettingsLayout({
               Update your profile, secure your sign-in, and tune your experience.
             </p>
           </div>
-          <div className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-right dark:border-gray-700 dark:bg-gray-800">
+          <div className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-left dark:border-gray-700 dark:bg-gray-800 sm:w-auto sm:text-right">
             <p className="text-xs text-gray-500 dark:text-gray-400">{sectionCategory}</p>
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sectionLabel}</p>
           </div>

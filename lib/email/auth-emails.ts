@@ -86,6 +86,8 @@ type SendGuardianNotificationInput = {
   studentName: string;
   studentEmail: string;
   school?: string;
+  approvalUrl?: string;
+  expiresAt?: string;
 };
 
 /**
@@ -112,6 +114,19 @@ export async function sendGuardianRegistrationNotice(
       <p>This is to let you know that ${escapeHtml(input.studentName)} has registered for ArcWealth.</p>
       <p><strong>Student email:</strong> ${escapeHtml(input.studentEmail)}</p>
       ${input.school ? `<p><strong>School:</strong> ${escapeHtml(input.school)}</p>` : ""}
+      ${
+        input.approvalUrl
+          ? `
+      <p style="margin-top: 16px;"><strong>Parent authorization required:</strong> please review and approve your child's account before login access is enabled.</p>
+      <p><a href="${escapeHtml(input.approvalUrl)}">Review and approve parental agreement</a></p>
+      ${
+        input.expiresAt
+          ? `<p style="font-size: 12px; color: #555;">This one-time link expires on ${escapeHtml(new Date(input.expiresAt).toUTCString())}.</p>`
+          : ""
+      }
+      `
+          : ""
+      }
       <p>If this registration was not expected, please contact support.</p>
       <p><a href="${escapeHtml(appUrl())}">Visit ArcWealth</a></p>
     `.trim(),

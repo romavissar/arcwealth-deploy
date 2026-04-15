@@ -12,6 +12,7 @@ import { formatDateTimeInBucharest } from "@/lib/bucharest-time";
 import { SettingsCard } from "@/components/account/SettingsCard";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 
 type Tab = "people" | "announcements" | "assignments";
 
@@ -88,7 +89,9 @@ export function ClassroomViewStudent({
                   className="h-10 w-10 rounded-full object-cover"
                 />
               ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-sm font-medium text-primary">
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-sm font-medium text-primary ${subtleFallbackAvatarBorderClass}`}
+                >
                   {people.teacher.username.slice(0, 1).toUpperCase()}
                 </div>
               )}
@@ -124,7 +127,9 @@ export function ClassroomViewStudent({
                           className="h-10 w-10 rounded-full object-cover"
                       />
                     ) : (
-                        <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm">
+                        <div
+                          className={`h-10 w-10 shrink-0 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300 flex items-center justify-center font-medium text-sm ${subtleFallbackAvatarBorderClass}`}
+                        >
                         {s.username.slice(0, 1).toUpperCase()}
                       </div>
                     )}

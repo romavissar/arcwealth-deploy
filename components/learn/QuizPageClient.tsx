@@ -233,8 +233,8 @@ export function QuizPageClient({ topicId, exercises, xpReward, isBoss, isCheckpo
 
   return (
     <div className="fixed inset-0 flex flex-col bg-gray-50 dark:bg-gray-900 z-50">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-        <Link href="/learn" className="p-2 -m-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+      <div className="flex items-center justify-between gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 sm:px-4">
+        <Link href="/learn" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-200">
           <X className="h-5 w-5" />
         </Link>
         <div className="flex flex-col items-center min-w-0 flex-1 mx-2">
@@ -253,9 +253,9 @@ export function QuizPageClient({ topicId, exercises, xpReward, isBoss, isCheckpo
             )}
           </span>
         </div>
-        <div className="w-9 shrink-0" aria-hidden />
+        <div className="w-11 shrink-0" aria-hidden />
       </div>
-      <div className="flex-1 overflow-auto flex flex-col items-center justify-center p-6">
+      <div className="flex-1 overflow-auto flex flex-col items-center justify-center p-4 sm:p-6">
         {current && (
           <QuizQuestion
             key={step}

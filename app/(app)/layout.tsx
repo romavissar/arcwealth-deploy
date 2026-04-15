@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { ensureUserInSupabase } from "@/lib/sync-user";
 import { getCurrentUserRole } from "@/lib/roles";
 import { getMyNotifications } from "@/app/actions/nudge";
@@ -41,11 +42,12 @@ export default async function AppLayout({
       <Sidebar userRole={role} primaryEmail={primaryEmail} />
       <div className="flex-1 flex flex-col min-w-0 md:ml-56">
         <TopBar notifications={notifications} primaryEmail={primaryEmail} avatarUrl={avatarUrl} />
-        <main className="flex-1 p-4 md:p-6 text-gray-900 dark:text-gray-100">
+        <main className="flex-1 p-4 pb-24 md:p-6 md:pb-6 text-gray-900 dark:text-gray-100">
           {children}
           <GuidedTour enabled={tutorialEnabled} />
         </main>
       </div>
+      <MobileBottomNav />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 
 interface ProfileHeroCardProps {
   username: string;
@@ -34,7 +35,7 @@ export function ProfileHeroCard({
             {avatarUrl ? (
               <Image src={avatarUrl} alt={`${username} avatar`} width={96} height={96} className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-3xl font-bold text-primary">
+              <div className={`flex h-full w-full items-center justify-center text-3xl font-bold text-primary ${subtleFallbackAvatarBorderClass}`}>
                 {username[0]?.toUpperCase() ?? "?"}
               </div>
             )}

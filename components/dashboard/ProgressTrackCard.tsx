@@ -58,7 +58,7 @@ export function ProgressTrackCard({
         <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-200">{progressLabel}</p>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {metrics.map((metric) => (
           <div
             key={metric.label}

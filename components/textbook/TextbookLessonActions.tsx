@@ -72,13 +72,13 @@ export function TextbookLessonActions({
   return (
     <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
       {prevTopicId && (
-        <Button asChild variant="outline" size="lg" className="border-slate-300 dark:border-slate-600">
+        <Button asChild variant="outline" size="lg" className="w-full border-slate-300 dark:border-slate-600 sm:w-auto">
           <Link href={`/textbook/${prevTopicId}`}>← Previous Lesson</Link>
         </Button>
       )}
 
       {showStartLesson && (
-        <Button asChild size="lg" className="bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+        <Button asChild size="lg" className="w-full bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400 sm:w-auto">
           <Link href={`/learn/${topicId}/lesson`}>Start lesson</Link>
         </Button>
       )}
@@ -89,17 +89,17 @@ export function TextbookLessonActions({
         onClick={handleCompletionToggle}
         aria-pressed={isCompleted}
         disabled={isPending}
-        className={
+        className={`w-full sm:w-auto ${
           isCompleted
             ? "bg-emerald-600 text-white hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-600"
             : "bg-slate-700 text-white hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500"
-        }
+        }`}
       >
         {isPending ? "Updating..." : isCompleted ? "Completed" : "Complete"}
       </Button>
 
       {nextTopicId && (
-        <Button asChild variant="outline" size="lg" className="border-slate-300 dark:border-slate-600">
+        <Button asChild variant="outline" size="lg" className="w-full border-slate-300 dark:border-slate-600 sm:w-auto">
           <Link href={`/textbook/${nextTopicId}`}>Next Lesson →</Link>
         </Button>
       )}

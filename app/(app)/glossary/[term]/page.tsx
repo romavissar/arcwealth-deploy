@@ -28,7 +28,7 @@ export default async function GlossaryTermPage({
 
   if (!unlocked) {
     return (
-      <div className="max-w-xl mx-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-8 text-center">
+      <div className="max-w-xl mx-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6 sm:p-8 text-center">
         <Lock className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
         <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{row.term}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-4">
@@ -46,7 +46,7 @@ export default async function GlossaryTermPage({
       <Link href="/glossary" className="text-sm text-primary hover:underline mb-4 inline-block">
         ← Glossary
       </Link>
-      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-8">
+      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">{row.term}</h1>
         <p className="text-gray-700 dark:text-gray-300 mb-6">{row.definition}</p>
         {row.example && (

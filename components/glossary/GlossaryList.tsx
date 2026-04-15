@@ -73,7 +73,7 @@ export function GlossaryList({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/10 via-indigo-50/40 to-amber-50 p-6 shadow-sm dark:border-primary/30 dark:from-primary/20 dark:via-slate-900 dark:to-slate-900">
+      <section className="rounded-2xl border border-[#8B5CF6]/55 bg-gradient-to-br from-primary/10 via-indigo-50/40 to-amber-50 p-6 shadow-sm dark:border-[#8B5CF6]/45 dark:from-primary/20 dark:via-slate-900 dark:to-slate-900">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Lesson vocabulary</p>
@@ -122,7 +122,7 @@ export function GlossaryList({
                 key={option}
                 type="button"
                 onClick={() => setFilter(option)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                className={`min-h-11 rounded-full px-3 py-2 text-sm font-semibold transition ${
                   isActive
                     ? "bg-primary text-primary-foreground"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
@@ -138,7 +138,7 @@ export function GlossaryList({
             <button
               type="button"
               onClick={() => setSelectedModule(null)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`min-h-11 rounded-full px-3 py-2 text-sm font-medium transition ${
                 selectedModule === null
                   ? "bg-indigo-600 text-white"
                   : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/40 dark:text-indigo-200 dark:hover:bg-indigo-900/70"
@@ -153,7 +153,7 @@ export function GlossaryList({
                   key={moduleId}
                   type="button"
                   onClick={() => setSelectedModule(moduleId)}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                  className={`min-h-11 rounded-full px-3 py-2 text-sm font-medium transition ${
                     isActive
                       ? "bg-indigo-600 text-white"
                       : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/40 dark:text-indigo-200 dark:hover:bg-indigo-900/70"

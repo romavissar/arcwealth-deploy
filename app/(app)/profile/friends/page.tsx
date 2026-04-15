@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getFriends, removeFriend } from "@/app/actions/friends";
 import { getRankBySlug } from "@/lib/ranks";
 import { cn } from "@/lib/utils";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 import { RemoveFriendButton } from "./RemoveFriendButton";
 
 export default async function ProfileFriendsPage() {
@@ -26,7 +27,7 @@ export default async function ProfileFriendsPage() {
             return (
               <li
                 key={f.id}
-                className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4"
+                className="flex flex-col items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-4 sm:flex-row sm:items-center sm:gap-4"
               >
                 <Link href={`/profile/${f.id}`} className="flex items-center gap-3 min-w-0 flex-1">
                   {f.avatarUrl ? (
@@ -38,7 +39,9 @@ export default async function ProfileFriendsPage() {
                       className="rounded-full object-cover h-10 w-10 shrink-0"
                     />
                   ) : (
-                    <div className="h-10 w-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-medium text-sm shrink-0">
+                    <div
+                      className={`h-10 w-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-medium text-sm shrink-0 ${subtleFallbackAvatarBorderClass}`}
+                    >
                       {f.username.slice(0, 1).toUpperCase()}
                     </div>
                   )}
@@ -49,7 +52,9 @@ export default async function ProfileFriendsPage() {
                     </p>
                   </div>
                 </Link>
-                <RemoveFriendButton friendUserId={f.id} />
+                <div className="w-full sm:w-auto">
+                  <RemoveFriendButton friendUserId={f.id} />
+                </div>
               </li>
             );
           })}

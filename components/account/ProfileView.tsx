@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 import { SettingsCard } from "./SettingsCard";
 
 type ProfilePayload = {
@@ -90,7 +91,7 @@ export function ProfileView({ isStudent = false }: { isStudent?: boolean }) {
           {avatarUrl ? (
             <Image src={avatarUrl} alt="" width={96} height={96} className="h-full w-full object-cover" />
           ) : (
-            <span>{initial}</span>
+            <span className={`flex h-full w-full items-center justify-center ${subtleFallbackAvatarBorderClass}`}>{initial}</span>
           )}
           </div>
           <div className="min-w-0">
@@ -105,7 +106,7 @@ export function ProfileView({ isStudent = false }: { isStudent?: boolean }) {
                   className="hidden"
                   onChange={onPickFile}
                 />
-                <Button type="button" variant="outline" size="sm" disabled={uploading} onClick={() => fileRef.current?.click()}>
+                <Button type="button" variant="outline" size="sm" className="min-h-11" disabled={uploading} onClick={() => fileRef.current?.click()}>
                   {uploading ? "Uploading..." : "Change photo"}
                 </Button>
               </div>

@@ -184,6 +184,11 @@ export interface Database {
           last_name: string | null;
           birth_date: string | null;
           two_factor_enabled: boolean;
+          parental_approval_required: boolean;
+          parental_approval_requested_at: string | null;
+          parental_approved_at: string | null;
+          parental_approver_name: string | null;
+          parental_agreement_version: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -196,6 +201,11 @@ export interface Database {
           last_name?: string | null;
           birth_date?: string | null;
           two_factor_enabled?: boolean;
+          parental_approval_required?: boolean;
+          parental_approval_requested_at?: string | null;
+          parental_approved_at?: string | null;
+          parental_approver_name?: string | null;
+          parental_agreement_version?: string | null;
           created_at?: string;
           updated_at?: string;
         };

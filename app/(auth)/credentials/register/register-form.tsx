@@ -15,13 +15,13 @@ import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@/compon
 function Submit({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="w-full" disabled={pending}>
+    <Button type="submit" className="min-h-11 w-full" disabled={pending}>
       {pending ? "Creating account…" : label}
     </Button>
   );
 }
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 const COUNTRY_OPTIONS = [
   "Austria",
@@ -132,6 +132,8 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
   const [gender, setGender] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
   const [learningGoal, setLearningGoal] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
 
   const age = useMemo(() => (birthDate ? getAgeFromBirthDate(birthDate) : null), [birthDate]);
   const guardianRequired = age !== null && age < 18;
@@ -144,6 +146,11 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
 
   function validateCurrentStep(currentStep: number): string | null {
     if (currentStep === 1) {
+      if (!acceptTerms) return "You must agree to the User Agreement to continue.";
+      if (!acceptPrivacy) return "You must acknowledge the Privacy Policy to continue.";
+    }
+
+    if (currentStep === 2) {
       if (!firstName.trim()) return "First name is required.";
       if (!lastName.trim()) return "Last name is required.";
       if (!email.trim()) return "Email is required.";
@@ -153,7 +160,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
       if (password !== confirmPassword) return "Passwords do not match.";
     }
 
-    if (currentStep === 2) {
+    if (currentStep === 3) {
       if (!birthDate) return "Birth date is required.";
       if (guardianRequired && !guardianEmail.trim()) {
         return "Guardian email is required for students under 18.";
@@ -163,7 +170,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
       }
     }
 
-    if (currentStep === 3) {
+    if (currentStep === 4) {
       if (!school.trim()) return "School is required.";
       if (!country.trim()) return "Country is required.";
       if (!city.trim()) return "City is required.";
@@ -214,6 +221,73 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
 
         {step === 1 ? (
           <div className="space-y-4">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-900/60 dark:text-gray-200">
+              <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">Review legal terms before sign up</h2>
+              <p className="mt-2">
+                Before creating an ArcWealth account, you must agree to the User Agreement and acknowledge the Privacy Policy.
+              </p>
+              <div className="mt-3 max-h-48 overflow-auto rounded-lg border border-gray-200 bg-white p-3 text-xs leading-5 dark:border-gray-700 dark:bg-gray-950">
+                <p>
+                  By signing up, you agree to ArcWealth&apos;s Terms of Service (user agreement), including account rules,
+                  acceptable use, educational-purpose disclaimers, suspension/termination rules, and limitation-of-liability
+                  provisions to the extent permitted by law.
+                </p>
+                <p className="mt-2">
+                  You also acknowledge the Privacy Policy describing what personal data is collected (for example account,
+                  profile, learning, and security data), why it is processed, who may receive it, and your GDPR rights.
+                </p>
+                <p className="mt-2">
+                  If you are under 18, ArcWealth may require guardian details and additional parental authorization.
+                </p>
+              </div>
+              <div className="mt-3 flex flex-col gap-2">
+                <Link href="/user-agreement" className="text-primary underline underline-offset-2">
+                  Read full User Agreement
+                </Link>
+                <Link href="/privacy-policy" className="text-primary underline underline-offset-2">
+                  Read full Privacy Policy
+                </Link>
+              </div>
+            </div>
+
+            <label className="flex items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700">
+              <input
+                type="checkbox"
+                checked={acceptTerms}
+                onChange={(e) => {
+                  setAcceptTerms(e.target.checked);
+                  setClientError(null);
+                }}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+              />
+              <span>
+                I have read and agree to the ArcWealth User Agreement (Terms of Service).
+              </span>
+            </label>
+
+            <label className="flex items-start gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700">
+              <input
+                type="checkbox"
+                checked={acceptPrivacy}
+                onChange={(e) => {
+                  setAcceptPrivacy(e.target.checked);
+                  setClientError(null);
+                }}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+              />
+              <span>
+                I have read and acknowledge the ArcWealth Privacy Policy.
+              </span>
+            </label>
+
+            <Button type="button" className="min-h-11 w-full" onClick={goToNextStep}>
+              Continue to details
+            </Button>
+          </div>
+        ) : null}
+
+        {step === 2 ? (
+          <div className="space-y-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label htmlFor="firstName">First name</Label>
@@ -255,7 +329,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                   setGender(e.target.value);
                   setClientError(null);
                 }}
-                className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:ring-offset-gray-900"
+                className="flex h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:ring-offset-gray-900"
               >
                 <option value="">Select gender</option>
                 {GENDER_OPTIONS.map((option) => (
@@ -313,13 +387,19 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
               <p className="text-xs text-gray-600 dark:text-gray-400">Passwords must match.</p>
             </div>
 
-            <Button type="button" className="w-full" onClick={goToNextStep}>
-              Continue
-            </Button>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Button type="button" variant="outline" className="min-h-11" onClick={goToPreviousStep}>
+                <ChevronLeft className="mr-1 h-4 w-4" />
+                Back
+              </Button>
+              <Button type="button" className="min-h-11" onClick={goToNextStep}>
+                Continue
+              </Button>
+            </div>
           </div>
         ) : null}
 
-        {step === 2 ? (
+        {step === 3 ? (
           <div className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="birthDate">Birth date</Label>
@@ -354,7 +434,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                       <button
                         id="birthDatePicker"
                         type="button"
-                        className="absolute inset-y-0 right-0 inline-flex w-10 items-center justify-center rounded-r-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-200"
+                        className="absolute inset-y-0 right-0 inline-flex w-11 items-center justify-center rounded-r-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-200"
                         aria-label="Open birth date calendar"
                       >
                         <CalendarIcon className="h-4 w-4 opacity-80" />
@@ -364,7 +444,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                 </PopoverAnchor>
                 <PopoverContent
                   align="start"
-                  className="w-[19rem] rounded-2xl border-gray-200 bg-white p-3 shadow-2xl dark:border-gray-700/70 dark:bg-gray-950"
+                  className="w-[min(92vw,19rem)] rounded-2xl border-gray-200 bg-white p-3 shadow-2xl dark:border-gray-700/70 dark:bg-gray-950"
                 >
                   <Calendar
                     mode="single"
@@ -411,19 +491,19 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button type="button" variant="outline" onClick={goToPreviousStep}>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Button type="button" variant="outline" className="min-h-11" onClick={goToPreviousStep}>
                 <ChevronLeft className="mr-1 h-4 w-4" />
                 Back
               </Button>
-              <Button type="button" onClick={goToNextStep}>
+              <Button type="button" className="min-h-11" onClick={goToNextStep}>
                 Continue
               </Button>
             </div>
           </div>
         ) : null}
 
-        {step === 3 ? (
+        {step === 4 ? (
           <div className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="school">
@@ -454,7 +534,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                     setCountry(e.target.value);
                     setClientError(null);
                   }}
-                  className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:ring-offset-gray-900"
+                  className="flex h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:ring-offset-gray-900"
                 >
                   <option value="">Select country</option>
                   {COUNTRY_OPTIONS.map((option) => (
@@ -497,7 +577,7 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
                 id="learningGoal"
                 value={learningGoal}
                 onChange={(e) => setLearningGoal(e.target.value)}
-                className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:ring-offset-gray-900"
+                className="flex h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-100 dark:ring-offset-gray-900"
               >
                 <option value="">Select a goal</option>
                 {GOAL_OPTIONS.map((goal) => (
@@ -508,8 +588,8 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
               </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button type="button" variant="outline" onClick={goToPreviousStep}>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Button type="button" variant="outline" className="min-h-11" onClick={goToPreviousStep}>
                 <ChevronLeft className="mr-1 h-4 w-4" />
                 Back
               </Button>
@@ -530,6 +610,8 @@ export function RegisterForm({ signInHref = "/credentials/login" }: { signInHref
         <input type="hidden" name="gender" value={gender} />
         <input type="hidden" name="gradeLevel" value={gradeLevel} />
         <input type="hidden" name="learningGoal" value={learningGoal} />
+        <input type="hidden" name="acceptTerms" value={acceptTerms ? "true" : "false"} />
+        <input type="hidden" name="acceptPrivacy" value={acceptPrivacy ? "true" : "false"} />
       </form>
 
       <p className="text-center text-sm text-gray-600 dark:text-gray-400">

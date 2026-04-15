@@ -12,6 +12,7 @@ import { NotificationsButton } from "@/components/layout/NotificationsButton";
 import type { NotificationItem } from "@/app/actions/nudge";
 import { signOutFromAppAction } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 
 export function TopBar({
   notifications = [],
@@ -29,40 +30,45 @@ export function TopBar({
       data-tour-id="top-metrics"
       className="sticky top-0 z-40 border-b border-gray-200/80 bg-white/85 backdrop-blur-xl dark:border-gray-700/80 dark:bg-gray-900/85"
     >
-      <div className="flex min-h-16 items-center justify-between gap-3 px-3 md:px-4">
-        <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <HeartDisplay />
-          <StreakBadge />
-          <RankBadge />
+      <div className="flex min-h-[4rem] items-center gap-1.5 px-2 py-2 sm:px-3 md:min-h-16 md:gap-3 md:px-4 md:py-0">
+        <div
+          data-tour-id="top-metrics-summary"
+          className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:gap-2"
+        >
+          <HeartDisplay compact />
+          <StreakBadge compact />
+          <RankBadge compact />
         </div>
-        <div className="flex flex-1 shrink-0 items-center justify-end gap-1.5 md:gap-2">
-          <NotificationsButton notifications={notifications} />
-          <div className="flex items-center gap-1 shrink-0">
+        <div className="flex shrink-0 items-center gap-1 md:gap-2">
+          <NotificationsButton notifications={notifications} compact />
+          <div className="flex shrink-0 items-center gap-1">
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
                 <Button
                   type="button"
                   variant="ghost"
-                  className="h-9 rounded-full border border-gray-200 bg-white px-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+                  className="h-auto rounded-xl border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 md:rounded-full md:px-2 md:py-1 md:text-xs"
                   title={primaryEmail ?? "Account"}
                 >
                   {avatarUrl ? (
-                    <span className="relative h-6 w-6 overflow-hidden rounded-full">
+                    <span className="relative h-5 w-5 overflow-hidden rounded-full">
                       <Image src={avatarUrl} alt="Profile picture" fill sizes="24px" className="object-cover" />
                     </span>
                   ) : (
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary ${subtleFallbackAvatarBorderClass}`}
+                    >
                       {(primaryEmail?.[0] ?? "?").toUpperCase()}
                     </span>
                   )}
-                  <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                  <ChevronDown className="h-3 w-3 opacity-70" />
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
                   align="end"
                   sideOffset={8}
-                  className="min-w-[220px] rounded-xl border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                  className="w-[min(92vw,22rem)] rounded-xl border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
                 >
                   <div className="px-3 py-2">
                     <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Signed in as</p>

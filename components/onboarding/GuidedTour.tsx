@@ -24,11 +24,30 @@ type AnchorRect = {
   height: number;
 };
 
-const TOUR_STEPS: TourStep[] = [
+type Rect = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+};
+
+type PanelSize = {
+  width: number;
+  height: number;
+};
+
+type ViewportBounds = {
+  width: number;
+  height: number;
+  padding: number;
+  bottomPadding: number;
+};
+
+export const TOUR_STEPS: TourStep[] = [
   {
     id: "dashboard-top-metrics",
     route: "/dashboard",
-    selector: "[data-tour-id='top-metrics']",
+    selector: "[data-tour-id='top-metrics-summary']",
     title: "Hearts, streaks, and rank at a glance",
     body: "This top bar tracks your hearts, current streak, and rank so you always know your live progress before starting a lesson.",
   },
@@ -108,13 +127,87 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
+function expandRect(rect: Rect, padding: number): Rect {
+  return {
+    top: rect.top - padding,
+    left: rect.left - padding,
+    width: rect.width + padding * 2,
+    height: rect.height + padding * 2,
+  };
+}
+
+function getIntersectionArea(a: Rect, b: Rect): number {
+  const overlapLeft = Math.max(a.left, b.left);
+  const overlapTop = Math.max(a.top, b.top);
+  const overlapRight = Math.min(a.left + a.width, b.left + b.width);
+  const overlapBottom = Math.min(a.top + a.height, b.top + b.height);
+  const overlapWidth = Math.max(0, overlapRight - overlapLeft);
+  const overlapHeight = Math.max(0, overlapBottom - overlapTop);
+  return overlapWidth * overlapHeight;
+}
+
+function getRectCenterDistance(a: Rect, b: Rect): number {
+  const ax = a.left + a.width / 2;
+  const ay = a.top + a.height / 2;
+  const bx = b.left + b.width / 2;
+  const by = b.top + b.height / 2;
+  return Math.hypot(ax - bx, ay - by);
+}
+
+function clampCandidate(candidate: { top: number; left: number }, panelSize: PanelSize, viewport: ViewportBounds): Rect {
+  const maxTop = Math.max(viewport.padding, viewport.height - panelSize.height - viewport.bottomPadding);
+  const maxLeft = Math.max(viewport.padding, viewport.width - panelSize.width - viewport.padding);
+  return {
+    top: clamp(candidate.top, viewport.padding, maxTop),
+    left: clamp(candidate.left, viewport.padding, maxLeft),
+    width: panelSize.width,
+    height: panelSize.height,
+  };
+}
+
+function computePanelPosition(anchorRect: AnchorRect | null, panelSize: PanelSize, viewport: ViewportBounds): { top: number; left: number } {
+  if (!anchorRect) {
+    return { top: viewport.padding, left: viewport.padding };
+  }
+
+  const gap = 12;
+  const noFlyZone = expandRect(anchorRect, 14);
+  const anchorRight = anchorRect.left + anchorRect.width;
+  const anchorBottom = anchorRect.top + anchorRect.height;
+  const anchorCenterY = anchorRect.top + anchorRect.height / 2;
+  const candidates = [
+    { top: anchorBottom + gap, left: anchorRect.left }, // below-left
+    { top: anchorBottom + gap, left: anchorRect.left + anchorRect.width / 2 - panelSize.width / 2 }, // below-center
+    { top: anchorRect.top - panelSize.height - gap, left: anchorRect.left }, // above-left
+    { top: anchorRect.top - panelSize.height - gap, left: anchorRect.left + anchorRect.width / 2 - panelSize.width / 2 }, // above-center
+    { top: anchorCenterY - panelSize.height / 2, left: anchorRight + gap }, // right-middle
+    { top: anchorCenterY - panelSize.height / 2, left: anchorRect.left - panelSize.width - gap }, // left-middle
+    { top: viewport.padding, left: viewport.padding }, // emergency fallback
+  ];
+
+  let bestCandidate: { rect: Rect; overlap: number; distance: number } | null = null;
+  for (const candidate of candidates) {
+    const rect = clampCandidate(candidate, panelSize, viewport);
+    const overlap = getIntersectionArea(rect, noFlyZone);
+    if (overlap === 0) {
+      return { top: rect.top, left: rect.left };
+    }
+    const distance = getRectCenterDistance(rect, anchorRect);
+    if (!bestCandidate || overlap < bestCandidate.overlap || (overlap === bestCandidate.overlap && distance > bestCandidate.distance)) {
+      bestCandidate = { rect, overlap, distance };
+    }
+  }
+
+  return bestCandidate ? { top: bestCandidate.rect.top, left: bestCandidate.rect.left } : { top: viewport.padding, left: viewport.padding };
+}
+
 function getAnchorRect(selector: string): AnchorRect | null {
   const node = document.querySelector(selector);
   if (!node) return null;
   const rect = node.getBoundingClientRect();
   return {
-    top: rect.top + window.scrollY,
-    left: rect.left + window.scrollX,
+    top: rect.top,
+    left: rect.left,
     width: rect.width,
     height: rect.height,
   };
@@ -137,6 +230,8 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
   const [anchorRect, setAnchorRect] = useState<AnchorRect | null>(null);
   const [error, setError] = useState<string | null>(null);
   const missingAnchorHandledForStep = useRef<string | null>(null);
+  const hasAutoScrolledStep = useRef<string | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   const hasTourQuery = searchParams.get("tour") === "1";
   const isOpen = enabled && hasTourQuery;
@@ -154,25 +249,43 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
   }, [router]);
 
   const panelPosition = useMemo(() => {
-    if (!anchorRect || typeof window === "undefined") return { top: 96, left: 24 };
-    const panelWidth = 360;
-    const panelHeight = 280;
+    if (typeof window === "undefined") return { top: 96, left: 16, width: 360 };
     const padding = 16;
-    const viewportTop = window.scrollY;
-    const viewportBottom = window.scrollY + window.innerHeight;
-    const belowTop = anchorRect.top + anchorRect.height + 12;
-    const aboveTop = anchorRect.top - panelHeight - 12;
-    const preferredTop = belowTop + panelHeight > viewportBottom - padding ? aboveTop : belowTop;
-    const maxTop = viewportBottom - panelHeight - padding;
-    const top = clamp(preferredTop, viewportTop + padding, maxTop);
-    const maxLeft = window.scrollX + window.innerWidth - panelWidth - padding;
-    const left = clamp(anchorRect.left, window.scrollX + padding, maxLeft);
-    return { top, left };
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const mobileNavNode = document.querySelector("[aria-label='Mobile navigation']");
+    const mobileNavRect = mobileNavNode?.getBoundingClientRect();
+    const mobileNavHeight = mobileNavRect && mobileNavRect.height > 0 ? mobileNavRect.height : 0;
+    const bottomPadding = padding + mobileNavHeight;
+    const panelWidth = Math.min(360, Math.max(280, viewportWidth - padding * 2));
+    const panelHeight = Math.min(320, Math.max(260, viewportHeight - (padding * 2 + mobileNavHeight)));
+    const { top, left } = computePanelPosition(anchorRect, { width: panelWidth, height: panelHeight }, {
+      width: viewportWidth,
+      height: viewportHeight,
+      padding,
+      bottomPadding,
+    });
+    return { top, left, width: panelWidth };
   }, [anchorRect]);
+
+  const updateAnchorRect = useCallback(() => {
+    if (!isOpen || !step) return;
+    setAnchorRect(getAnchorRect(step.selector));
+  }, [isOpen, step]);
+
+  const scheduleAnchorRectUpdate = useCallback(() => {
+    if (animationFrameRef.current !== null) return;
+    animationFrameRef.current = window.requestAnimationFrame(() => {
+      animationFrameRef.current = null;
+      updateAnchorRect();
+    });
+  }, [updateAnchorRect]);
 
   useEffect(() => {
     if (!isOpen) {
       setStepId(null);
+      setAnchorRect(null);
+      hasAutoScrolledStep.current = null;
       return;
     }
     const queryStepId = searchParams.get("step");
@@ -186,22 +299,45 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
 
   useEffect(() => {
     if (!isOpen || !step) return;
-    const update = () => {
-      const rect = getAnchorRect(step.selector);
-      setAnchorRect(rect);
-      if (rect) {
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        window.scrollTo({ top: Math.max(0, rect.top - 96), behavior: prefersReducedMotion ? "auto" : "smooth" });
+    updateAnchorRect();
+    const handleViewportChange = () => scheduleAnchorRectUpdate();
+    window.addEventListener("resize", handleViewportChange, { passive: true });
+    window.addEventListener("scroll", handleViewportChange, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("scroll", handleViewportChange);
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
     };
-    update();
-    window.addEventListener("resize", update);
-    window.addEventListener("scroll", update);
-    return () => {
-      window.removeEventListener("resize", update);
-      window.removeEventListener("scroll", update);
-    };
-  }, [isOpen, step]);
+  }, [isOpen, scheduleAnchorRectUpdate, step, updateAnchorRect]);
+
+  useEffect(() => {
+    if (!isOpen || !step || !anchorRect) return;
+    if (hasAutoScrolledStep.current === step.id) return;
+    hasAutoScrolledStep.current = step.id;
+    const target = document.querySelector(step.selector) as HTMLElement | null;
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    const mobileNavNode = document.querySelector("[aria-label='Mobile navigation']");
+    const mobileNavRect = mobileNavNode?.getBoundingClientRect();
+    const mobileNavHeight = mobileNavRect && mobileNavRect.height > 0 ? mobileNavRect.height : 0;
+    const estimatedPanelHeight = Math.min(320, Math.max(260, window.innerHeight - (32 + mobileNavHeight)));
+    const targetTopBuffer = 96;
+    const targetBottomBuffer = Math.max(180, mobileNavHeight + estimatedPanelHeight * 0.55);
+    const availableSpaceAbove = rect.top - 16;
+    const availableSpaceBelow = window.innerHeight - mobileNavHeight - 16 - rect.bottom;
+    const hasPanelRoom = availableSpaceAbove >= 72 || availableSpaceBelow >= Math.min(220, estimatedPanelHeight * 0.6);
+    const isVisibleEnough = rect.top >= targetTopBuffer && rect.bottom <= window.innerHeight - targetBottomBuffer && hasPanelRoom;
+    if (isVisibleEnough) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      block: "center",
+      inline: "nearest",
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
+  }, [anchorRect, isOpen, step]);
 
   useEffect(() => {
     if (!isOpen || !step || anchorRect || isSaving) return;
@@ -219,6 +355,19 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
       missingAnchorHandledForStep.current = null;
     }
   }, [anchorRect]);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !isOpen || !step) return;
+    const matches = document.querySelectorAll(step.selector);
+    if (matches.length === 0) {
+      console.warn(`[GuidedTour] Missing selector for step "${step.id}": ${step.selector}`);
+      return;
+    }
+    const rect = matches[0].getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      console.warn(`[GuidedTour] Zero-size selector for step "${step.id}": ${step.selector}`);
+    }
+  }, [isOpen, step]);
 
   if (!isOpen || !step) return null;
 
@@ -285,7 +434,13 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
 
       <section
         className="absolute w-[calc(100vw-2rem)] max-w-[360px] rounded-2xl border border-gray-200 bg-white p-4 shadow-xl dark:border-gray-700 dark:bg-gray-900"
-        style={{ top: panelPosition.top, left: panelPosition.left, maxHeight: "calc(100vh - 2rem)", overflowY: "auto" }}
+        style={{
+          top: panelPosition.top,
+          left: panelPosition.left,
+          width: panelPosition.width,
+          maxHeight: "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 1rem)",
+          overflowY: "auto",
+        }}
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">
           Step {stepIndex + 1} of {TOUR_STEPS.length}
@@ -298,12 +453,13 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
           </p>
         )}
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button type="button" variant="secondary" onClick={closeWithSkip} disabled={isSaving} aria-label="Skip tutorial">
+          <Button type="button" variant="secondary" className="min-h-11" onClick={closeWithSkip} disabled={isSaving} aria-label="Skip tutorial">
             Skip
           </Button>
           <Button
             type="button"
             variant="outline"
+            className="min-h-11"
             onClick={goToPreviousStep}
             disabled={stepIndex === 0 || isSaving}
             aria-label="Previous tutorial step"
@@ -311,11 +467,11 @@ export function GuidedTour({ enabled }: GuidedTourProps) {
             Back
           </Button>
           {!isLastStep ? (
-            <Button type="button" className="ml-auto" onClick={goToNextStep} disabled={isSaving} aria-label="Next tutorial step">
+            <Button type="button" className="ml-auto min-h-11" onClick={goToNextStep} disabled={isSaving} aria-label="Next tutorial step">
               Next
             </Button>
           ) : (
-            <Button type="button" className="ml-auto" onClick={closeWithComplete} disabled={isSaving} aria-label="Finish tutorial">
+            <Button type="button" className="ml-auto min-h-11" onClick={closeWithComplete} disabled={isSaving} aria-label="Finish tutorial">
               Done
             </Button>
           )}

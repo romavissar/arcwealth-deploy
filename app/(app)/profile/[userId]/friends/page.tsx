@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { canViewProfile, getPublicFriends, getPublicProfile } from "@/app/actions/friends";
+import { subtleFallbackAvatarBorderClass } from "@/components/ui/avatar-fallback";
 
 export default async function ProfileUserFriendsPage({
   params,
@@ -37,7 +38,11 @@ export default async function ProfileUserFriendsPage({
                 href={`/profile/${f.id}`}
                 className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
               >
-                <div className="relative h-10 w-10 rounded-full bg-primary/20 dark:bg-primary/30 flex items-center justify-center text-sm font-bold text-primary overflow-hidden shrink-0">
+                <div
+                  className={`relative h-10 w-10 rounded-full flex items-center justify-center text-sm font-bold text-primary overflow-hidden shrink-0 ${
+                    f.avatarUrl ? "" : `bg-primary/20 dark:bg-primary/30 ${subtleFallbackAvatarBorderClass}`
+                  }`}
+                >
                   {f.avatarUrl ? (
                     <Image
                       src={f.avatarUrl}

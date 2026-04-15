@@ -203,8 +203,8 @@ export function LessonShell({
 
   return (
     <div className="fixed inset-0 flex flex-col bg-[var(--bg-page)] text-[var(--text-primary)] z-50">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-card)] shadow-sm">
-        <Link href="/learn" className="p-2 -m-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 shrink-0">
+      <div className="flex items-center justify-between gap-2 px-3 py-3 border-b border-[var(--border)] bg-[var(--bg-card)] shadow-sm sm:px-4">
+        <Link href="/learn" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200 shrink-0">
           <X className="h-5 w-5" />
         </Link>
         <div className="flex-1 flex justify-center items-center min-w-0 px-2">
@@ -212,10 +212,10 @@ export function LessonShell({
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <HeartDisplay />
-          <span className="text-sm font-medium text-[var(--indigo-fill)]">{streakDays} day streak</span>
+          <span className="hidden text-sm font-medium text-[var(--indigo-fill)] sm:inline">{streakDays} day streak</span>
         </div>
       </div>
-      <div className="flex-1 overflow-auto flex flex-col items-center justify-center p-6">
+      <div className="flex-1 overflow-auto flex flex-col items-center justify-center p-4 sm:p-6">
         {current?.type === "hook" && (
           <LessonContentStep key={step} title={current.title} body={current.body} onNext={handleNext} />
         )}

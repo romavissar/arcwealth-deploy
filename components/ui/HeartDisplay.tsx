@@ -11,7 +11,7 @@ function formatCountdown(secondsLeft: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export function HeartDisplay() {
+export function HeartDisplay({ compact = false }: { compact?: boolean }) {
   const [hearts, setHearts] = useState(5);
   const [maxHearts, setMaxHearts] = useState(5);
   const [lastHeartsAt, setLastHeartsAt] = useState<string | null>(null);
@@ -63,13 +63,23 @@ export function HeartDisplay() {
   }, [hearts, maxHearts, lastHeartsAt, refetchProfile]);
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-xl border border-rose-300/80 bg-rose-50 px-2.5 py-1.5 text-sm font-semibold text-rose-800 dark:border-rose-700/70 dark:bg-rose-900/30 dark:text-rose-200">
-      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-500/15 dark:bg-rose-400/20">
-        <Heart className="h-3.5 w-3.5 text-rose-600 dark:text-rose-300" aria-hidden="true" />
+    <div
+      className={`inline-flex items-center rounded-xl border border-rose-300/80 bg-rose-50 font-semibold text-rose-800 dark:border-rose-700/70 dark:bg-rose-900/30 dark:text-rose-200 ${
+        compact ? "gap-1.5 px-2 py-1 text-xs" : "gap-2 px-2.5 py-1.5 text-sm"
+      }`}
+    >
+      <span
+        className={`flex items-center justify-center rounded-md bg-rose-500/15 dark:bg-rose-400/20 ${
+          compact ? "h-5 w-5" : "h-6 w-6"
+        }`}
+      >
+        <Heart className={`${compact ? "h-3 w-3" : "h-3.5 w-3.5"} text-rose-600 dark:text-rose-300`} aria-hidden="true" />
       </span>
       <span className="tabular-nums">{hearts}</span>
       {countdown !== null && (
-        <span className="text-xs text-rose-700/90 dark:text-rose-200/90 tabular-nums">+1 in {countdown}</span>
+        <span className="max-w-16 truncate text-[11px] text-rose-700/90 tabular-nums dark:text-rose-200/90 sm:max-w-none">
+          {compact ? `+1 ${countdown}` : `+1 in ${countdown}`}
+        </span>
       )}
     </div>
   );
